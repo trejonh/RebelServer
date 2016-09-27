@@ -1,0 +1,17 @@
+<div id="loginJumbotron" class="jumbotron">
+  <h2>Welcome to the Rebel Kangaroo Server</h2>
+  <p>Login to access full functionality</p>
+    <img src="images/rebelKangaroo.png" alt="Boxing Kangaroo"><br>
+    <form action="/" id="loginForm">
+      <div class="form-group">
+        <label for="userName">User Name</label>
+        <input type="username" class="form-control" id="usernameInput" placeholder="User name" ng-model="username">
+      </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="passwordInout" placeholder="password" ng-model="password">
+        </div>
+        <button type="submit" class="btn btn-success" ng-click="submit()">Login</button>
+    </form>
+    <a href="#registerUser">Register</a>
+</div>
