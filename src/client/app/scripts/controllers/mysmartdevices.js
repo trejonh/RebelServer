@@ -8,10 +8,6 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('MysmartdevicesCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('MysmartdevicesCtrl', function($scope, Users) {
+    $scope.users = Users.getList().$object;
   });

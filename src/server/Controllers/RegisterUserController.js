@@ -1,8 +1,13 @@
 //setup
-var Resource = require("resourcejs");
+//var Resource = require("resourcejs");
+var restful = require("node-restful");
 module.exports = function(app, route) {
     //setup controller for restful
-    Resource(app,"",route,app.models.registeredUserModel).rest();
+    //  Resource(app,"",route,app.models.registeredUserModel).rest();
+    var rest = restful.model("registeredUserModel",
+        app.models.registeredUserModel
+    ).methods(["get", "put", "post", "delete"]);
+    rest.register(app, route);
     //return Middleware
     return function(req, res, next) {
         next();

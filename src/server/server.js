@@ -30,6 +30,6 @@ mongoose.connection.once("open", function() {
     _.each(routes, function(controller, route) {
         app.use(route, controller(app, route));
     });
-    console.log("Listening on 8080");
-    app.listen(8080);
+    app.listen(3000);
+    console.log("Listening on 3000");
 });
