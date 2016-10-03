@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/node
+# Created by https://www.gitignore.io/api/node,grunt,bower,yeoman
 
 ### Node ###
 # Logs
@@ -43,9 +43,30 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+
 ### grunt ###
 # Grunt usually compiles files inside this directory
 dist/
 
 # Grunt usually preprocesses files such as coffeescript, compass... inside the .tmp directory
 .tmp/
+
+
+### Bower ###
+bower_components
+.bower-cache
+.bower-registry
+.bower-tmp
+
+
+### Yeoman ###
+node_modules/
+bower_components/
+*.log
+
+build/
+dist/

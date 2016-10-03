@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Rebel Server</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/ico" sizes="16x16" href="./images/favicon.ico">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <link rel="stylesheet" href="./styles/font-awesome.min.css">
+  <link rel="stylesheet" href="./styles/common.css">
+  <link rel="stylesheet" href="https://bootswatch.com/united/bootstrap.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+<body ng-app="clientApp">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+        <a class="navbar-brand" href="#/">Rebel Kangaroo</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+
+        <ul class="nav navbar-nav">
+          <li><a href="#/">My Devices</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div id="mainContent" class="container">
+    <div ng-view=""></div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <span>
+      <a href="#/about">About</a>
+    </span>
+      <span style="float:right;">
+        <a href="https://github.com/msoeSE/RebelServer/issues">
+          <i class="fa fa-bug" aria-hidden="true"></i>&nbsp;&nbsp;Report Bug
+        </a>
+    </span>
+    </div>
+  </footer>
+
+  <!-- build:js(.) scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/lodash/lodash.js"></script>
+  <script src="bower_components/restangular/dist/restangular.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!-- build:js({.tmp,app}) scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/controllers/main.js"></script>
+  <script src="scripts/controllers/mysmartdevices.js"></script>
+  <script src="scripts/controllers/registeruser.js"></script>
+  <script src="scripts/controllers/profileController.js"></script>
+  <script src="./Common/AuthService.js"></script>
+  <script src="./Common/DataService.js"></script>
+  <!-- endbuild -->
+</body>
+
+</html>
