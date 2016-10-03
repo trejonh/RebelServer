@@ -8,18 +8,25 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('RegisteruserCtrl', function($scope, Users, $location) {
-    $scope.users = {};
+  .controller('RegisteruserCtrl', function($scope, $location, authentication) {
+    var registerUser = this;
+    registerUser.credentials = {
+      name: "",
+      username: "",
+      email: "",
+      password: ""
+    };
     $scope.submit = function() {
-      console.log("trying to post");
-      Users.post($scope.users).then(function() {
-        console.log("in function to post");
-        $location.path("/mySmartDevices");
+      authentication.register(registerUser.credentials).then(function() {
+        $location.path("/profile");
+      }, function errorCallback() {
+        console.log("error saving to db");
       });
     };
   });
 
-function isDataComplete(formData) {
+
+function isDataComplete(formData) { //jshint ignore:line
   var fName = formData.users.fullname;
   var uName = formData.users.username;
   var password = formData.users.password;
@@ -29,7 +36,7 @@ function isDataComplete(formData) {
   console.log(fName);
   console.log(uName);
   console.log(password);
-  if (!fName || fName.length == 0 || !uName || uName.length == 0)
-    return false;
+  if (!fName || fName.length === 0 || !uName || uName.length === 0)
+    return false; //jshint ignore:line
   return true;
 }

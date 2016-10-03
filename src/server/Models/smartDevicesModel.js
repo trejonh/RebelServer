@@ -6,7 +6,7 @@ var SmartDeviceSchema = new mongoose.Schema({
         required: true
     },
     owner: {
-        type: String,
+        type: Object,
         required: false
     },
     deviceID: {

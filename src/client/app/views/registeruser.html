@@ -1,19 +1,19 @@
 <form id="registerForm">
   <div class="form-group">
     <label for="userName">Full Name</label>
-    <input type="username" class="form-control" id="fullNameInput" placeholder="Full name" ng-model="registeredUserModel.name">
+    <input type="username" class="form-control" id="fullNameInput" placeholder="Full name" ng-model="registerUser.credentials.name">
   </div>
   <div class="form-group">
     <label for="userName">User Name</label>
-    <input type="username" class="form-control" id="usernameInput" placeholder="User name" ng-model="registeredUserModel.username">
+    <input type="username" class="form-control" id="usernameInput" placeholder="User name" ng-model="registerUser.credentials.username">
   </div>
     <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" class="form-control" id="passwordInout" placeholder="password" ng-model="registeredUserModel.password">
+      <input type="password" class="form-control" id="passwordInout" placeholder="password" ng-model="registerUser.credentials.password">
     </div>
       <div class="form-group">
         <label for="userName">Email</label>
-        <input type="username" class="form-control" id="emailInput" placeholder="email" ng-model="registeredUserModel.email">
+        <input type="username" class="form-control" id="emailInput" placeholder="email" ng-model="registerUser.credentials.email">
       </div>
     <button type="submit" class="btn btn-success" ng-click="submit()">Register</button>
 </form>

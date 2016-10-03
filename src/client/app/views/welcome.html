@@ -5,11 +5,11 @@
     <form action="/" id="loginForm">
       <div class="form-group">
         <label for="userName">User Name</label>
-        <input type="username" class="form-control" id="usernameInput" placeholder="User name" ng-model="username">
+        <input type="username" class="form-control" id="usernameInput" placeholder="User name" ng-model="main.credentials.username">
       </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" class="form-control" id="passwordInout" placeholder="password" ng-model="password">
+          <input type="password" class="form-control" id="passwordInout" placeholder="password" ng-model="main.credentials.password">
         </div>
         <button type="submit" class="btn btn-success" ng-click="submit()">Login</button>
     </form>

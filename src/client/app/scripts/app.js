@@ -12,8 +12,7 @@ angular
   .module('clientApp', [
     'ngRoute',
     "restangular"
-  ])
-  .config(function($routeProvider, RestangularProvider) {
+  ]).config(function($routeProvider, RestangularProvider) {
     RestangularProvider.setBaseUrl("http://localhost:3000");
     $routeProvider
       .when('/', {
@@ -37,6 +36,11 @@ angular
         controller: 'RegisteruserCtrl',
         controllerAs: 'registerUser'
       })
+      .when('/profile', {
+        templateUrl: 'views/profile.html',
+        controller: 'ProfileCtrl',
+        controllerAs: 'profile'
+      })
       .otherwise({
         redirectTo: '/'
       });
@@ -46,6 +50,19 @@ angular
         id: "_id"
       });
     });
-  }).factory("Users", function(UsersRestangular) {
+  })
+  .factory("Users", function(UsersRestangular) {
     return UsersRestangular.service("registeredUsers");
+  })
+  .run(function($rootScope, $location, authentication) {
+    $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) { // jshint ignore:line
+      if ($location.path() === '/profile' && !authentication.isLoggedIn())
+        $location.path('/');// jshint ignore:line
+    });
   });
+/*.run(function($rootScope, $location, authentication) {
+    $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) { // jshint ignore:line
+      if ($location.path() === '/profile' && !authentication.isLoggedIn())
+        $location.path('/');
+    });
+  });*/
