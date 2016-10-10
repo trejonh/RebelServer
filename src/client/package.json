@@ -25,9 +25,12 @@
     "grunt-svgmin": "^2.0.0",
     "grunt-usemin": "^3.0.0",
     "grunt-wiredep": "^2.0.0",
+    "istanbul": "^0.4.5",
+    "jasmine": "^2.5.2",
     "jit-grunt": "^0.9.1",
-    "time-grunt": "^1.0.0",
-    "jshint-stylish": "^1.0.0"
+    "jshint-stylish": "^1.0.0",
+    "mocha": "^3.1.0",
+    "time-grunt": "^1.0.0"
   },
   "engines": {
     "node": ">=0.10.0"
