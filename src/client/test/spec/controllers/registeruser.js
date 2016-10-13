@@ -11,7 +11,7 @@ describe('Controller: RegisteruserCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    RegisteruserCtrl = $controller('RegisteruserCtrl', {
+    RegisteruserCtrl = $controller('registerUser', {
       $scope: scope
       // place here mocked dependencies
     });

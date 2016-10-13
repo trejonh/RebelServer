@@ -21,12 +21,6 @@ angular
         controllerAs: 'main'
       })
       .when('/mySmartDevices', {
-        /*resolve:{
-          "check":function($location){
-              if(!$rootScope.isLoggedIn)
-                $location.path("/")
-          }
-        },*/
         templateUrl: 'views/mysmartdevices.html',
         controller: 'MysmartdevicesCtrl',
         controllerAs: 'mySmartDevices'

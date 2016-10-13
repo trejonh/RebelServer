@@ -1,6 +1,6 @@
 //setup
 //var Resource = require("resourcejs");
-var restful = require("node-restful");
+//var restful = require("node-restful");
 var passport = require('passport');
 var mongoose = require('mongoose');
 var User = mongoose.model('registeredUserModel');
@@ -16,14 +16,11 @@ module.exports.register = function(req,res) {
     user.name = req.body.name;
     user.email = req.body.email;
     user.username = req.body.username;
-    console.log("in node server trying to setPassword");
     user.setPassword(req.body.password);
 
     user.save(function(err) {
-      console.log("attempting to ave to DB");
       if(err){
         console.log(err);
-        console.log("cant save");
         return;
       }
       var token;

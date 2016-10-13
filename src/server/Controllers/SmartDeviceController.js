@@ -1,6 +1,6 @@
 //setup//setup
 //var Resource = require("resourcejs");
-var restful = require("node-restful");
+/*var restful = require("node-restful");
 module.exports = function(app, route) {
     //setup controller for restful
     //  Resource(app,"",route,app.models.registeredUserModel).rest();
@@ -12,4 +12,4 @@ module.exports = function(app, route) {
     return function(req, res, next) {
         next();
     };
-};
+};*/

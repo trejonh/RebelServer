@@ -18,7 +18,3 @@ router.post('/register', ctrlAuth.register);
 router.post('/login', ctrlAuth.login);
 
 module.exports = router;
-/*module.exports = {
-  "/smartDevices" : require("./Controllers/SmartDeviceController"),
-  "/registeredUsers": require("./Controllers/RegisterUserController")
-};*/

@@ -11,7 +11,7 @@ describe('Controller: MysmartdevicesCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    MysmartdevicesCtrl = $controller('MysmartdevicesCtrl', {
+    MysmartdevicesCtrl = $controller('mySmartDevices', {
       $scope: scope
       // place here mocked dependencies
     });
