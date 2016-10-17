@@ -1,17 +1,35 @@
 <div id="loginJumbotron" class="jumbotron">
   <h2>Welcome to the Rebel Kangaroo Server</h2>
   <p>Login to access full functionality</p>
-    <img src="images/rebelKangaroo.png" alt="Boxing Kangaroo"><br>
-    <form action="/" id="loginForm">
-      <div class="form-group">
-        <label for="userName">User Name</label>
-        <input type="username" class="form-control" id="usernameInput" placeholder="User name" ng-model="main.credentials.username">
-      </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" id="passwordInout" placeholder="password" ng-model="main.credentials.password">
-        </div>
-        <button type="submit" class="btn btn-success" ng-click="submit()">Login</button>
-    </form>
-    <a href="#registerUser">Register</a>
+  <img src="images/rebelKangaroo.png" alt="Boxing Kangaroo"><br>
+  <form ng-submit="submit()" id="loginForm">
+    <div class="form-group">
+      <label for="userName">User Name</label>
+      <input type="username" class="form-control" id="usernameInput" placeholder="User name" ng-model="main.credentials.username">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="passwordInout" placeholder="password" ng-model="main.credentials.password">
+    </div>
+    <button type="submit" class="btn btn-success" ng-click="submit()">Login</button>
+    <div id="loginFailure" class="alert alert-danger alert-dismissable fade-in" role="alert" style="display:none;">
+      <h4>Login Error!</h4>
+      <p>
+        Please verify the username and password are correct before trying again to login. If error continues, consider changing password or register a new account
+        <button type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          Close
+        </button>
+      </p>
+    </div>
+  </form>
+  <a href="#registerUser">Register</a>
 </div>
+<script>
+$(document).ready(function(){
+  $("#loginFailure").hide();
+});
+$("button.close").click(function() {
+  $("#loginFailure").hide();
+});
+</script>

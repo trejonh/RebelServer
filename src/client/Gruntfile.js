@@ -96,6 +96,7 @@ module.exports = function (grunt) {
       },
       test: {
         options: {
+          //dbURL:"mongodb://localhost/test",
           port: 9001,
           middleware: function (connect) {
             return [
@@ -220,7 +221,7 @@ module.exports = function (grunt) {
             }
           }
       }
-    }, 
+    },
 
     // Renames files for browser caching purposes
     filerev: {

@@ -49,8 +49,6 @@
 
     var register = function(user) {
       return $http.post('http://localhost:3000/register', user).success(function(data) {
-        console.log("loggin data");
-        console.log(data);
         saveToken(data.token);
       }).error(function(err) {
         console.log(err);
@@ -61,6 +59,8 @@
     var login = function(user) {
       return $http.post('http://localhost:3000/login', user).success(function(data) {
         saveToken(data.token);
+      }).error(function(err){
+        console.log(err);
       });
     };
 

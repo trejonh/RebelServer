@@ -18,12 +18,7 @@ angular.module('clientApp')
       authentication.login(main.credentials).then(function() {
         $location.path("/profile");
       }, function errorCallback() {
-        console.log("failed to login");
+        $("#loginFailure").show();// jshint ignore:line
       });
-      /*  $rootScope.username = $scope.username;//$rootscope is global
-        $rootScope.password = $scope.password;*/
-      /*
-      $rootScope.isLoggedIn = true;
-      */
     };
   });
