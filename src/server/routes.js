@@ -20,5 +20,4 @@ router.post('/login', ctrlAuth.login);
 //particle test
 router.get('/particleTest', ctrlComms.readMessage);
 router.post('/particleTest', ctrlComms.setMessage);
-
 module.exports = router;

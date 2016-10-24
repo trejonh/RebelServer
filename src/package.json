@@ -24,6 +24,7 @@
     "angular": "^1.5.8",
     "jasmine": "^2.5.2",
     "jasmine-core": "^2.2.0",
+    "node-cmd": "^1.1.1",
     "really-need": "^1.9.2",
     "supertest": "^2.0.0"
   }
