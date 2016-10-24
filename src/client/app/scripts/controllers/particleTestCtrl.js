@@ -21,5 +21,5 @@ angular.module('clientApp')
       .error(function(err){
         console.log(err);
       });
-      particle.message.url = "https://api.particle.io/v1/devices/"+particle.message.deviceID+"/led?access_token="+particle.message.accessToken;
+      $scope.actionUrl = "https://api.particle.io/v1/devices/"+particle.message.deviceID+"/led?access_token="+particle.message.accessToken;
   });
