@@ -13,8 +13,13 @@
       return $http.get('http://'+window.location.hostname+':3000/particleTest');
     };
 
+    var toggle = function(id,token){
+      return $http.post("https://api.particle.io/v1/devices/"+id+"/led?access_token="+token);
+    };
+
   return {
-    getDeviceStatus: getDeviceStatus
+    getDeviceStatus: getDeviceStatus,
+    toggle:toggle
   };
 }
 })();
