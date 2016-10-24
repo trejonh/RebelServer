@@ -21,12 +21,6 @@ angular
         controllerAs: 'main'
       })
       .when('/mySmartDevices', {
-        /*resolve:{
-          "check":function($location){
-              if(!$rootScope.isLoggedIn)
-                $location.path("/")
-          }
-        },*/
         templateUrl: 'views/mysmartdevices.html',
         controller: 'MysmartdevicesCtrl',
         controllerAs: 'mySmartDevices'
@@ -40,6 +34,11 @@ angular
         templateUrl: 'views/profile.html',
         controller: 'ProfileCtrl',
         controllerAs: 'profile'
+      })
+      .when('/particleTest', {
+        templateUrl: 'views/particleTest.html',
+        controller: 'ParticleTestCtrl;',
+        controllerAs: 'particle'
       })
       .otherwise({
         redirectTo: '/'

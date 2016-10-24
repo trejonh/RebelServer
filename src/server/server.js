@@ -80,62 +80,6 @@ app.use(function(err, req, res, next) {
     });
 });
 
-app.listen(3000);
+var server = app.listen(3000);
 
-module.exports = app;
-/*// set up ========================
-var DATABASE = "mongodb://localhost:27017/smartHomeDevices";
-var express = require("express");
-var mongoose = require("mongoose"); //require monogDB Driver
-var morgan = require("morgan"); // log requests to the console (express4)
-var bodyParser = require("body-parser"); // pull information from HTML POST (express4)
-var methodOverride = require("method-override"); // simulate DELETE and PUT (express4)
-var passport = require("passport");
-//var _ = require("lodash");
-var http = require('http');
-//setup
-//app.models =
-require("./Models/moduleIndex");
-//  Bring in the Passport config after model is defined
-require('./config/passport');
-//registering routes
-var routes = require("./routes");
-//Create App
-var app = express();
-app.use(passport.initialize());
-//Add Middleware for REST API
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-app.use(bodyParser.json);
-app.use(bodyParser.json({
-    type: 'application/vnd.api+json'
-}));
-app.use(methodOverride("X-HTTP-Method-Override"));
-app.use(morgan("dev"));
-//CORS Support, makes API Public
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,");
-    res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
-    next();
-});
-app.use("/", routes);
-// Connect to the db
-mongoose.connect(DATABASE);
-mongoose.connection.once("open", function() {
-    var serv = http.createServer(function(req, res) {
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-        res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
-        res.writeHead(200, {
-            'Content-Type': 'text/plain'
-        });
-        console.log(routes(req.method, req.url));
-        res.end("END",req.url);
-    }).listen(3000);
-    //module.exports = app;
-    console.log("Listening on 3000");
-});
-*/
+module.exports = server;

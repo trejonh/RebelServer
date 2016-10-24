@@ -1,4 +1,5 @@
 module.exports = {
     smartDevice: require("./smartDevicesModel"),
-    registeredUser: require("./registeredUserModel")
+    registeredUser: require("./registeredUserModel"),
+    testMessages: require("./testMessagesModel")
 };

@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var gracefulShutdown;
-var dbURL = "mongodb://localhost/smartHomeDevices";
+var dbURL = process.env["TestDB"]? "mongodb://localhost/tests":"mongodb://localhost/smartHomeDevices"; //jshint ignore:line
 mongoose.Promise = global.Promise;
 mongoose.connect(dbURL);
 //Connection Events
