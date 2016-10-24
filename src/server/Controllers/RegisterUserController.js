@@ -17,10 +17,11 @@ module.exports.register = function(req,res) {
     user.email = req.body.email;
     user.username = req.body.username;
     user.setPassword(req.body.password);
-
-    user.save(function(err) {
+    //ToDo: do client-side check to verify user doesnt exist
+    User.findOneAndUpdate({"username":user.username},user,{upsert:true},function(err,doc){
       if(err){
         console.log(err);
+        res.status(500);
         return;
       }
       var token;
