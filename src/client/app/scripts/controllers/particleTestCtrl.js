@@ -14,6 +14,7 @@ angular.module('clientApp')
     particleServ.getDeviceStatus()
       .success(function(data){
         particle.message = data;
+        console.log(particle.message);
       })
       .error(function(err){
         console.log(err);
