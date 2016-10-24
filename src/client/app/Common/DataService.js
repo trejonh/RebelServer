@@ -10,7 +10,7 @@
   function meanData ($http, authentication) {// jshint ignore:line
 
     var getProfile = function () {
-      return $http.get('http://localhost:3000/profile', {
+      return $http.get('http://'+window.location.hostname+':3000/profile', {
         headers: {
           Authorization: 'Bearer '+ authentication.getToken()
         }
