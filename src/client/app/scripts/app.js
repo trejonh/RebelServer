@@ -35,6 +35,11 @@ angular
         controller: 'ProfileCtrl',
         controllerAs: 'profile'
       })
+      .when('/particleTest', {
+        templateUrl: 'views/particleTest.html',
+        controller: 'ParticleTestCtrl;',
+        controllerAs: 'particle'
+      })
       .otherwise({
         redirectTo: '/'
       });
