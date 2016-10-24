@@ -4,7 +4,7 @@ Will be used only for submodule testing not for dev
 var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req,res){
-  console.log(req);
+  console.log(req.data);
   console.log(req.body);
   var mess = new Message();
   mess.message = req.body.message;
