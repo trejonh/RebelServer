@@ -29,6 +29,11 @@ module.exports.readMessage = function(req,res){
         res.status(400);
         return;
       }
+      if(doc === null){
+        console.log("doc is null");
+        res.status(400);
+        return;
+      }
       res.status(200).json(doc.mess);
     });
 };
