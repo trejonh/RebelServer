@@ -20,10 +20,5 @@ angular.module('clientApp')
       .error(function(err){
         console.log(err);
       });
-
-      $scope.toggle = function(){
-        var onOff = $scope.led;
-        console.log(onOff);
-        //particleServ.toggle(onOff,particle.message.deviceID,particle.message.accessToke);
-      };
+      particle.message.url = "https://api.particle.io/v1/devices/"+particle.message.deviceID+"/led?access_token="+particle.message.accessToken;
   });
