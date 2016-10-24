@@ -13,7 +13,7 @@ angular
     'ngRoute',
     "restangular"
   ]).config(function($routeProvider, RestangularProvider) {
-    RestangularProvider.setBaseUrl("http://localhost:3000");
+    RestangularProvider.setBaseUrl("http://"+window.location.hostname+":3000");
     $routeProvider
       .when('/', {
         templateUrl: 'views/welcome.html',
@@ -37,7 +37,7 @@ angular
       })
       .when('/particleTest', {
         templateUrl: 'views/particleTest.html',
-        controller: 'ParticleTestCtrl;',
+        controller: 'ParticleTestCtrl',
         controllerAs: 'particle'
       })
       .otherwise({
