@@ -3,14 +3,14 @@
   <p>
     The particle said this: {{particle.message.message}}
   </p>
-<form action="https://api.particle.io/v1/devices/"{{particle.message.deviceID}}"/led?access_token="{{particle.message.accessToken}} method="POST">
+<form ng-action="toggle(led)">
     Tell your device what to do!<br>
     <br>
-    <input type="radio" name="args" value="on">Turn the LED on.
+    <input type="radio" name="args" value="on" ng-model="led.on">Turn the LED on.
     <br>
-    <input type="radio" name="args" value="off">Turn the LED off.
+    <input type="radio" name="args" value="off" ng-model="led.off">Turn the LED off.
     <br>
     <br>
-    <input type="submit" value="Do it!">
+    <input type="submit" value="Do it!" ng-click="toggle(led)">
   </form>
 </div>
