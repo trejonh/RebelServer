@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('ParticleTestCtrl', function($scope,$sce,particleServ) {
+  .controller('ParticleTestCtrl',["$scope","$sce","particleServ", function($scope,$sce,particleServ) {
     var particle = this;
     particle.message = {};
     //particle.url = "https://api.particle.io/v1/devices/"
@@ -20,4 +20,4 @@ angular.module('clientApp')
       .error(function(err){
         console.log(err);
       });
-  });
+  }]);
