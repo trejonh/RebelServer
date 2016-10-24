@@ -3,7 +3,7 @@
   <p>
     The particle said this: {{particle.message.message}}
   </p>
-<form action={{actionUrl}} method="POST">
+<form ng-action="{{actionUrl}}" method="POST">
     Tell your device what to do!<br>
     <br>
     <input type="radio" name="args" value="on" >Turn the LED on.
