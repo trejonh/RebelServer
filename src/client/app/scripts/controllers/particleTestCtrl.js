@@ -14,6 +14,7 @@ angular.module('clientApp')
     //particle.url = "https://api.particle.io/v1/devices/"
     particleServ.getDeviceStatus()
       .success(function(data){
+        console.log(data);
         particle.message = data;
         console.log(particle.message);
       })

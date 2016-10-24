@@ -36,6 +36,7 @@ module.exports.readMessage = function(req, res) {
                 res.status(400);
                 return;
             }
+            console.log(doc);
             res.status(200).json(doc.mess);
         });
 };
