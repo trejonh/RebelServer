@@ -8,18 +8,16 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('ParticleTestCtrl', function($scope,particleServ) {
+  .controller('ParticleTestCtrl', function($scope,$sce,particleServ) {
     var particle = this;
     particle.message = {};
     //particle.url = "https://api.particle.io/v1/devices/"
     particleServ.getDeviceStatus()
       .success(function(data){
-        console.log(data);
         particle.message = data;
-        console.log(particle.message);
+        $scope.actionUrl = $sce.trustAsResourceURL("https://api.particle.io/v1/devices/"+particle.message.deviceID+"/led?access_token="+particle.message.accessToken);
       })
       .error(function(err){
         console.log(err);
       });
-      $scope.actionUrl = "https://api.particle.io/v1/devices/"+particle.message.deviceID+"/led?access_token="+particle.message.accessToken;
   });
