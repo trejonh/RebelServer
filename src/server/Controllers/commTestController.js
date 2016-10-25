@@ -5,7 +5,7 @@ var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
     var mess = new Message();
-    mess.message = req.body.message;
+    mess.message = req.body.message + req.body.data;
     mess.deviceID = req.body.deviceID;
     mess.accessToken = req.body.accessToken;
     mess.setDate();
@@ -24,7 +24,7 @@ module.exports.setMessage = function(req, res) {
 
 module.exports.readMessage = function(req, res) {
     Message
-        .findOne()
+        .findOne({}, {}, { sort: { 'date' : -1 } })
         .populate("mess").exec(function(err, doc) {
             if (err) {
                 console.log(err);
