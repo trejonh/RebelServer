@@ -11,10 +11,12 @@ angular.module('clientApp')
   .controller('ParticleTestCtrl', function($scope,particleServ) {
     var particle = this;
     particle.message = {};
+    particle.url="";
     //particle.url = "https://api.particle.io/v1/devices/"
     particleServ.getDeviceStatus()
       .success(function(data){
         particle.message = data;
+        particle.url = "https://api.particle.io/v1/devices/"+data.deviceID+"/led?access_token="+data.accessToken;
       })
       .error(function(err){
         console.log(err);
