@@ -16,13 +16,12 @@ angular.module('clientApp')
     particleServ.getDeviceStatus()
       .success(function(data){
         particle.message = data;
-        $sce.trustAsResourceUrl("https://api.particle.io/v1/devices/"+data.deviceID+"/led?access_token="+data.accessToken);
         particle.url = "https://api.particle.io/v1/devices/"+data.deviceID+"/led?access_token="+data.accessToken;
       })
       .error(function(err){
         console.log(err);
       });
-      $scope.toggle = function(){
-        console.log(particleServ.toggle(particle.message.deviceID,particle.message.accessToken,$scope.ledState));
+      $scope.trustSrc = function(src){
+        return $sce.trustAsResourceUrl(src);
       };
   });
