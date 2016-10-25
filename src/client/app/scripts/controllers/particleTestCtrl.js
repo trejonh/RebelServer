@@ -20,10 +20,7 @@ angular.module('clientApp')
         console.log(err);
       });
       $scope.toggle = function(){
-        console.log($scope.on);
-          console.log($scope.off);
-        console.log(particle.message.deviceID);
-      console.log(particle.message.accessToken);
+        console.log($scope.ledState);
         particleServ.toggle(particle.message.deviceID,particle.message.accessToken);
       };
   });

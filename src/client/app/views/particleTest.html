@@ -6,9 +6,9 @@
 <form ng-submit="toggle()">
     Tell your device what to do!<br>
     <br>
-    <input type="radio" name="args" ng-model="on" >Turn the LED on.
+    <input type="radio" name="args" ng-model="ledState" value="on">Turn the LED on.
     <br>
-    <input type="radio" name="args" ng-model="off" >Turn the LED off.
+    <input type="radio" name="args" ng-model="ledState" value="off" >Turn the LED off.
     <br>
     <br>
     <input type="submit" value="Do it!">
