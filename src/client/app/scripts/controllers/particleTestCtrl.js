@@ -24,5 +24,5 @@ angular.module('clientApp')
         $scope.trustSrc = function(src){
           return $sce.trustAsResourceUrl(src);
         };
-    }, 10000);
+    }, 50000);
   });
