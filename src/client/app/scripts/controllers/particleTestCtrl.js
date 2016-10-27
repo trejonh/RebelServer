@@ -8,13 +8,14 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('ParticleTestCtrl', function($scope,$sce,$timeout,particleServ) {
+  .controller('ParticleTestCtrl', function($scope,$sce,$interval,particleServ) {
     var particle = this;
     particle.message = {};
     particle.url="";
     particleServ.getDeviceStatus()
       .success(function(data){
         particle.message = data;
+        $scope.message = data.message;
         particle.url = "https://api.particle.io/v1/devices/"+data.deviceID+"/led?access_token="+data.accessToken;
       })
       .error(function(err){
@@ -23,7 +24,7 @@ angular.module('clientApp')
       $scope.trustSrc = function(src){
         return $sce.trustAsResourceUrl(src);
       };
-    $timeout(function () {
+    $interval(function () {
       particleServ.getDeviceStatus()
         .success(function(data){
           console.log("in timoeout");
@@ -33,5 +34,5 @@ angular.module('clientApp')
         .error(function(err){
           console.log(err);
         });
-    }, 5000);
+    }, 1000);
   });
