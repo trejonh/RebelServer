@@ -12,7 +12,7 @@ angular.module('clientApp')
     var particle = this;
     particle.message = {};
     particle.url="";
-    $timeout(function () {
+    //$timeout(function () {
       particleServ.getDeviceStatus()
         .success(function(data){
           particle.message = data;
@@ -24,5 +24,5 @@ angular.module('clientApp')
         $scope.trustSrc = function(src){
           return $sce.trustAsResourceUrl(src);
         };
-    }, 50000);
+  //  }, 50000);
   });
