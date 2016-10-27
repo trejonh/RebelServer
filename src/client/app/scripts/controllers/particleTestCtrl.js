@@ -26,10 +26,12 @@ angular.module('clientApp')
     $timeout(function () {
       particleServ.getDeviceStatus()
         .success(function(data){
+          console.log("in timoeout");
+          console.log(data);
           $scope.message = data.message;
         })
         .error(function(err){
           console.log(err);
         });
-    }, 50000);
+    }, 5000);
   });
