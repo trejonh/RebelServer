@@ -27,12 +27,10 @@ angular.module('clientApp')
     $interval(function () {
       particleServ.getDeviceStatus()
         .success(function(data){
-          console.log("in timoeout");
-          console.log(data);
           $scope.message = data.message;
         })
         .error(function(err){
           console.log(err);
         });
-    }, 1000);
+    }, 2000);
   });

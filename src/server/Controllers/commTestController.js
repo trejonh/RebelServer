@@ -5,7 +5,6 @@ var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
     var mess = new Message();
-    console.log(req.body);
     mess.message = req.body.message +" "+ req.body.data;
     mess.deviceID = req.body.deviceID;
     mess.accessToken = req.body.accessToken;
