@@ -5,14 +5,15 @@ var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
     var mess = new Message();
-    console.log(req.body.data);
-    mess.message = req.body.message + req.body.data;
+    mess.message = req.body.message +" "+ req.body.data;
     mess.deviceID = req.body.deviceID;
     mess.accessToken = req.body.accessToken;
     mess.setDate();
     Message.findOneAndUpdate({
         "deviceID": mess.deviceID
-    }, mess, {
+    }, {$set:{
+      "message": mess.message
+    }}, {
         upsert: true
     }, function(err, doc) {
         if (err) {
