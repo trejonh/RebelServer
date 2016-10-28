@@ -5,7 +5,7 @@ var TestMessagesSchema = new mongoose.Schema({
         required: true
     },
     date: {
-        type: Object,
+        type: String,
         required: true
     },
     deviceID:{
@@ -19,6 +19,6 @@ var TestMessagesSchema = new mongoose.Schema({
 });
 
 TestMessagesSchema.methods.setDate = function(){
-  this.date = new Date();
+  this.date = new Date().toString();
 };
 module.exports = mongoose.model("testMessagesModel", TestMessagesSchema);
