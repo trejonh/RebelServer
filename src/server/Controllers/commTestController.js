@@ -5,7 +5,7 @@ var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
     var mess = new Message();
-    mess.message = req.body.message +" "+ req.body.data;
+    mess.message = req.body.message;// +" "+ req.body.data;
     mess.deviceID = req.body.deviceID;
     mess.accessToken = req.body.accessToken;
     mess.setDate();
@@ -26,7 +26,7 @@ module.exports.setMessage = function(req, res) {
 
 module.exports.readMessage = function(req, res) {
     Message
-        .findOne({}, {}, { sort: { 'date' : -1 } })
+        .findOne({})
         .populate("mess").exec(function(err, doc) {
             if (err) {
                 console.log(err);
@@ -41,4 +41,16 @@ module.exports.readMessage = function(req, res) {
             console.log(doc);
             res.status(200).json(doc);
         });
+};
+
+module.exports.deleteMess = function(req, res) {
+    Message.remove({}, function(err){
+        if(err){
+          console.log(err);
+          res.status(400);
+          return;
+        }
+        res.status(200);
+        return;
+    });
 };
