@@ -12,6 +12,7 @@ angular.module('clientApp')
     var particle = this;
     particle.message = {};
     particle.url="";
+    $scope.message = "Waiting for data";
     particleServ.getDeviceStatus()
       .success(function(data){
         particle.message = data;
