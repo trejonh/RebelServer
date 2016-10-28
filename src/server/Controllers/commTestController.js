@@ -9,10 +9,12 @@ module.exports.setMessage = function(req, res) {
     mess.deviceID = req.body.deviceID;
     mess.accessToken = req.body.accessToken;
     mess.setDate();
+    console.log(mess);
     Message.findOneAndUpdate({
         "deviceID": mess.deviceID
     }, {$set:{
-      "message": mess.message
+      "message": mess.message,
+      "accessToken": mess.accessToken
     }}, {
         upsert: true
     }, function(err, doc) {
