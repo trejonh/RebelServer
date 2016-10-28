@@ -5,7 +5,7 @@ var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
     var mess = new Message();
-    mess.message = req.body.message;// +" "+ req.body.data;
+    mess.message = req.body.message;
     mess.deviceID = req.body.deviceID;
     mess.accessToken = req.body.accessToken;
     mess.setDate();
@@ -44,6 +44,7 @@ module.exports.readMessage = function(req, res) {
 };
 
 module.exports.deleteMess = function(req, res) {
+  console.log("in del route");
     Message.remove({}, function(err){
         if(err){
           console.log(err);
