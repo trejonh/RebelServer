@@ -44,7 +44,6 @@ module.exports.readMessage = function(req, res) {
 };
 
 module.exports.deleteMess = function(req, res) {
-  console.log("in del route");
     Message.remove({}, function(err){
         if(err){
           console.log(err);
