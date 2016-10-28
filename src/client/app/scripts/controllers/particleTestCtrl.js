@@ -35,6 +35,7 @@ angular.module('clientApp')
         })
         .error(function(err){
           console.log(err);
+          $scope.message = "Message Deleted";
         });
     }, 2000);
   });
