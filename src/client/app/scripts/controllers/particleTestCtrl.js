@@ -31,12 +31,12 @@ angular.module('clientApp')
           if(data === null || data.message === "" || data.message === undefined){
             $scope.message = "Message Deleted";
           }else{
-            $scope.message = "Message Recieved at: "+data.date+" it is: "+data.message;
+            $scope.message = "Message Recieved : "+data.message;
           }
         })
         .error(function(err){
           console.log(err);
-          $scope.message = "Message Deleted";
+          $scope.message = "Message Not Found";
         });
     }, 2000);
   });
