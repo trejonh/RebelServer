@@ -35,8 +35,8 @@ angular.module('clientApp')
           }
         })
         .error(function(err){
-          console.log(err);
           $scope.message = "Message Not Found";
+          console.log(err);
         });
     }, 2000);
   });
