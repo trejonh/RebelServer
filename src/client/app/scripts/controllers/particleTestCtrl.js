@@ -38,12 +38,13 @@ angular.module('clientApp')
           }
         })
         .error(function(err){
+          if(err){
           tracker = null;
           $scope.message = "Message Not Found";
-          console.log(err);
+        }
         });
         if(tracker ===null ){
-          $scope.message = "";
+          $scope.message = "Message not found";
         }
-    }, 2000);
+    }, 1000);
   });
