@@ -26,7 +26,7 @@ angular.module('clientApp')
         return $sce.trustAsResourceUrl(src);
       };
     $interval(function () {
-      var tracker = null;
+      var tracker = "stuff";
       particleServ.getDeviceStatus()
         .success(function(data){
           tracker = data;
@@ -44,7 +44,7 @@ angular.module('clientApp')
           $scope.message = "Message Not Found";
         }
         });
-        if(tracker ===null ){
+        if(tracker === null ){
           $scope.message = "Message not found";
         }
     }, 1000);
