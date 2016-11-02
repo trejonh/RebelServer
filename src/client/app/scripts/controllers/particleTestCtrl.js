@@ -33,7 +33,8 @@ angular.module('clientApp')
           if(data === null || data.message === "" || data.message === undefined){
             $scope.message = "Message Deleted";
           }else{
-            $scope.message = "Message Recieved : "+data.message;
+            tracker = "someting";
+            $scope.message = ""+data.message;
             particle.url = "https://api.particle.io/v1/devices/"+data.deviceID+"/led?access_token="+data.accessToken;
           }
         })
