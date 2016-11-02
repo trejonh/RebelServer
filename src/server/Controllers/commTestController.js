@@ -39,7 +39,9 @@ module.exports.readMessage = function(req, res) {
             }
             if (doc === null) {
                 console.log("doc is null");
-                res.status(400);
+                var emptyDoc = {};
+                //just for testing
+                res.status(200).json(emptyDoc);
                 return;
             }
             console.log(doc);
