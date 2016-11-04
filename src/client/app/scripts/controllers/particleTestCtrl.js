@@ -13,7 +13,7 @@ angular.module('clientApp')
     particle.message = {};
     particle.url = "";
     var emptyDoc = {};
-    $scope.message = "Waiting for data";
+    $scope.message = "No Message Found";
     particleServ.getDeviceStatus()
       .success(function(data) {
         particle.message = data;
@@ -30,10 +30,10 @@ angular.module('clientApp')
       particleServ.getDeviceStatus()
         .success(function(data) {
           if (data === emptyDoc) {
-            $scope.message = "Waiting for data";
+            $scope.message = "No Message Found";
           }
           if (data === null || data.message === "" || data.message === undefined) {
-            $scope.message = "Message Deleted";
+            $scope.message = "No Message Found";
           } else {
             $scope.message = "" + data.message;
             particle.url = "https://api.particle.io/v1/devices/" + data.deviceID + "/led?access_token=" + data.accessToken;
@@ -41,7 +41,7 @@ angular.module('clientApp')
         })
         .error(function(err) {
           if (err) {
-            $scope.message = "Message Not Found";
+            $scope.message = "No Message Found";
           }
         });
     }, 1000);
