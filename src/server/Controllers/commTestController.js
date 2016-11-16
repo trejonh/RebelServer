@@ -1,9 +1,12 @@
-/*
+  /*
 Will be used only for submodule testing not for dev
 */
 var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
+    /*console.log(req);
+    console.log("==================================================");
+    console.log(req.body);*/
     var mess = new Message();
     mess.message = req.body.message;
     mess.deviceID = req.body.deviceID;
@@ -11,7 +14,10 @@ module.exports.setMessage = function(req, res) {
     mess.setDate();
     Message.findOneAndUpdate({
         "deviceID": mess.deviceID
-    }, mess, {
+    }, {$set:{
+      "message": mess.message,
+      "accessToken": mess.accessToken
+    }}, {
         upsert: true
     }, function(err, doc) {
         if (err) {
@@ -24,7 +30,7 @@ module.exports.setMessage = function(req, res) {
 
 module.exports.readMessage = function(req, res) {
     Message
-        .findOne()
+        .findOne({})
         .populate("mess").exec(function(err, doc) {
             if (err) {
                 console.log(err);
@@ -33,9 +39,24 @@ module.exports.readMessage = function(req, res) {
             }
             if (doc === null) {
                 console.log("doc is null");
-                res.status(400);
+                var emptyDoc = {};
+                //just for testing
+                res.status(200).json(emptyDoc);
                 return;
             }
-            res.status(200).json(doc.mess);
+            console.log(doc);
+            res.status(200).json(doc);
         });
+};
+
+module.exports.deleteMess = function(req, res) {
+    Message.remove({}, function(err){
+        if(err){
+          console.log(err);
+          res.status(400);
+          return;
+        }
+        res.status(200);
+        return;
+    });
 };

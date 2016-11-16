@@ -11,7 +11,6 @@
   function authentication($http, $window) { // jshint ignore:line
 
     var saveToken = function(token) {
-      console.log(token);
       $window.localStorage['mean-token'] = token;
     };
 

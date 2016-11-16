@@ -8,17 +8,41 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('ParticleTestCtrl', function($scope,particleServ) {
+  .controller('ParticleTestCtrl', function($scope, $sce, $interval, particleServ) {
     var particle = this;
     particle.message = {};
-    //particle.url = "https://api.particle.io/v1/devices/"
+    particle.url = "";
+    var emptyDoc = {};
+    $scope.message = "No Message Found";
     particleServ.getDeviceStatus()
-      .success(function(data){
+      .success(function(data) {
         particle.message = data;
-        console.log(particle.message);
+        //$scope.message = data.message;
+        particle.url = "https://api.particle.io/v1/devices/" + data.deviceID + "/led?access_token=" + data.accessToken;
       })
-      .error(function(err){
+      .error(function(err) {
         console.log(err);
       });
-      particle.message.url = "https://api.particle.io/v1/devices/"+particle.message.deviceID+"/led?access_token="+particle.message.accessToken;
+    $scope.trustSrc = function(src) {
+      return $sce.trustAsResourceUrl(src);
+    };
+    $interval(function() {
+      particleServ.getDeviceStatus()
+        .success(function(data) {
+          if (data === emptyDoc) {
+            $scope.message = "No Message Found";
+          }
+          if (data === null || data.message === "" || data.message === undefined) {
+            $scope.message = "No Message Found";
+          } else {
+            $scope.message = "" + data.message;
+            particle.url = "https://api.particle.io/v1/devices/" + data.deviceID + "/led?access_token=" + data.accessToken;
+          }
+        })
+        .error(function(err) {
+          if (err) {
+            $scope.message = "No Message Found";
+          }
+        });
+    }, 1000);
   });

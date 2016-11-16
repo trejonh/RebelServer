@@ -1,16 +1,15 @@
 <h1>Welcome to the Subsystem Test Page</h1>
 <div class="container">
   <p>
-    The particle said this: {{particle.message.message}}
+    The particle said this: "<em>{{message}}</em> "
   </p>
-<form action={{particle.message.url}} method="POST">
-    Tell your device what to do!<br>
+<form action="{{trustSrc(particle.url)}}" method="POST">
     <br>
-    <input type="radio" name="args" value="on" ng-model="led.on">Turn the LED on.
+    <input type="radio" name="args" ng-model="ledState" value="on">Turn the LED on.
     <br>
-    <input type="radio" name="args" value="off" ng-model="led.off">Turn the LED off.
+    <input type="radio" name="args" ng-model="ledState" value="off" >Turn the LED off.
     <br>
     <br>
-    <input type="submit" value="Do it!" ng-click="toggle(led)">
+    <input type="submit" value="Do it!">
   </form>
 </div>
