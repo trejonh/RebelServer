@@ -15,5 +15,4 @@ and testing a programmable power switch that can be controlled by a mobile app.
 ###[Greg Pore - EE](poreg@msoe.edu)
 
 ##Other Repositories
-###[Rebel Kangaroo - Mobile App](https://github.com/msoeSE/RebelKangaroo)
-###[Rebel MC - Micro=Controller](https://github.com/msoeSE/RebelMC)
+###[Rebel MC - Micro-Controller](https://github.com/msoeSE/RebelMC)
