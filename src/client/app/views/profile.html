@@ -1,1 +1,21 @@
-<h1>Welcome {{profile.user.name}}!</h1>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="dropdown">
+        <img src="{{profile.user.profileImage}}" alt="{{profile.user.name}}"
+          class="img-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <ul class="dropdown-menu" aria-labelledby="accountImage">
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-9">
+      <h1>Welcome {{profile.user.name}}!</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-9">
+    </div>
+  </div>
+</div>

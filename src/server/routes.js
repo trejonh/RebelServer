@@ -19,6 +19,6 @@ router.post('/register', ctrlAuth.register);
 router.post('/login', ctrlAuth.login);
 //particle test
 router.get('/particleTest', ctrlComms.readMessage);
-router.post('/particleTest', ctrlComms.setMessage);
+router.post('/particleJSON', ctrlComms.setMessage);
 router.delete('/particleTest', ctrlComms.deleteMess);
 module.exports = router;

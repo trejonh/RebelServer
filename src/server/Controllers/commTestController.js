@@ -4,9 +4,9 @@ Will be used only for submodule testing not for dev
 var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
-    /*console.log(req);
+    console.log(req);
     console.log("==================================================");
-    console.log(req.body);*/
+    console.log(req.body);/*
     var mess = new Message();
     mess.message = req.body.message;
     mess.deviceID = req.body.deviceID;
@@ -25,7 +25,8 @@ module.exports.setMessage = function(req, res) {
             return;
         }
         res.status(200);
-    });
+    });*/
+    res.status(200);
 };
 
 module.exports.readMessage = function(req, res) {

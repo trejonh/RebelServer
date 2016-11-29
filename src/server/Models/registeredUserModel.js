@@ -21,6 +21,10 @@ var RegisteredUserSchema = new mongoose.Schema({
     type: Object,
     required: false
   },
+  profileImage:{
+    type: String,
+    required:false
+  },
   hash: String,
   salt: String
 });
@@ -36,6 +40,8 @@ RegisteredUserSchema.methods.validPassword = function(password) {
   var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64,"SHA1").toString('hex');
   return this.hash === hash;
 };
+
+//RegisteredUserSchema.methods.update
 
 RegisteredUserSchema.methods.generateJwt = function() {
   var expiration = new Date();
