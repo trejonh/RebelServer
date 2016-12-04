@@ -9,7 +9,7 @@
   </div>
   <div class="form-group">
     <label for="password">Password*</label>
-    <input type="password" class="form-control" id="passwordInout" placeholder="password" ng-model="registerUser.credentials.password">
+    <input type="password" class="form-control" id="passwordInput" placeholder="password" ng-model="registerUser.credentials.password">
   </div>
   <div class="form-group">
     <label for="email">Email</label>
@@ -17,8 +17,23 @@
   </div>
   <div class="form-group">
     <label for="profileImage">Profile Image</label>
-    <input type="file" accept="image/*" name="pic" class="form-control" id="imageUpload" ng-model="registerUser.credentials.profileImage" ng-change="imgChange()">
+    <input type="file" accept="image/*" name="pic" class="form-control" id="imageUpload" file-model="profileImage">
   </div>
   <button type="submit" class="btn btn-success" ng-click="submit()">Register</button>
   <p><strong>*</strong>- Required field</p>
 </form>
+<script type="text/javascript" src="strength.js"></script>
+<script type="text/javascript" src="js.js"></script>
+<script>
+  $(document).ready(function($) {
+
+    $("#passwordInput").strength(
+        strengthClass: 'strength',
+        strengthMeterClass: 'strength_meter',
+        strengthButtonClass: 'button_strength',
+        strengthButtonText: 'Show password',
+        strengthButtonTextToggle: 'Hide Password'
+      );
+
+  });
+</script>

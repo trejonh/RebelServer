@@ -47,7 +47,7 @@
     };
 
     var register = function(user) {
-      return $http.post('http://'+window.location.hostname+':3000/register', user).success(function(data) {
+      return $http.post('http://' + window.location.hostname + ':3000/register', user).success(function(data) {
         saveToken(data.token);
       }).error(function(err) {
         console.log(err);
@@ -56,11 +56,27 @@
     };
 
     var login = function(user) {
-      return $http.post('http://'+window.location.hostname+':3000/login', user).success(function(data) {
+      return $http.post('http://' + window.location.hostname + ':3000/login', user).success(function(data) {
         saveToken(data.token);
-      }).error(function(err){
+      }).error(function(err) {
         console.log(err);
       });
+    };
+
+    var changeProfilImg = function(file, uploadUrl) {
+      var fd = new FormData();
+      fd.append('file', file);
+      //console.log(fd);
+      /*$http.post(uploadUrl, fd, {
+         transformRequest: angular.identity,
+         headers: {'Content-Type': undefined}
+      })
+
+      .success(function(){
+      })
+
+      .error(function(){
+      });*/
     };
 
     var logout = function() {
@@ -74,6 +90,7 @@
       isLoggedIn: isLoggedIn,
       register: register,
       login: login,
+      changeProfilImg: changeProfilImg,
       logout: logout
     };
   };

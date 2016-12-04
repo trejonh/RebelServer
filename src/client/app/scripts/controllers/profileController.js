@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('ProfileCtrl', function($location,meanData) {
+  .controller('ProfileCtrl', function($scope,$location,meanData,authentication) {
     var profile = this;
     profile.user = {};
     meanData.getProfile()
@@ -18,4 +18,7 @@ angular.module('clientApp')
       .error(function(e) {
         console.log(e);
       });
+      $scope.logout = function(){
+        console.log("loggin out");
+      };
   });

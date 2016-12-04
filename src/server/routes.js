@@ -16,6 +16,7 @@ router.get('/profile', auth, ctrlProfile.profileRead);
 
 // authentication
 router.post('/register', ctrlAuth.register);
+//router.options('/register', ctrlAuth.register);
 router.post('/login', ctrlAuth.login);
 //particle test
 router.get('/particleTest', ctrlComms.readMessage);

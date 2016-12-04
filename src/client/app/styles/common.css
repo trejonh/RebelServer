@@ -10,3 +10,13 @@ form{
 footer.footer{
   margin-top: 75px;
 }
+#navbar-collapse{
+  position: relative;
+}
+#pages{
+  position: absolute;
+  top: 50%;
+  right: -20%;
+  transform: translateY(-50%);
+  float: right;
+}
