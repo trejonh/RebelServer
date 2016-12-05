@@ -5,8 +5,12 @@ var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
     console.log(req);
+    console.console.log("========================tcp===================");
+    req.TCP.onread(function(data){
+      console.log(data);
+    });
     console.log("==================================================");
-    console.log(req.body);/*
+    console.log(req.Route.stack[0]);/*
     var mess = new Message();
     mess.message = req.body.message;
     mess.deviceID = req.body.deviceID;
