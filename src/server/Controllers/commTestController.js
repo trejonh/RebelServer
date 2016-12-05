@@ -6,9 +6,12 @@ var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
     //console.log(req);
     console.log("========================tcp===================");
-    req.TCP.onread(function(data){
+    console.log(req.socket.TCP);
+    console.log(req.socket.Socket.TCP);
+    console.log(req.onRead);
+    /*req.TCP.onread(function(data){
       console.log(data);
-    });
+    });*/
     console.log("============body====================");
     console.log(req.body);
     console.log("=================route stack=================================");
