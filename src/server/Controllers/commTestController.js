@@ -4,18 +4,8 @@ Will be used only for submodule testing not for dev
 var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
-    //console.log(req);
-    console.log("========================tcp===================");
-    console.log(req.socket.TCP);
-    console.log(req.socket.Socket.TCP);
-    console.log(req.onRead);
-    /*req.TCP.onread(function(data){
-      console.log(data);
-    });*/
-    console.log("============body====================");
-    console.log(req.body);
-    console.log("=================route stack=================================");
-    console.log(req.Route.stack[0]);/*
+    console.log(req.body.data);
+    /*
     var mess = new Message();
     mess.message = req.body.message;
     mess.deviceID = req.body.deviceID;
