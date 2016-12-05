@@ -4,7 +4,7 @@ Will be used only for submodule testing not for dev
 var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
-    console.log(req);
+    //console.log(req);
     console.console.log("========================tcp===================");
     req.TCP.onread(function(data){
       console.log(data);
