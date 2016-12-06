@@ -17,17 +17,17 @@
       };
       data = data.split(",");
       for (var i = 0; i < data.length; i++) {
-          var outletData = data.split(":");
+          var outletData = data[i].split(":");
           outletData = outletData[1];
           switch (i) {
               case 0:
                   outlet.deviceID = parseInt(outletData);
                   break;
               case 1:
-                  outlet.outletNumber = parseInt(outletData);
+                  outlet.outletNumber = parseInt(outletData.trim());
                   break;
               case 2:
-                  outlet.nickname = parseInt(outletData);
+                  outlet.nickname = outletData;
                   break;
               case 3:
                   outlet.isOn = parseInt(outletData);
