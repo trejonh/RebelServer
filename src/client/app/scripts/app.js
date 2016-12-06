@@ -77,7 +77,6 @@ angular
       }
     });
     if (authentication.isLoggedIn() || $location.path() === "/profile") {
-      console.log(authentication.isLoggedIn());
       $rootScope.lgBtn = {
         display: "inline-block"
       };

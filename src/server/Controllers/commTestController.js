@@ -5,6 +5,10 @@ var mongoose = require("mongoose");
 var Message = mongoose.model("testMessagesModel");
 module.exports.setMessage = function(req, res) {
     console.log(req.body.data);
+    JSON.parse(req.body.data,function(key,val){
+      console.log(key + " key");
+      console.log(val+" val");
+    });
     /*
     var mess = new Message();
     mess.message = req.body.message;

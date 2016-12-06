@@ -16,7 +16,7 @@ footer.footer{
 #pages{
   position: absolute;
   top: 50%;
-  right: -20%;
+  right: 0px;
   transform: translateY(-50%);
   float: right;
 }

@@ -16,49 +16,54 @@ angular.module('clientApp')
       username: "",
       email: "",
       password: "",
+      confirmPassword:"",
       profileImage: ""
     };
     $scope.submit = function() {
-      if ($scope.profileImage) {
+      if ($scope.profileImage !== null || $scope.profileImage !== undefined) {
         var file = $scope.profileImage;
         var reader = new FileReader();
         reader.onload = function() {
           registerUser.credentials.profileImage = reader.result;
+
+          if (completedFields(registerUser.credentials)) {
+            authentication.register(registerUser.credentials).then(function() {
+              $location.path("/profile");
+            }, function errorCallback(err) {
+              console.log(err);
+              console.log("error saving to db");
+            });
+          }
+
         };
         reader.readAsDataURL(file);
-      }
-      if (!registerUser.credentials.profileImage) {
-        registerUser.credentials.profileImage = defaultPic;
-      }
-      if (completedFields(registerUser.credentials)) {
-        authentication.register(registerUser.credentials).then(function() {
-          $location.path("/profile");
-        }, function errorCallback(err) {
-          console.log(err);
-          console.log("error saving to db");
-        });
+      } else {
+        if (!registerUser.credentials.profileImage && !$scope.profileImage) {
+          registerUser.credentials.profileImage = defaultPic;
+        }
+        if (completedFields(registerUser.credentials)) {
+          authentication.register(registerUser.credentials).then(function() {
+            $location.path("/profile");
+          }, function errorCallback(err) {
+            console.log(err);
+            console.log("error saving to db");
+          });
+        }
       }
     };
 
   });
 
-
 function completedFields(credentials) { //jshint ignore:line
   var fName = credentials.name;
   var uName = credentials.username;
   var password = credentials.password;
+  var confirmPass = credentials.confirmPassword;
   fName = fName.trim();
   uName = uName.trim();
   password = password.trim();
-  /*if (!checkPasswordStrength(password))
-    return false;*/
-  if (!fName || fName.length === 0 || !uName || uName.length === 0)
+  confirmPass = confirmPass.trim();
+  if (!fName || fName.length === 0 || !uName || uName.length === 0 || password !== confirmPass)
     return false; //jshint ignore:line
   return true;
 }
-
-/*function checkPasswordStrength(password){
-  if(password.length < 8)
-    return false;
-  return true;
-}*/
