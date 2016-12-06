@@ -18,28 +18,27 @@
       data = data.split(",");
       for (var i = 0; i < data.length; i++) {
           var outletData = data[i].split(":");
-          outletData = outletData[1];
           switch (i) {
               case 0:
-                  outlet.deviceID = parseInt(outletData);
+                  outlet.deviceID = parseInt(outletData[1]);
                   break;
               case 1:
-                  outlet.outletNumber = parseInt(outletData.trim());
+                  outlet.outletNumber = parseInt(outletData[2]);
                   break;
               case 2:
-                  outlet.nickname = outletData;
+                  outlet.nickname = outletData[1];
                   break;
               case 3:
-                  outlet.isOn = parseInt(outletData);
+                  outlet.isOn = parseInt(outletData[1]);
                   break;
               case 4:
-                  outlet.timeSetOn = parseInt(outletData);
+                  outlet.timeSetOn = parseInt(outletData[1]);
                   break;
               case 5:
-                  outlet.timeSetOff = parseInt(outletData);
+                  outlet.timeSetOff = parseInt(outletData[1]);
                   break;
               case 6:
-                  outlet.elapsedTimeOn = parseInt(outletData);
+                  outlet.elapsedTimeOn = parseInt(outletData[1]);
                   break;
           }
       }
