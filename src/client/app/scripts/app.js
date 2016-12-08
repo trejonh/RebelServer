@@ -35,10 +35,15 @@ angular
         controller: 'ProfileCtrl',
         controllerAs: 'profile'
       })
-      .when('/particleTest', {
-        templateUrl: 'views/particleTest.html',
-        controller: 'ParticleTestCtrl',
-        controllerAs: 'particle'
+      .when('/about', {
+        templateUrl: 'views/about.html',
+        controller: 'AboutCtrl',
+        controllerAs: 'about'
+      })
+      .when('/mydevices', {
+        templateUrl: 'views/mydevices.html',
+        controller: 'MyDeviceCtrl',
+        controllerAs: 'mydevice'
       })
       .otherwise({
         redirectTo: '/'
@@ -69,14 +74,14 @@ angular
   })
   .run(function($rootScope, $location, authentication) {
     $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) { // jshint ignore:line
-      if ($location.path() === '/profile' && !authentication.isLoggedIn()) {
+      if ($location.path() === '/profile' || $location.path() === '/mydevices' && !authentication.isLoggedIn()) {
         $rootScope.lgBtn = {
           display: "none"
         };
         $location.path('/'); // jshint ignore:line
       }
     });
-    if (authentication.isLoggedIn() || $location.path() === "/profile") {
+    if (authentication.isLoggedIn()) {
       $rootScope.lgBtn = {
         display: "inline-block"
       };

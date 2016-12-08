@@ -10,7 +10,7 @@ var auth = jwt({
 
 var ctrlProfile = require('./Controllers/ProfileController');
 var ctrlAuth = require('./Controllers/RegisterUserController');
-var ctrlComms = require('./Controllers/commTestController');
+var ctrlCOutlet = require('./Controllers/OutletController');
 // profile
 router.get('/profile', auth, ctrlProfile.profileRead);
 
@@ -19,7 +19,6 @@ router.post('/register', ctrlAuth.register);
 //router.options('/register', ctrlAuth.register);
 router.post('/login', ctrlAuth.login);
 //particle test
-router.get('/particleTest', ctrlComms.readMessage);
-router.post('/particleJSON', ctrlComms.setMessage);
-router.delete('/particleTest', ctrlComms.deleteMess);
+router.get('/particleTest', ctrlCOutlet.getOutletData);
+router.post('/outletData', ctrlCOutlet.setOutletData);
 module.exports = router;
