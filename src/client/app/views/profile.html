@@ -21,43 +21,25 @@
   <div id="listedDevices">
     <h2>Owned Devices</h2>
     <div class="container">
-      <div class="row" ng-repeat="device in devices">
-        <div class="col-sm-3" id="deviceImgCol">
-          <h5>{{device.deviceID}}</h5>
-          <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/24177-200.png" alt="device-" />
-        </div>
-        <div class="col-sm-9" id="deviceOutletCol">
-          <div class="row" ng-repeat="outlet in device.outlets">
-            <div class="row">
-              <div class="col-sm-12">
-                <h2>{{outlet.nickname}}</h2>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-3">
-                <h3>Outlet number</h3>
-                <hr>
-                <strong>{{outlet.outletNumber}}</strong>
-              </div>
-              <div class="col-sm-3">
-                <h3>Status</h3>
-                <hr>
-                <strong>{{outlet.isOn}}</strong>
-              </div>
-              <div class="col-sm-3">
-                <h3>Power drawn</h3>
-                <hr>
-                <strong>{{outlet.wattag}}</strong>
-              </div>
-              <div class="col-sm-3">
-                <h3>Total Time On</h3>
-                <hr>
-                <strong>{{outlet.elapsedTimeOn}}</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div ng-repeat="device in devices">
+        <h3>Device: {{device.deviceID}}</h3>
+      <table class="table table-hover table-condensed table-responsive">
+        <tr>
+          <th>Outlet Number</th>
+          <th>Primary Usage</th>
+          <th>On/off</th>
+          <th>Power Drawn</th>
+          <th>Total Time On</th>
+        </tr>
+        <tr ng-repeat="outlet in device.outlets">
+          <td>{{outlet.outletNumber}}</td>
+          <td>{{outlet.nickname}}</td>
+          <td>{{outlet.isOn}}</td>
+          <td>{{outlet.wattage}}</td>
+          <td>{{outlet.elapsedTimeOn}}</td>
+        </tr>
+      </table>
+    </div>
     </div>
   </div>
 </div>

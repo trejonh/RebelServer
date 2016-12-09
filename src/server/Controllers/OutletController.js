@@ -1,6 +1,6 @@
   /*
-            Will be used only for submodule testing not for dev
-            */
+              Will be used only for submodule testing not for dev
+              */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   module.exports.setOutletData = function(req, res) {
@@ -106,12 +106,14 @@
   module.exports.getOutlets = function(deviceID, callback) {
       Outlets.find({
           deviceID: deviceID
+      }).sort({
+          outletNumber: 'asc'
       }).lean().exec(function(err, outlets) {
           if (err) {
               console.log(err);
-              callback(err,null);
+              callback(err, null);
           } else {
-              callback(null,outlets);
+              callback(null, outlets);
           }
       });
   };
