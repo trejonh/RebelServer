@@ -30,8 +30,14 @@ angular.module('clientApp')
       .success(function(data) {
         profile.user = data;
         deviceService.getDevices(profile.user.username);
-        $scope.devices = deviceService.devices;
-        console.log($scope.devices);
+        deviceService.getDevices(profile.user.username).success(function(data) {
+          $scope.devices = data;
+          console.log($scope.devices);
+        }).error(function(err) {
+          if (err) {
+            console.log(err);
+          }
+        });
       })
       .error(function(e) {
         console.log(e);
@@ -78,9 +84,14 @@ angular.module('clientApp')
         profile.addDevice.username = profile.user.username;
         profile.addDevice._id = profile.user._id;
         deviceService.addDevice(profile.addDevice);
-        deviceService.getDevices(profile.user.username);
-        $scope.devices = deviceService.devices;
-        console.log($scope.devices);
+        deviceService.getDevices(profile.user.username).success(function(data) {
+          $scope.devices = data;
+          console.log($scope.devices);
+        }).error(function(err) {
+          if (err) {
+            console.log(err);
+          }
+        });
       });
     };
   });
