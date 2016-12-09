@@ -19,8 +19,8 @@
       });
     };
 
-    var getDevices = function(username,devices,callback) {
-    $http.get('http://' + window.location.hostname + ':3000/devices', {
+    var getDevices = function(username, devices, callback) {
+      $http.get('http://' + window.location.hostname + ':3000/devices', {
         params: {
           username: username
         }
