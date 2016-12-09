@@ -31,6 +31,7 @@ angular.module('clientApp')
         profile.user = data;
         deviceService.getDevices(profile.user.username);
         $scope.devices = deviceService.devices;
+        console.log($scope.devices);
       })
       .error(function(e) {
         console.log(e);
@@ -79,6 +80,7 @@ angular.module('clientApp')
         deviceService.addDevice(profile.addDevice);
         deviceService.getDevices(profile.user.username);
         $scope.devices = deviceService.devices;
+        console.log($scope.devices);
       });
     };
   });
