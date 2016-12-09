@@ -4,12 +4,13 @@
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   module.exports.setOutletData = function(req, res) {
-    console.log("in set");
       var data = req.body.data;
       var outlet = new Outlet();
       data = data.split(",");
+      console.log(data);
       for (var i = 0; i < data.length; i++) {
           var outletData = data[i].split(":");
+          console.log(outletData);
           switch (i) {
               case 0:
                   outlet.deviceID = outletData[1];
