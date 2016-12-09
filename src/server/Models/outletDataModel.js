@@ -13,11 +13,11 @@ var OutletDataSchema = new mongoose.Schema({
         required: true
     },
     nickname: {
-        type: Number,
+        type: String,
         required: true
     },
     isOn: {
-        type: Boolean,
+        type: Number,
         required: true
     },
     wattage: {
