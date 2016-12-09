@@ -17,6 +17,7 @@ module.exports.getDevices = function(req, res) {
     });
 };
 module.exports.addDevice = function(deviceID, _id) {
+  console.log("adding device");
     var newDevice = new Device();
     newDevice.deviceName = "Some Name";
     console.log(deviceID+"   "+_id);
