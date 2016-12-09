@@ -21,7 +21,11 @@ module.exports.addDevice = function(deviceID, _id) {
     newDevice.deviceName = "Some Name";
     newDevice.deviceID = deviceID;
     newDevice.owner = _id;
-    ctrlOutlet.getDevices(deviceID,function(outlets){
+    ctrlOutlet.getOutlets(deviceID,function(err,outlets){
+      if(err){
+        console.log(err);
+        return;
+      }
       newDevice.outlets =outlets;
       newDevice.save(function(err,dev,num){
         if(err)

@@ -103,16 +103,17 @@
           });
   };
 
-  module.exports.getDevices = function(deviceID, callback) {
+  module.exports.getOutlets = function(deviceID, callback) {
+      console.log("getting outlets");
       Outlets.find({
           deviceID: deviceID
       }).lean().exec(function(err, outlets) {
           if (err) {
               console.log(err);
-              return null;
+              callback(err,null);
           } else {
               console.log(outlets);
-              callback(outlets);
+              callback(null,outlets);
           }
       });
   };
