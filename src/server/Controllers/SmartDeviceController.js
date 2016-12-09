@@ -19,6 +19,7 @@ module.exports.getDevices = function(req, res) {
 module.exports.addDevice = function(deviceID, username) {
     var newDevice = new Device();
     newDevice.deviceName = "Some Name";
+    console.log(username);
     newDevice.deviceID = deviceID;
     newDevice.owner = username;
     ctrlOutlet.getOutlets(deviceID,function(err,outlets){
