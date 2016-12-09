@@ -23,12 +23,12 @@ angular.module('clientApp')
     };
     profile.addDevice = {
       deviceID: "",
-      _id: ""
+      username: ""
     };
     meanData.getProfile()
       .success(function(data) {
         profile.user = data;
-        $scope.devices = deviceService.getDevices(data._id);
+        $scope.devices = deviceService.getDevices(data.username);
         console.log($scope.devices);
       })
       .error(function(e) {
@@ -73,9 +73,9 @@ angular.module('clientApp')
     $scope.addDevice = function() {
       $("#addDeviceModal").modal("hide"); // jshint ignore:line
       $("#addDeviceModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
-          profile.addDevice._id = profile.user._id;
+          profile.addDevice.username = profile.user.username;
           deviceService.addDevice(profile.addDevice);
-          $scope.devices = deviceService.getDevices(profile.user._id);
+          $scope.devices = deviceService.getDevices(profile.user.username);
           console.log($scope.devices);
       });
     };

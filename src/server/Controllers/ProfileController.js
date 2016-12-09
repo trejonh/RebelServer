@@ -40,7 +40,7 @@ module.exports.updateUser = function(req, res) {
         if(req.body.newPic)
           user.profileImage =req.body.newPic;
         if(req.body.deviceID && user.devices.indexOf(req.body.deviceID) === -1){
-          deviceCtrl.addDevice(req.body.deviceID, req.body._id);
+          deviceCtrl.addDevice(req.body.deviceID, req.body.username);
           user.devices.push(req.body.deviceID);
         }
         user.save();
