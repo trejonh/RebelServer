@@ -12,10 +12,10 @@
           //  console.log(outletData);
           switch (i) {
               case 0:
-                  outlet.deviceID = outletData[1];
+                  outlet.deviceID = outletData[1].trim();
                   break;
               case 1:
-                  outlet.accessToken = outletData[1];
+                  outlet.accessToken = outletData[1].trim();
                   break;
               case 2:
                   outlet.outletNumber = parseInt(outletData[2]);
