@@ -19,14 +19,14 @@
       });
     };
 
-    var getDevices = function(username,devices) {
+    var getDevices = function(username,devices,callback) {
     $http.get('http://' + window.location.hostname + ':3000/devices', {
         params: {
           username: username
         }
       }).success(function(data) {
         console.log(data);
-        devices = data;
+        callback(data);
       }).error(function(err) {
         if (err)
           console.log(err);
