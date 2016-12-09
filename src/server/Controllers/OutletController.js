@@ -5,7 +5,7 @@
   var Outlets = mongoose.model("outletDataModel");
   module.exports.setOutletData = function(req, res) {
       var data = req.body.data;
-      var outlet = new Outlet();
+      var outlet = new Outlets();
       data = data.split(",");
       console.log(data);
       for (var i = 0; i < data.length; i++) {
