@@ -36,7 +36,7 @@
                   outlet.timeSetOff = parseInt(outletData[1]);
                   break;
               case 8:
-                  outlet.elapsedTimeOn = parseInt(outletData[1]);
+                  outlet.elapsedTimeOn = parseInt(outletData[1].substring(0,outletData[1].indexOf('}')));
                   break;
           }
       }
