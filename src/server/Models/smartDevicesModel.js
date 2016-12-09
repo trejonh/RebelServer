@@ -6,15 +6,15 @@ var SmartDeviceSchema = new mongoose.Schema({
         required: true
     },
     owner: {
-        type: Object,
+        type: String,
         required: false
     },
     deviceID: {
-        type: Number,
+        type: String,
         required: true
     },
     outlets: {
-        type: Object,
+        type: [],
         required: true
     }
 });

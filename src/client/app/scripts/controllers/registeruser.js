@@ -16,12 +16,14 @@ angular.module('clientApp')
       username: "",
       email: "",
       password: "",
-      confirmPassword:"",
+      confirmPassword: "",
       profileImage: ""
     };
+    var file;
+    var noPic = false;
     $scope.submit = function() {
       if ($scope.profileImage !== null || $scope.profileImage !== undefined) {
-        var file = $scope.profileImage;
+        file = $scope.profileImage;
         var reader = new FileReader();
         reader.onload = function() {
           registerUser.credentials.profileImage = reader.result;
@@ -36,11 +38,14 @@ angular.module('clientApp')
           }
 
         };
-        reader.readAsDataURL(file);
-      } else {
-        if (!registerUser.credentials.profileImage && !$scope.profileImage) {
-          registerUser.credentials.profileImage = defaultPic;
+        if (file !== undefined) {
+          reader.readAsDataURL(file);
+        }else{
+          noPic = true;
         }
+      }
+      if (noPic) {
+        registerUser.credentials.profileImage = defaultPic;
         if (completedFields(registerUser.credentials)) {
           authentication.register(registerUser.credentials).then(function() {
             $location.path("/profile");

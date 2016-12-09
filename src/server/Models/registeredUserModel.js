@@ -18,7 +18,7 @@ var RegisteredUserSchema = new mongoose.Schema({
     required: true
   },
   devices:{
-    type: Object,
+    type: [],
     required: false
   },
   profileImage:{

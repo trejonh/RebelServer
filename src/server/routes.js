@@ -10,15 +10,17 @@ var auth = jwt({
 
 var ctrlProfile = require('./Controllers/ProfileController');
 var ctrlAuth = require('./Controllers/RegisterUserController');
-var ctrlCOutlet = require('./Controllers/OutletController');
+var ctrlOutlet = require('./Controllers/OutletController');
+var ctrlDevice = require('./Controllers/SmartDeviceController');
 // profile
 router.get('/profile', auth, ctrlProfile.profileRead);
+router.delete('/profile', ctrlProfile.profileDelete);
+router.put('/profile', ctrlProfile.updateUser);
 
 // authentication
 router.post('/register', ctrlAuth.register);
-//router.options('/register', ctrlAuth.register);
 router.post('/login', ctrlAuth.login);
 //particle test
-router.get('/particleTest', ctrlCOutlet.getOutletData);
-router.post('/outletData', ctrlCOutlet.setOutletData);
+router.get('/devices', ctrlDevice.getDevices);
+router.post('/outletData', ctrlOutlet.setOutletData);
 module.exports = router;

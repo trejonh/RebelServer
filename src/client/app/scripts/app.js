@@ -74,23 +74,24 @@ angular
   })
   .run(function($rootScope, $location, authentication) {
     $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) { // jshint ignore:line
-      if ($location.path() === '/profile' || $location.path() === '/mydevices' && !authentication.isLoggedIn()) {
+      var autheRequiredPath = $location.path() === '/profile' || $location.path() === '/mydevices';
+      if (autheRequiredPath && !authentication.isLoggedIn()) {
         $rootScope.lgBtn = {
           display: "none"
         };
         $location.path('/'); // jshint ignore:line
       }
+      if (authentication.isLoggedIn()) {
+        $rootScope.lgBtn = {
+          display: "inline-block"
+        };
+      }
+      $rootScope.logout = function() {
+        authentication.logout();
+        $rootScope.lgBtn = {
+          display: "none"
+        };
+        $location.path('/'); // jshint ignore:line
+      };
     });
-    if (authentication.isLoggedIn()) {
-      $rootScope.lgBtn = {
-        display: "inline-block"
-      };
-    }
-    $rootScope.logout = function() {
-      authentication.logout();
-      $rootScope.lgBtn = {
-        display: "none"
-      };
-      $location.path('/'); // jshint ignore:line
-    };
   });

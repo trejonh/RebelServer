@@ -1,6 +1,6 @@
   /*
-        Will be used only for submodule testing not for dev
-        */
+          Will be used only for submodule testing not for dev
+          */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   module.exports.setOutletData = function(req, res) {
@@ -97,4 +97,17 @@
               console.log(doc);
               res.status(200).json(doc);
           });
+  };
+
+  module.exports.getDevices = function(deviceID) {
+      Outlet.find({
+          deviceID: deviceID
+      }).lean().exec(function(err, outlets) {
+          if (err) {
+              console.log(err);
+              return null;
+          } else {
+              return outlets;
+          }
+      });
   };

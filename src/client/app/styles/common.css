@@ -20,3 +20,12 @@ footer.footer{
   transform: translateY(-50%);
   float: right;
 }
+button#accountDropdown{
+  border-color: none;
+  border: none;
+  background-color: transparent;
+}
+h1#welcomeUser{
+  padding-top:50px;
+  padding-bottom: 50px;
+}

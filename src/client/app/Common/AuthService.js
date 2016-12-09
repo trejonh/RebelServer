@@ -63,24 +63,36 @@
       });
     };
 
-    var changeProfilImg = function(file, uploadUrl) {
-      var fd = new FormData();
-      fd.append('file', file);
-      //console.log(fd);
-      /*$http.post(uploadUrl, fd, {
-         transformRequest: angular.identity,
-         headers: {'Content-Type': undefined}
-      })
-
-      .success(function(){
-      })
-
-      .error(function(){
-      });*/
+    var changeProfilImg = function(file) {
+      $http.put('http://' + window.location.hostname + ':3000/profile',file)
+      .success(function(data){
+        console.log(data);
+      }).error(function(err){
+        if(err)
+          console.log(err);
+      });
     };
 
     var logout = function() {
       $window.localStorage.removeItem('mean-token');
+    };
+
+    var deleteAccount = function(userData) {
+      return $http.delete('http://' + window.location.hostname + ':3000/profile',{params: {_id:userData}}).success(function(data) {
+        console.log("account deleted");
+      }).error(function(err) {
+        if(err)
+          console.log(err);
+      });
+    };
+
+    var changePassword = function(passwords){
+      return $http.put('http://' + window.location.hostname + ':3000/profile',passwords).success(function(data) {
+        console.log("password changed");
+      }).error(function(err) {
+        if(err)
+          console.log(err);
+      });
     };
 
     return {
@@ -91,7 +103,9 @@
       register: register,
       login: login,
       changeProfilImg: changeProfilImg,
-      logout: logout
+      logout: logout,
+      deleteAccount: deleteAccount,
+      changePassword: changePassword
     };
   };
 })();
