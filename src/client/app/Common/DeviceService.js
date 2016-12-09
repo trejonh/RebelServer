@@ -20,7 +20,7 @@
     };
 
     var getDevices = function(username) {
-      $http.get('http://' + window.location.hostname + ':3000/devices', {
+    return $http.get('http://' + window.location.hostname + ':3000/devices', {
         params: {
           username: username
         }
