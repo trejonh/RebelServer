@@ -107,6 +107,7 @@
               console.log(err);
               return null;
           } else {
+            console.log(outlets);
               return outlets;
           }
       });

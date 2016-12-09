@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var ctrlOutlet = require('./OutletController');
 var Device = mongoose.model('smartDeviceModel');
-var Outlet = mongoose.model('outletDataModel');
 
 module.exports.getDevices = function(req, res) {
     Device.find({
@@ -13,6 +12,7 @@ module.exports.getDevices = function(req, res) {
             res.json(err);
             return;
         }
+        console.log(devices);
         res.status(200).json(devices);
     });
 };
@@ -21,6 +21,6 @@ module.exports.addDevice = function(deviceID, _id) {
     newDevice.deviceName = "Some Name";
     newDevice.deviceID = deviceID;
     newDevice.owner = _id;
-    newDevice.outlets = ctrlOutlet.getDevices(_id);
+    newDevice.outlets = ctrlOutlet.getDevices(deviceID);
     newDevice.save();
 };
