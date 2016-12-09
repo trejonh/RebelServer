@@ -29,6 +29,7 @@ module.exports.profileDelete = function(req, res) {
 
 module.exports.updateUser = function(req, res) {
     User.findById(req.body._id,function(err, user){
+        console.log(req.body);
         if(err){
           res.status(500);
           res.json(err);
