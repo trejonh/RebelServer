@@ -17,15 +17,15 @@ module.exports.getDevices = function(req, res) {
     });
 };
 module.exports.addDevice = function(deviceID, _id) {
-  console.log("adding device");
     var newDevice = new Device();
     newDevice.deviceName = "Some Name";
-    console.log(deviceID+"   "+_id);
     newDevice.deviceID = deviceID;
     newDevice.owner = _id;
-    newDevice.outlets = ctrlOutlet.getDevices(deviceID);
-    newDevice.save(function(err,dev,num){
-      if(err)
-        console.log(err);
+    ctrlOutlet.getDevices(deviceID,function(outlets){
+      newDevice.outlets =outlets;
+      newDevice.save(function(err,dev,num){
+        if(err)
+          console.log(err);
     });
+  });
 };

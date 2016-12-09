@@ -1,6 +1,6 @@
   /*
-          Will be used only for submodule testing not for dev
-          */
+            Will be used only for submodule testing not for dev
+            */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   module.exports.setOutletData = function(req, res) {
@@ -9,7 +9,7 @@
       data = data.split(",");
       for (var i = 0; i < data.length; i++) {
           var outletData = data[i].split(":");
-        //  console.log(outletData);
+          //  console.log(outletData);
           switch (i) {
               case 0:
                   outlet.deviceID = outletData[1];
@@ -36,7 +36,7 @@
                   outlet.timeSetOff = parseInt(outletData[1]);
                   break;
               case 8:
-                  outlet.elapsedTimeOn = parseInt(outletData[1].substring(0,outletData[1].indexOf('}')));
+                  outlet.elapsedTimeOn = parseInt(outletData[1].substring(0, outletData[1].indexOf('}')));
                   break;
           }
       }
@@ -103,7 +103,7 @@
           });
   };
 
-  module.exports.getDevices = function(deviceID) {
+  module.exports.getDevices = function(deviceID, callback) {
       Outlets.find({
           deviceID: deviceID
       }).lean().exec(function(err, outlets) {
@@ -111,8 +111,8 @@
               console.log(err);
               return null;
           } else {
-            console.log(outlets);
-              return outlets;
+              console.log(outlets);
+              callback(outlets);
           }
       });
   };
