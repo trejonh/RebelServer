@@ -39,6 +39,8 @@ module.exports.updateUser = function(req, res) {
         if(req.body.newPic)
           user.profileImage =req.body.newPic;
         if(req.body.deviceID && user.devices.indexOf(req.body.deviceID) === -1){
+
+          console.log("adding deviceID");
           deviceCtrl.addDevice(req.body.deviceID, req.body._id);
           user.devices.push(req.body.deviceID);
         }
