@@ -29,7 +29,6 @@ module.exports.profileDelete = function(req, res) {
 
 module.exports.updateUser = function(req, res) {
     User.findById(req.body._id,function(err, user){
-        console.log(req.body);
         if(err){
           res.status(500);
           res.json(err);
@@ -40,8 +39,6 @@ module.exports.updateUser = function(req, res) {
         if(req.body.newPic)
           user.profileImage =req.body.newPic;
         if(req.body.deviceID && user.devices.indexOf(req.body.deviceID) === -1){
-
-          console.log("adding deviceID");
           deviceCtrl.addDevice(req.body.deviceID, req.body._id);
           user.devices.push(req.body.deviceID);
         }

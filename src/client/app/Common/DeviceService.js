@@ -21,7 +21,9 @@
 
     var getDevices = function(id) {
       $http.get('http://' + window.location.hostname + ':3000/devices', {
-        _id: id
+        params: {
+          _id: id
+        }
       }).success(function(data) {
         return data;
       }).error(function(err) {

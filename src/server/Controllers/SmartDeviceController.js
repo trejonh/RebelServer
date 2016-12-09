@@ -4,7 +4,7 @@ var Device = mongoose.model('smartDeviceModel');
 
 module.exports.getDevices = function(req, res) {
     Device.find({
-        owner: req.body._id
+        owner: req.query._id
     }).lean().exec(function(err, devices) {
         if (err) {
             console.log(err);
