@@ -22,5 +22,5 @@ router.post('/register', ctrlAuth.register);
 router.post('/login', ctrlAuth.login);
 //particle test
 router.get('/devices', ctrlDevice.getDevices);
-router.post('/outletData', ctrlOutlet.setOutletData);
+router.post('/particleJSON', ctrlOutlet.setOutletData);
 module.exports = router;
