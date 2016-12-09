@@ -9,7 +9,7 @@
       data = data.split(",");
       for (var i = 0; i < data.length; i++) {
           var outletData = data[i].split(":");
-          console.log(outletData);
+        //  console.log(outletData);
           switch (i) {
               case 0:
                   outlet.deviceID = outletData[1];
@@ -40,7 +40,7 @@
                   break;
           }
       }
-      console.log(outlet);
+      //console.log(outlet);
       Outlets.find({
           deviceID: outlet.deviceID,
           outletNumber: outlet.outletNumber
