@@ -4,6 +4,7 @@
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   module.exports.setOutletData = function(req, res) {
+    console.log("in set");
       var data = req.body.data;
       var outlet = new Outlet();
       data = data.split(",");

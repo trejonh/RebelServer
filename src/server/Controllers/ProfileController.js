@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('registeredUserModel');
-var deviceCtrl = require("./SmartDeviceController");
 module.exports.profileRead = function(req, res) {
 
     // If no user ID exists in the JWT return a 401
