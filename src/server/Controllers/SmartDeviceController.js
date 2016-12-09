@@ -3,7 +3,6 @@ var ctrlOutlet = require('./OutletController');
 var Device = mongoose.model('smartDeviceModel');
 
 module.exports.getDevices = function(req, res) {
-    console.log(req.query.username);
     Device.find({
         owner: req.query.username
     }).lean().exec(function(err, devices) {
@@ -13,7 +12,6 @@ module.exports.getDevices = function(req, res) {
             res.json(err);
             return;
         }
-        console.log(devices);
         res.status(200).json(devices);
     });
 };

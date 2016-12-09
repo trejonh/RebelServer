@@ -25,6 +25,7 @@
           username: username
         }
       }).success(function(data) {
+        console.log(data);
         return data;
       }).error(function(err) {
         if (err)
