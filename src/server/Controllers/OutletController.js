@@ -7,7 +7,6 @@
       var data = req.body.data;
       var outlet = new Outlets();
       data = data.split(",");
-      console.log(data);
       for (var i = 0; i < data.length; i++) {
           var outletData = data[i].split(":");
           console.log(outletData);
@@ -28,12 +27,15 @@
                   outlet.isOn = parseInt(outletData[1]);
                   break;
               case 5:
-                  outlet.timeSetOn = parseInt(outletData[1]);
+                  outlet.wattage = parseInt(outletData[1]);
                   break;
               case 6:
-                  outlet.timeSetOff = parseInt(outletData[1]);
+                  outlet.timeSetOn = parseInt(outletData[1]);
                   break;
               case 7:
+                  outlet.timeSetOff = parseInt(outletData[1]);
+                  break;
+              case 8:
                   outlet.elapsedTimeOn = parseInt(outletData[1]);
                   break;
           }
