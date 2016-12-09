@@ -77,7 +77,7 @@
   };
 
   module.exports.getOutletData = function(req, res) {
-      Outlet
+      Outlets
           .findOne({
               deviceID: req.body.deviceID
           })
@@ -100,7 +100,7 @@
   };
 
   module.exports.getDevices = function(deviceID) {
-      Outlet.find({
+      Outlets.find({
           deviceID: deviceID
       }).lean().exec(function(err, outlets) {
           if (err) {
