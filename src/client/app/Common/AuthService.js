@@ -47,7 +47,7 @@
     };
 
     var register = function(user) {
-      return $http.post('http://'+window.location.hostname+':3000/register', user).success(function(data) {
+      return $http.post('http://' + window.location.hostname + ':3000/register', user).success(function(data) {
         saveToken(data.token);
       }).error(function(err) {
         console.log(err);
@@ -56,15 +56,43 @@
     };
 
     var login = function(user) {
-      return $http.post('http://'+window.location.hostname+':3000/login', user).success(function(data) {
+      return $http.post('http://' + window.location.hostname + ':3000/login', user).success(function(data) {
         saveToken(data.token);
-      }).error(function(err){
+      }).error(function(err) {
         console.log(err);
+      });
+    };
+
+    var changeProfilImg = function(file) {
+      $http.put('http://' + window.location.hostname + ':3000/profile',file)
+      .success(function(data){
+        console.log(data);
+      }).error(function(err){
+        if(err)
+          console.log(err);
       });
     };
 
     var logout = function() {
       $window.localStorage.removeItem('mean-token');
+    };
+
+    var deleteAccount = function(userData) {
+      return $http.delete('http://' + window.location.hostname + ':3000/profile',{params: {_id:userData}}).success(function(data) {
+        console.log("account deleted");
+      }).error(function(err) {
+        if(err)
+          console.log(err);
+      });
+    };
+
+    var changePassword = function(passwords){
+      return $http.put('http://' + window.location.hostname + ':3000/profile',passwords).success(function(data) {
+        console.log("password changed");
+      }).error(function(err) {
+        if(err)
+          console.log(err);
+      });
     };
 
     return {
@@ -74,7 +102,10 @@
       isLoggedIn: isLoggedIn,
       register: register,
       login: login,
-      logout: logout
+      changeProfilImg: changeProfilImg,
+      logout: logout,
+      deleteAccount: deleteAccount,
+      changePassword: changePassword
     };
   };
 })();

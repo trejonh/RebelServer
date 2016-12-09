@@ -13,7 +13,7 @@ angular
     'ngRoute',
     "restangular"
   ]).config(function($routeProvider, RestangularProvider) {
-    RestangularProvider.setBaseUrl("http://"+window.location.hostname+":3000");
+    RestangularProvider.setBaseUrl("http://" + window.location.hostname + ":3000");
     $routeProvider
       .when('/', {
         templateUrl: 'views/welcome.html',
@@ -35,15 +35,34 @@ angular
         controller: 'ProfileCtrl',
         controllerAs: 'profile'
       })
-      .when('/particleTest', {
-        templateUrl: 'views/particleTest.html',
-        controller: 'ParticleTestCtrl',
-        controllerAs: 'particle'
+      .when('/about', {
+        templateUrl: 'views/about.html',
+        controller: 'AboutCtrl',
+        controllerAs: 'about'
+      })
+      .when('/mydevices', {
+        templateUrl: 'views/mydevices.html',
+        controller: 'MyDeviceCtrl',
+        controllerAs: 'mydevice'
       })
       .otherwise({
         redirectTo: '/'
       });
-  }).factory("UsersRestangular", function(Restangular) {
+  }).directive('fileModel', ['$parse', function($parse) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        var model = $parse(attrs.fileModel);
+        var modelSetter = model.assign;
+
+        element.bind('change', function() {
+          scope.$apply(function() {
+            modelSetter(scope, element[0].files[0]);
+          });
+        });
+      }
+    };
+  }]).factory("UsersRestangular", function(Restangular) {
     return Restangular.withConfig(function(RestangularConfigurer) {
       RestangularConfigurer.setRestangularFields({
         id: "_id"
@@ -55,13 +74,24 @@ angular
   })
   .run(function($rootScope, $location, authentication) {
     $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) { // jshint ignore:line
-      if ($location.path() === '/profile' && !authentication.isLoggedIn())
-        $location.path('/');// jshint ignore:line
+      var autheRequiredPath = $location.path() === '/profile' || $location.path() === '/mydevices';
+      if (autheRequiredPath && !authentication.isLoggedIn()) {
+        $rootScope.lgBtn = {
+          display: "none"
+        };
+        $location.path('/'); // jshint ignore:line
+      }
+      if (authentication.isLoggedIn()) {
+        $rootScope.lgBtn = {
+          display: "inline-block"
+        };
+      }
+      $rootScope.logout = function() {
+        authentication.logout();
+        $rootScope.lgBtn = {
+          display: "none"
+        };
+        $location.path('/'); // jshint ignore:line
+      };
     });
   });
-/*.run(function($rootScope, $location, authentication) {
-    $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) { // jshint ignore:line
-      if ($location.path() === '/profile' && !authentication.isLoggedIn())
-        $location.path('/');
-    });
-  });*/

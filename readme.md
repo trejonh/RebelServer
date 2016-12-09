@@ -1,4 +1,3 @@
-[![CircleCI](https://circleci.com/gh/msoeSE/RebelServer.svg?style=svg)](https://circleci.com/gh/msoeSE/RebelServer)
 #Rebel Server
 Rebel Kangaroo is a senior design project at MSOE created by a 2016-17 design team.
 Rebel Server is the remote server that the micro-controller and mobile app will communicate
@@ -16,3 +15,5 @@ and testing a programmable power switch that can be controlled by a mobile app.
 
 ##Other Repositories
 ###[Rebel MC - Micro-Controller](https://github.com/msoeSE/RebelMC)
+
+#[Live Site](ec2-54-214-154-163.us-west-2.compute.amazonaws.com)
