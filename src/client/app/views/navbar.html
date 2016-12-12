@@ -14,7 +14,7 @@
         <li><a href="#/about">About</a></li>
         <li><a href="#/mydevices">My Devices</a></li>
         <li><a href="#/profile">My Profile</a></li>
-        <li id="logoutBtn" class="btn btn-default" role="button" ng-click="logout()" ng-style="lgBtn">Logout</li>
+        <li id="logoutBtn" class="btn btn-default" role="button" ng-click="logout()" ng-hide="loggedIn" ng-init="loggedIn = true">Logout</li>
       </ul>
     </div>
   </div>

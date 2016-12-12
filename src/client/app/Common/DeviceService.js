@@ -8,7 +8,7 @@
 
   deviceService.$inject = ['$http', '$window'];
 
-  function deviceService($http, authentication) { // jshint ignore:line
+  function deviceService($http) {
 
     var addDevice = function(device) {
       return $http.put('http://' + window.location.hostname + ':3000/profile', device).success(function(data) {

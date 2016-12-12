@@ -45,6 +45,11 @@ angular
         controller: 'MyDeviceCtrl',
         controllerAs: 'mydevice'
       })
+      .when('/mydevices/:deviceID/stats', {
+        templateUrl: 'views/stats.html',
+        controller: 'StatsCtrl',
+        controllerAs: 'stats'
+      })
       .otherwise({
         redirectTo: '/'
       });
