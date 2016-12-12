@@ -9,10 +9,11 @@
  */
 angular.module('clientApp')
   .controller('MyDeviceCtrl', function($scope, $location, authentication, deviceService) {
-    var myDevices = this;
+    var mydevice = this;
     $scope.myOwnedDevices = {};
-    myDevices.user = authentication.currentUser();
-    deviceService.getDevices(myDevices.user.username).success(function(data) {
+    mydevice.user = authentication.currentUser();
+    deviceService.getDevices(mydevice.user.username).success(function(data) {
+      console.log(data);
       $scope.myOwnedDevices = data;
     }).error(function(err) {
       if (err) {
