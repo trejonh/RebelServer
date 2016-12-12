@@ -7,11 +7,11 @@
     <div class="col-sm-3" ng-repeat="device in myOwnedDevices">
       <button class="btn btn-default" id="deviceStatsBtn" href="#/mydevices/:{{device.deviceID}}/stats">
         <h6>{{device.nickname}}</h6>
-        <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/24177-200.png" alt="device-deviceID" class="img-rounded img-responsive"/>
+        <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/24177-200.png" alt="device-{{device.deviceID}}" class="img-rounded img-responsive"/>
         <hr>
         <p>
-          <br>Outlets on: {{outletsOn}}
-          <br>Total Power drawn: {{totalPowerDrawn}} watts
+          <!-- <br>Outlets on: {{outletsOn}} -->
+          <!-- <br>Total Power drawn: {{totalPowerDrawn}} watts -->
         </p>
       </button>
     </div>
