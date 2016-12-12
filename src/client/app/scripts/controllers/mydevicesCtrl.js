@@ -10,10 +10,13 @@
 angular.module('clientApp')
   .controller('MyDeviceCtrl', function($scope, $location, meanData, deviceService) {
     var mydevice = this;
-    $scope.myOwnedDevices = {};
+    $scope.myOwnedDevices = [];
     meanData.getProfile()
       .success(function(data) {
+        console.log("got user data");
+        console.log(data);
         deviceService.getDevices(data.username).success(function(deviceData) {
+          console.log("got device data");
           $scope.myOwnedDevices = deviceData;
           console.log($scope.myOwnedDevices);
         }).error(function(err) {
