@@ -29,7 +29,6 @@ angular.module('clientApp')
     meanData.getProfile()
       .success(function(data) {
         profile.user = data;
-        deviceService.getDevices(profile.user.username);
         deviceService.getDevices(profile.user.username).success(function(data) {
           $scope.devices = data;
           console.log($scope.devices);
