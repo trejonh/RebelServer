@@ -8,10 +8,11 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('MyDeviceCtrl', function($scope, $location, authentication, deviceService) {
+  .controller('MyDeviceCtrl', function($scope, $location, $interval, authentication, deviceService) {
     var mydevice = this;
     $scope.myOwnedDevices = {};
     mydevice.user = authentication.currentUser();
+    var getDevices = $interval(function(){
     deviceService.getDevices(mydevice.user.username).success(function(data) {
       console.log(data);
       $scope.myOwnedDevices = data;
@@ -20,6 +21,12 @@ angular.module('clientApp')
         console.log(err);
       }
     });
+
+    if($scope.myOwnedDevices){
+      $interval.cancel(getDevices);
+    }
+
+    },5000);
     $scope.outletsOn = $scope.myOwnedDevices.outlets.forEach(function(outlet){
       var numOn = 0;
       if(outlet.isOn === 1){
