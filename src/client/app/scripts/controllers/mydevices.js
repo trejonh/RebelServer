@@ -17,15 +17,6 @@ angular.module('clientApp')
         mydevice.user = data;
         deviceService.getDevices(mydevice.user.username).success(function(data) {
           $scope.devices = data;
-          $scope.totalPowerDrawn = 0;
-          $scope.outletsOn = 0;
-          $scope.devices.outlets.forEach(function(outlet) {
-            if (outlet.isOn === 1) {
-              $scope.totalPowerDrawn += outlet.wattage;
-              $scope.outletsOn++;
-            }
-
-          });
         }).error(function(err) {
           if (err) {
             console.log(err);
@@ -35,4 +26,24 @@ angular.module('clientApp')
       .error(function(e) {
         console.log(e);
       });
+    $scope.outletsOn = function(device) {
+      var toRet = 0;
+      device.outlets.forEach(function(outlet) {
+        if (outlet.isOn === 1) {
+          toRet++;
+        }
+      });
+      return toRet;
+    };
+
+    $scope.totalPowerDrawn = function(device) {
+      var toRet = 0;
+      device.outlets.forEach(function(outlet) {
+        if (outlet.isOn === 1) {
+          toRet += outlet.wattage;
+        }
+      });
+      return toRet;
+    };
+
   });
