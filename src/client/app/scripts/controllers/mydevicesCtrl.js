@@ -9,13 +9,15 @@
  */
 angular.module('clientApp')
   .controller('MyDeviceCtrl', function($scope, $location, meanData, deviceService) {
-    var mydevice = this;
     console.log("in my device ctrl");
+    var mydevice = this;
+    mydevice.user = {};
     $scope.myOwnedDevices = [];
     meanData.getProfile()
       .success(function(data) {
         console.log("got user data");
         console.log(data);
+        mydevice.user = data;
         deviceService.getDevices(data.username).success(function(deviceData) {
           console.log("got device data");
           $scope.myOwnedDevices = deviceData;
@@ -29,7 +31,7 @@ angular.module('clientApp')
       .error(function(e) {
         console.log(e);
       });
-    /*$scope.outletsOn = $scope.myOwnedDevices.outlets.forEach(function(outlet) {
+    $scope.outletsOn = $scope.myOwnedDevices.outlets.forEach(function(outlet) {
       var numOn = 0;
       if (outlet.isOn === 1) {
         numOn++;
@@ -42,5 +44,5 @@ angular.module('clientApp')
         totalWattage += outlet.wattage;
       }
       return totalWattage;
-    });*/
+    });
   });
