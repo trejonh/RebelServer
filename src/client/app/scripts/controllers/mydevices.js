@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('MydevicesCtrl', function($scope, meanData, deviceService) {
+  .controller('MydevicesCtrl', function($scope, $location, meanData, deviceService) {
     var mydevice = this;
     mydevice.user = {};
     $scope.devices = [];
@@ -44,6 +44,10 @@ angular.module('clientApp')
         }
       });
       return toRet;
+    };
+
+    $scope.toStatPage = function(device){
+      $location.path("/mydevices/"+device.deviceID+"/stats");
     };
 
   });
