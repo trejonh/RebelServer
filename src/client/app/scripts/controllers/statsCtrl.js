@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('StatsCtrl', function($scope, $route, deviceService) {
+  .controller('StatsCtrl', function($scope, $route, deviceService, gaugeGraphService) {
     var stats = this;
     var deviceId = $route.current.params.deviceID;
     stats.device = {};
@@ -31,6 +31,30 @@ angular.module('clientApp')
     };
     $scope.saveClickedOutletData = function(outletData) {
       outlet = outletData;
+      //power Consumption
+      var graphData = {
+        title : "Power Consumption",
+        container: "currentUsage",
+        outterMost : "Current Power Consumption",
+        outterMostY: getEnergyConsumedPerDay(outlet.wattage, 100000000),
+        middle : "Previous Power Consumption",
+        middleY : getEnergyConsumedPerDay(652, 80),
+        innerMost : "Desired Power Consumption",
+        innerMostY : getEnergyConsumedPerDay(785, 8695412)
+      };
+      gaugeGraphService.initGraph(graphData);
+      //power cost
+      graphData = {
+        title : "Cost of Energy per Day",
+        container: "currentCost",
+        outterMost : "Current Power Cost",
+        outterMostY: getCostOfEnergyConsumedPerDay(outlet.wattage, 100000000, stats.costPerKWH),
+        middle : "Previous Power Cost",
+        middleY : getCostOfEnergyConsumedPerDay(outlet.wattage, 500000000, stats.costPerKWH),
+        innerMost : "Desired Cost ",
+        innerMostY : getCostOfEnergyConsumedPerDay(outlet.wattage, 100000000/5, stats.costPerKWH)
+      };
+      gaugeGraphService.initGraph(graphData);
     };
   });
 
