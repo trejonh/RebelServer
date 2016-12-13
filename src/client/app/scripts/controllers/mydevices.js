@@ -27,18 +27,19 @@ angular.module('clientApp')
       .error(function(e) {
         console.log(e);
       });
-    $scope.outletsOn = 0;/*$scope.devices.outlets.forEach(function(outlet) {
+    $scope.outletsOn = $scope.devices.outlets.forEach(function(outlet) {
       var numOn = 0;
       if (outlet.isOn === 1) {
         numOn++;
       }
       return numOn;
-    });*/
-    $scope.totalPowerDrawn = 0;/*$scope.devices.outlets.forEach(function(outlet) {
+    });
+    console.log($scope.outletsOn);
+    $scope.totalPowerDrawn = $scope.devices.outlets.forEach(function(outlet) {
       var totalWattage = 0;
       if (outlet.isOn === 1) {
         totalWattage += outlet.wattage;
       }
       return totalWattage;
-    });*/
+    });
   });
