@@ -38,7 +38,7 @@ angular.module('clientApp')
         labels: ["Desired Power Consumption","Current Power Consumption","Previous Power Consumption"],
         series: [getEnergyConsumedPerDay(outlet.wattage, 100000000),getEnergyConsumedPerDay(652, 80),getEnergyConsumedPerDay(785, 8695412)],
       };
-      GraphService.initGaugeGraph(graphData);
+      var usageGraph = GraphService.initGaugeGraph(graphData);
       //power cost
 
       var graphData2 = {
@@ -47,7 +47,11 @@ angular.module('clientApp')
         labels: ["Desired Cost","Current Cost","Previous cost"],
         series: [getCostOfEnergyConsumedPerDay(outlet.wattage, 100000000,stats.costPerKWH),getCostOfEnergyConsumedPerDay(652, 80,stats.costPerKWH),getCostOfEnergyConsumedPerDay(785, 8695412,stats.costPerKWH)],
       };
-      console.log(GraphService.initGaugeGraph(graphData2));
+      var costGraph = GraphService.initGaugeGraph(graphData2);
+      $("#detailedStats").on("shown.bs.modal",function(){//jshint ignore:line
+        usageGraph.update();
+        costGraph.update();
+      });
     };
   });
 
