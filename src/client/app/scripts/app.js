@@ -35,15 +35,15 @@ angular
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
-      .when('/mydevices', {
-        templateUrl: 'views/mydevices.html',
-        controller: 'MyDeviceCtrl',
-        controllerAs: 'mydevice'
-      })
       .when('/mydevices/:deviceID/stats', {
         templateUrl: 'views/stats.html',
         controller: 'StatsCtrl',
         controllerAs: 'stats'
+      })
+      .when('/mydevices', {
+        templateUrl: 'views/mydevices.html',
+        controller: 'MydevicesCtrl',
+        controllerAs: 'mydevices'
       })
       .otherwise({
         redirectTo: '/'

@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name clientApp.controller:RegisteruserCtrl
+ * @name clientApp.controller:MydevicesCtrl
  * @description
- * # RegisteruserCtrl
+ * # MydevicesCtrl
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('MyDeviceCtrl', function($scope, meanData, deviceService) {
+  .controller('MydevicesCtrl', function ($scope, meanData, deviceService) {
     var mydevice = this;
     mydevice.user = {};
     $scope.devices = [];
