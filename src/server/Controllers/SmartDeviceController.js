@@ -3,9 +3,12 @@ var ctrlOutlet = require('./OutletController');
 var Device = mongoose.model('smartDeviceModel');
 
 module.exports.getDevices = function(req, res) {
-    Device.find({
+    var searchQuery = req.query.username ? {
         owner: req.query.username
-    }).lean().exec(function(err, devices) {
+    } : {
+        deviceID: req.query.deviceID
+    };
+    Device.find(searchQuery).lean().exec(function(err, devices) {
         if (err) {
             console.log(err);
             res.status(500);
@@ -20,15 +23,15 @@ module.exports.addDevice = function(deviceID, username) {
     newDevice.deviceName = "Some Name";
     newDevice.deviceID = deviceID;
     newDevice.owner = username;
-    ctrlOutlet.getOutlets(deviceID,function(err,outlets){
-      if(err){
-        console.log(err);
-        return;
-      }
-      newDevice.outlets=outlets;
-      newDevice.save(function(err,dev,num){
-        if(err)
-          console.log(err);
+    ctrlOutlet.getOutlets(deviceID, function(err, outlets) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        newDevice.outlets = outlets;
+        newDevice.save(function(err, dev, num) {
+            if (err)
+                console.log(err);
+        });
     });
-  });
 };

@@ -29,7 +29,7 @@ angular.module('clientApp')
     meanData.getProfile()
       .success(function(data) {
         profile.user = data;
-        deviceService.getDevices(profile.user.username).success(function(data) {
+        deviceService.getDevices(profile.user.username,null).success(function(data) {
           $scope.devices = data;
           console.log($scope.devices);
         }).error(function(err) {
@@ -83,7 +83,7 @@ angular.module('clientApp')
         profile.addDevice.username = profile.user.username;
         profile.addDevice._id = profile.user._id;
         deviceService.addDevice(profile.addDevice);
-        deviceService.getDevices(profile.user.username).success(function(data) {
+        deviceService.getDevices(profile.user.username,null).success(function(data) {
           $scope.devices = data;
           console.log($scope.devices);
         }).error(function(err) {

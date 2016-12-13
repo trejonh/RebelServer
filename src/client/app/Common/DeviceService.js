@@ -19,10 +19,11 @@
       });
     };
 
-    var getDevices = function(username) {
+    var getDevices = function(username,deviceID) {
       return $http.get('http://' + window.location.hostname + ':3000/devices', {
         params: {
-          username: username
+          username: username,
+          deviceID: deviceID
         }
       });
     };

@@ -1,1 +1,356 @@
-<h1>Stats</h1>
+<h1>{{stats.device.deviceName}}</h1>
+<br>
+<br>
+<br>
+<div class="form-group">
+  <label for="costPerKWH">Cost per kWh in cents</label>
+  <input type="number" class="form-control" id="costInput" placeholder="cost per kWh i.e. 0.58 = 50&cent;" ng-model="stats.costPerKWH">
+</div>
+<hr>
+<table class="table table-hover table-condensed table-responsive">
+  <tr>
+    <th>Outlet Number</th>
+    <th>Primary Usage</th>
+    <th>On/off</th>
+    <th>Power Drawn</th>
+    <th>Total Time On</th>
+  </tr>
+  <tr ng-repeat="outlet in outlets" id="outletStatRow" data-toggle="modal" data-target="#detailedStats" ng-click="saveClickedOutletData(outlet)">
+    <td>{{outlet.outletNumber}}</td>
+    <td>{{outlet.nickname}}</td>
+    <td>{{outlet.isOn}}</td>
+    <td>{{outlet.wattage}}</td>
+    <td>{{outlet.elapsedTimeOn}}</td>
+  </tr>
+</table>
+<!--  -->
+<!--  -->
+<!--  -->
+<!-- More stats Modal-->
+<div id="detailedStats" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Detailed Stats</h4>
+      </div>
+      <div class="modal-body">
+        <h1>{{stats.outlet.nickname}}</h1>
+        <hr>
+        <br>
+        <p>
+          <strong>Cost per kilowatts-hour {{stats.costPerKWH}}&cent;</strong>
+        </p>
+        <h2>Current Usage &amp; Cost</h2>
+        <div class="container" id="currentUsage"></div>
+        <div class="container" id="currentCost"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- Scripting for gauges -->
+<script>
+  $(function() {
+    Highcharts.chart('currentUsage', {
+
+        chart: {
+          type: 'solidgauge',
+          marginTop: 50
+        },
+
+        title: {
+          text: 'Current Energy Usage',
+          style: {
+            fontSize: '24px'
+          }
+        },
+
+        tooltip: {
+          borderWidth: 0,
+          backgroundColor: 'none',
+          shadow: false,
+          style: {
+            fontSize: '16px'
+          },
+          pointFormat: '{series.name}<br><span style="font-size:2em; color: {point.color}; font-weight: bold">{point.y}%</span>',
+          positioner: function(labelWidth) {
+            return {
+              x: 200 - labelWidth / 2,
+              y: 180
+            };
+          }
+        },
+
+        pane: {
+          startAngle: 0,
+          endAngle: 360,
+          background: [{ // Track for Move
+            outerRadius: '112%',
+            innerRadius: '88%',
+            backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0.3).get(),
+            borderWidth: 0
+          }, { // Track for Exercise
+            outerRadius: '87%',
+            innerRadius: '63%',
+            backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[1]).setOpacity(0.3).get(),
+            borderWidth: 0
+          }, { // Track for Stand
+            outerRadius: '62%',
+            innerRadius: '38%',
+            backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[2]).setOpacity(0.3).get(),
+            borderWidth: 0
+          }]
+        },
+
+        yAxis: {
+          min: 0,
+          max: 100,
+          lineWidth: 0,
+          tickPositions: []
+        },
+
+        plotOptions: {
+          solidgauge: {
+            borderWidth: '34px',
+            dataLabels: {
+              enabled: false
+            },
+            linecap: 'round',
+            stickyTracking: false
+          }
+        },
+
+        series: [{
+          name: 'Current Usage',
+          borderColor: Highcharts.getOptions().colors[0],
+          data: [{
+            color: Highcharts.getOptions().colors[0],
+            radius: '100%',
+            innerRadius: '100%',
+            y: {
+              {
+                getEnergyConsumedPerDay()
+              }
+            }
+          }]
+        }, {
+          name: 'Previuous Usage',
+          borderColor: Highcharts.getOptions().colors[1],
+          data: [{
+            color: Highcharts.getOptions().colors[1],
+            radius: '75%',
+            innerRadius: '75%',
+            y: 25
+          }]
+        }, {
+          name: 'Desired Usage',
+          borderColor: Highcharts.getOptions().colors[2],
+          data: [{
+            color: Highcharts.getOptions().colors[2],
+            radius: '50%',
+            innerRadius: '50%',
+            y: 50
+          }]
+        }]
+      },
+
+      /**
+       * In the chart load callback, add icons on top of the circular shapes
+       */
+      function callback() {
+
+        // Move icon
+        this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8])
+          .attr({
+            'stroke': '#303030',
+            'stroke-linecap': 'round',
+            'stroke-linejoin': 'round',
+            'stroke-width': 2,
+            'zIndex': 10
+          })
+          .translate(190, 26)
+          .add(this.series[2].group);
+
+        // Exercise icon
+        this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8, 'M', 8, -8, 'L', 16, 0, 8, 8])
+          .attr({
+            'stroke': '#303030',
+            'stroke-linecap': 'round',
+            'stroke-linejoin': 'round',
+            'stroke-width': 2,
+            'zIndex': 10
+          })
+          .translate(190, 61)
+          .add(this.series[2].group);
+
+        // Stand icon
+        this.renderer.path(['M', 0, 8, 'L', 0, -8, 'M', -8, 0, 'L', 0, -8, 8, 0])
+          .attr({
+            'stroke': '#303030',
+            'stroke-linecap': 'round',
+            'stroke-linejoin': 'round',
+            'stroke-width': 2,
+            'zIndex': 10
+          })
+          .translate(190, 96)
+          .add(this.series[2].group);
+      });
+
+
+  });
+  /********Cost********/
+  $(function() {
+    Highcharts.chart('currentCost', {
+
+        chart: {
+          type: 'solidgauge',
+          marginTop: 50
+        },
+
+        title: {
+          text: 'Current Energy Cost',
+          style: {
+            fontSize: '24px'
+          }
+        },
+
+        tooltip: {
+          borderWidth: 0,
+          backgroundColor: 'none',
+          shadow: false,
+          style: {
+            fontSize: '16px'
+          },
+          pointFormat: '{series.name}<br><span style="font-size:2em; color: {point.color}; font-weight: bold">{point.y}%</span>',
+          positioner: function(labelWidth) {
+            return {
+              x: 200 - labelWidth / 2,
+              y: 180
+            };
+          }
+        },
+
+        pane: {
+          startAngle: 0,
+          endAngle: 360,
+          background: [{ // Track for Move
+            outerRadius: '112%',
+            innerRadius: '88%',
+            backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0.3).get(),
+            borderWidth: 0
+          }, { // Track for Exercise
+            outerRadius: '87%',
+            innerRadius: '63%',
+            backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[1]).setOpacity(0.3).get(),
+            borderWidth: 0
+          }, { // Track for Stand
+            outerRadius: '62%',
+            innerRadius: '38%',
+            backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[2]).setOpacity(0.3).get(),
+            borderWidth: 0
+          }]
+        },
+
+        yAxis: {
+          min: 0,
+          max: 100,
+          lineWidth: 0,
+          tickPositions: []
+        },
+
+        plotOptions: {
+          solidgauge: {
+            borderWidth: '34px',
+            dataLabels: {
+              enabled: false
+            },
+            linecap: 'round',
+            stickyTracking: false
+          }
+        },
+
+        series: [{
+          name: 'Current Cost',
+          borderColor: Highcharts.getOptions().colors[0],
+          data: [{
+            color: Highcharts.getOptions().colors[0],
+            radius: '100%',
+            innerRadius: '100%',
+            y: {
+              {
+                getCostOfEnergyConsumedPerDay()
+              }
+            }
+          }]
+        }, {
+          name: 'Previuous Cost',
+          borderColor: Highcharts.getOptions().colors[1],
+          data: [{
+            color: Highcharts.getOptions().colors[1],
+            radius: '75%',
+            innerRadius: '75%',
+            y: 25
+          }]
+        }, {
+          name: 'Desired Cost',
+          borderColor: Highcharts.getOptions().colors[2],
+          data: [{
+            color: Highcharts.getOptions().colors[2],
+            radius: '50%',
+            innerRadius: '50%',
+            y: 50
+          }]
+        }]
+      },
+
+      /**
+       * In the chart load callback, add icons on top of the circular shapes
+       */
+      function callback() {
+
+        // Move icon
+        this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8])
+          .attr({
+            'stroke': '#303030',
+            'stroke-linecap': 'round',
+            'stroke-linejoin': 'round',
+            'stroke-width': 2,
+            'zIndex': 10
+          })
+          .translate(190, 26)
+          .add(this.series[2].group);
+
+        // Exercise icon
+        this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8, 'M', 8, -8, 'L', 16, 0, 8, 8])
+          .attr({
+            'stroke': '#303030',
+            'stroke-linecap': 'round',
+            'stroke-linejoin': 'round',
+            'stroke-width': 2,
+            'zIndex': 10
+          })
+          .translate(190, 61)
+          .add(this.series[2].group);
+
+        // Stand icon
+        this.renderer.path(['M', 0, 8, 'L', 0, -8, 'M', -8, 0, 'L', 0, -8, 8, 0])
+          .attr({
+            'stroke': '#303030',
+            'stroke-linecap': 'round',
+            'stroke-linejoin': 'round',
+            'stroke-width': 2,
+            'zIndex': 10
+          })
+          .translate(190, 96)
+          .add(this.series[2].group);
+      });
+
+
+  });
+</script>
