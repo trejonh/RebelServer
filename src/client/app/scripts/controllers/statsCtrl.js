@@ -13,7 +13,7 @@ angular.module('clientApp')
     var deviceId = $route.current.params.deviceID;
     stats.device = {};
     $scope.outlets = [];
-    stats.costPerKWH = 0;
+    stats.costPerKWH = 0.5;
     var outlet = {};
     deviceService.getDevices(null, deviceId).success(function(data) {
       stats.device = data[0];
