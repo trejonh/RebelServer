@@ -9,15 +9,14 @@
  */
 angular.module('clientApp')
   .controller('MyDeviceCtrl', function($scope, $location, meanData, deviceService) {
-    console.log("in my device ctrl");
     var mydevice = this;
     mydevice.user = {};
     $scope.devices = [];
     meanData.getProfile()
       .success(function(data) {
         mydevice.user = data;
-        deviceService.getDevices(data.username).success(function(data) {
-          $scope.devices = data;
+        deviceService.getDevices(data.username).success(function(deviceData) {
+          $scope.devices = deviceData;
           console.log($scope.devices);
         }).error(function(err) {
           if (err) {
