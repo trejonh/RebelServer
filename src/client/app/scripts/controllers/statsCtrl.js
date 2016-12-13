@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('StatsCtrl', function($scope, $route, deviceService, gaugeGraphService) {
+  .controller('StatsCtrl', function($scope, $route, deviceService, GraphService) {
     var stats = this;
     var deviceId = $route.current.params.deviceID;
     stats.device = {};
@@ -33,28 +33,21 @@ angular.module('clientApp')
       outlet = outletData;
       //power Consumption
       var graphData = {
-        title : "Power Consumption",
-        container: "currentUsage",
-        outterMost : "Current Power Consumption",
-        outterMostY: getEnergyConsumedPerDay(outlet.wattage, 100000000),
-        middle : "Previous Power Consumption",
-        middleY : getEnergyConsumedPerDay(652, 80),
-        innerMost : "Desired Power Consumption",
-        innerMostY : getEnergyConsumedPerDay(785, 8695412)
+        title: "Power Consumption",
+        container: "#currentUsage",
+        labels: ["Desired Power Consumption","Current Power Consumption","Previous Power Consumption"],
+        series: [getEnergyConsumedPerDay(outlet.wattage, 100000000),getEnergyConsumedPerDay(652, 80),getEnergyConsumedPerDay(785, 8695412)],
       };
-      gaugeGraphService.initGraph(graphData);
+      GraphService.initGaugeGraph(graphData);
       //power cost
-      graphData = {
-        title : "Cost of Energy per Day",
-        container: "currentCost",
-        outterMost : "Current Power Cost",
-        outterMostY: getCostOfEnergyConsumedPerDay(outlet.wattage, 100000000, stats.costPerKWH),
-        middle : "Previous Power Cost",
-        middleY : getCostOfEnergyConsumedPerDay(outlet.wattage, 500000000, stats.costPerKWH),
-        innerMost : "Desired Cost ",
-        innerMostY : getCostOfEnergyConsumedPerDay(outlet.wattage, 100000000/5, stats.costPerKWH)
+
+      var graphData2 = {
+        title: "Power Cost",
+        container: "#currentCost",
+        labels: ["Desired Cost","Current Cost","Previous cost"],
+        series: [getCostOfEnergyConsumedPerDay(outlet.wattage, 100000000,stats.costPerKWH),getCostOfEnergyConsumedPerDay(652, 80,stats.costPerKWH),getCostOfEnergyConsumedPerDay(785, 8695412,stats.costPerKWH)],
       };
-      gaugeGraphService.initGraph(graphData);
+      console.log(GraphService.initGaugeGraph(graphData2));
     };
   });
 
