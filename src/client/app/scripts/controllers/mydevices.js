@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('MydevicesCtrl', function ($scope, meanData, deviceService) {
+  .controller('MydevicesCtrl', function($scope, meanData, deviceService) {
     var mydevice = this;
     mydevice.user = {};
     $scope.devices = [];
@@ -17,7 +17,15 @@ angular.module('clientApp')
         mydevice.user = data;
         deviceService.getDevices(mydevice.user.username).success(function(data) {
           $scope.devices = data;
-          console.log($scope.devices);
+          $scope.totalPowerDrawn = 0;
+          $scope.outletsOn = 0;
+          $scope.devices.outlets.forEach(function(outlet) {
+            if (outlet.isOn === 1) {
+              $scope.totalPowerDrawn += outlet.wattage;
+              $scope.outletsOn++;
+            }
+
+          });
         }).error(function(err) {
           if (err) {
             console.log(err);
@@ -27,19 +35,4 @@ angular.module('clientApp')
       .error(function(e) {
         console.log(e);
       });
-    $scope.outletsOn = $scope.devices.outlets.forEach(function(outlet) {
-      var numOn = 0;
-      if (outlet.isOn === 1) {
-        numOn++;
-      }
-      return numOn;
-    });
-    console.log($scope.outletsOn);
-    $scope.totalPowerDrawn = $scope.devices.outlets.forEach(function(outlet) {
-      var totalWattage = 0;
-      if (outlet.isOn === 1) {
-        totalWattage += outlet.wattage;
-      }
-      return totalWattage;
-    });
   });
