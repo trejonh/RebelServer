@@ -1,10 +1,10 @@
-<h1>My Devices {{mydevice.user.username}}</h1>
+<h1>My Devices</h1>
 <br>
 <br>
 <br>
 <div class="container">
   <div class="row">
-    <div class="col-sm-3" ng-repeat="device in myOwnedDevices">
+    <div class="col-sm-3" ng-repeat="device in devices">
       <button class="btn btn-default" id="deviceStatsBtn" href="#/mydevices/:{{device.deviceID}}/stats">
         <h6>{{device.nickname}}</h6>
         <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/24177-200.png" alt="device-{{device.deviceID}}" class="img-rounded img-responsive"/>

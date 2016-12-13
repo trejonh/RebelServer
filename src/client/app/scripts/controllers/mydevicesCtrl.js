@@ -12,16 +12,13 @@ angular.module('clientApp')
     console.log("in my device ctrl");
     var mydevice = this;
     mydevice.user = {};
-    $scope.myOwnedDevices = [];
+    $scope.devices = [];
     meanData.getProfile()
       .success(function(data) {
-        console.log("got user data");
-        console.log(data);
         mydevice.user = data;
-        deviceService.getDevices(data.username).success(function(deviceData) {
-          console.log("got device data");
-          $scope.myOwnedDevices = deviceData;
-          console.log($scope.myOwnedDevices);
+        deviceService.getDevices(data.username).success(function(data) {
+          $scope.devices = data;
+          console.log($scope.devices);
         }).error(function(err) {
           if (err) {
             console.log(err);
@@ -31,18 +28,18 @@ angular.module('clientApp')
       .error(function(e) {
         console.log(e);
       });
-    $scope.outletsOn = $scope.myOwnedDevices.outlets.forEach(function(outlet) {
+    $scope.outletsOn = 0;/*$scope.devices.outlets.forEach(function(outlet) {
       var numOn = 0;
       if (outlet.isOn === 1) {
         numOn++;
       }
       return numOn;
-    });
-    $scope.totalPowerDrawn = $scope.myOwnedDevices.outlets.forEach(function(outlet) {
+    });*/
+    $scope.totalPowerDrawn = 0;/*$scope.devices.outlets.forEach(function(outlet) {
       var totalWattage = 0;
       if (outlet.isOn === 1) {
         totalWattage += outlet.wattage;
       }
       return totalWattage;
-    });
+    });*/
   });
