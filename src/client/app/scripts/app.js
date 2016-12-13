@@ -20,11 +20,6 @@ angular
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
-      .when('/mySmartDevices', {
-        templateUrl: 'views/mysmartdevices.html',
-        controller: 'MysmartdevicesCtrl',
-        controllerAs: 'mySmartDevices'
-      })
       .when('/registerUser', {
         templateUrl: 'views/registeruser.html',
         controller: 'RegisteruserCtrl',
