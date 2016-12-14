@@ -32,13 +32,14 @@ angular.module('clientApp')
     $scope.saveClickedOutletData = function(outletData) {
       outlet = outletData;
       //power Consumption
-      var usageSeries = [getEnergyConsumedPerDay(outlet.wattage, 100000000), getEnergyConsumedPerDay(652, 80), getEnergyConsumedPerDay(785, 8695412)];
+      var usageSeries = [getEnergyConsumedPerDay(outlet.wattage, 100000000), getEnergyConsumedPerDay(652, 8054684215), getEnergyConsumedPerDay(785, 8695412)];
       var usageTotal;
       usageSeries.forEach(function(item){
         console.log("in usageSeries");
         console.log(item);
         usageTotal+=item;
       });
+      console.log(usageTotal);
       usageTotal=usageTotal*2;
       var graphData = {
         title: "Power Consumption",
@@ -47,10 +48,9 @@ angular.module('clientApp')
         series: usageSeries,
         total: usageTotal
       };
-      console.log(usageTotal);
       var usageGraph;
       var costSeries = [getCostOfEnergyConsumedPerDay(outlet.wattage, 100000000, stats.costPerKWH),
-          getCostOfEnergyConsumedPerDay(652, 80, stats.costPerKWH),
+          getCostOfEnergyConsumedPerDay(652, 8054684215, stats.costPerKWH),
           getCostOfEnergyConsumedPerDay(785, 8695412, stats.costPerKWH)];
       var costTotal;
       costSeries.forEach(function(item){
@@ -58,8 +58,8 @@ angular.module('clientApp')
         console.log(item);
         costTotal+=item;
       });
-      costTotal=costTotal*2;
       console.log(costTotal);
+      costTotal=costTotal*2;
       //power cost
 
       var graphData2 = {
@@ -89,7 +89,7 @@ angular.module('clientApp')
  */
 function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
   timeOn = (((timeOn / 1000) / 60) / 60); //ms->secs->mins->hours
-  return (wattage * timeOn) / (1000 * 24); //Energy in kilowatts-hours/day
+  return (wattage * timeOn) / 1000; //Energy in kilowatts-hours/day
 }
 
 /**
@@ -102,5 +102,5 @@ function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
  * @param costPerKWH - cost of Energy per kilowatts-hour in cents (.01)
  */
 function getCostOfEnergyConsumedPerDay(wattage, timeOn, costPerKWH) { // jshint ignore:line
-  return getEnergyConsumedPerDay(wattage, timeOn) * (costPerKWH / 100); //Cost in $/day
+  return getEnergyConsumedPerDay(wattage, timeOn) * costPerKWH ; //Cost in $/day
 }

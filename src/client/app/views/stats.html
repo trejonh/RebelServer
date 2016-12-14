@@ -3,7 +3,7 @@
 <br>
 <br>
 <div class="form-group">
-  <label for="costPerKWH">Cost per kWh in cents</label>
+  <label for="costPerKWH">Cost per kWh</label>
   <input type="number" class="form-control" id="costInput" placeholder="cost per kWh i.e. 0.58 = 50&cent;" ng-model="stats.costPerKWH">
 </div>
 <hr>
@@ -27,9 +27,6 @@
 <div class="container">
   <h1>{{stats.outlet.nickname}}</h1>
   <br>
-  <p>
-    <strong>Cost per kilowatts-hour ${{stats.costPerKWH}};</strong>
-  </p>
   <div class="row">
     <div class="col-sm-6">
       <h2>Usage</h2>
