@@ -88,8 +88,8 @@ angular.module('clientApp')
     };
 
     $scope.scheduleTasks = function() {
-      var offTime = Date.parse("" + stats.taskScheduler.scheduleOff);
-      var onTime = Date.parse("" + stats.taskScheduler.scheduleOn);
+      var offTime = new Date("" + stats.taskScheduler.scheduleOff);
+      var onTime = new Date("" + stats.taskScheduler.scheduleOn);
       stats.taskScheduler.scheduleOn = "" + onTime.getHours() + ":" + onTime.getMinutes();
       stats.taskScheduler.scheduleOff = "" + offTime.getHours() + ":" + offTime.getMinutes();
       console.log(stats.taskScheduler);
