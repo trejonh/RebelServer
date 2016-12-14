@@ -38,6 +38,19 @@ angular.module('clientApp')
       stats.outlet = outletData;
       //power Consumption
       var usageSeries = [getEnergyConsumedPerDay(outlet.wattage, 86400000), getEnergyConsumedPerDay(652, 86400000 / 2), getEnergyConsumedPerDay(785, 86400000 / 5)];
+      var costSeries = [getCostOfEnergyConsumedPerDay(outlet.wattage, 86400000, stats.costPerKWH),
+        getCostOfEnergyConsumedPerDay(652, 86400000 / 2, stats.costPerKWH),
+        getCostOfEnergyConsumedPerDay(785, 86400000 / 5, stats.costPerKWH)
+      ];
+      //power cost
+      for (var i = 0; i < costSeries.length && i < usageSeries.length; i++) {
+        costTotal += costSeries[i];
+        usageSeries += usageSeries[i];
+        console.log(costTotal);
+      }
+      costTotal = costTotal * 2;
+      usageTotal = usageTotal * 2;
+
       var graphData = {
         title: "Power Consumption",
         container: "#currentUsage",
@@ -45,11 +58,6 @@ angular.module('clientApp')
         series: usageSeries,
         total: usageTotal
       };
-      var costSeries = [getCostOfEnergyConsumedPerDay(outlet.wattage, 86400000, stats.costPerKWH),
-        getCostOfEnergyConsumedPerDay(652, 86400000 / 2, stats.costPerKWH),
-        getCostOfEnergyConsumedPerDay(785, 86400000 / 5, stats.costPerKWH)
-      ];
-      //power cost
 
       var graphData2 = {
         title: "Power Cost",
@@ -58,13 +66,8 @@ angular.module('clientApp')
         series: costSeries,
         total: costTotal
       };
-      for (var i = 0; i < costSeries.length && i < usageSeries.length; i++) {
-        costTotal += costSeries[i];
-        usageSeries += usageSeries[i];
-      }
-      costTotal = costTotal * 2;
-      usageTotal = usageTotal * 2;
-      console.log(costTotal);
+      console.log(graphData);
+      console.log(graphData2);
       if (usageGraph || costGraph) {
         usageGraph.update(graphData);
         costGraph.update(graphData2);
