@@ -57,6 +57,7 @@ angular.module('clientApp')
         costTotal += item;
       });
       costTotal = costTotal * 2;
+      console.log(costTotal);
       //power cost
 
       var graphData2 = {

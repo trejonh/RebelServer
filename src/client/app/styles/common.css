@@ -30,5 +30,8 @@ h1#welcomeUser{
   padding-bottom: 50px;
 }
 tr#outletStatRow:hover{
-  cursor: pointer; 
+  cursor: pointer;
+}
+div#graphRows div.col-sm-6{
+  min-height: 400px;
 }
