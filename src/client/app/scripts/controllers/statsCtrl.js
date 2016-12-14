@@ -88,6 +88,9 @@ angular.module('clientApp')
  * @param timeOn - total time on in one day in milliseconds
  */
 function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
+  console.log("logging wattage then time on");
+  console.log(wattage);
+  console.log(timeOn);
   timeOn = (((timeOn / 1000) / 60) / 60); //ms->secs->mins->hours
   return (wattage * timeOn) / 1000; //Energy in kilowatts-hours/day
 }
@@ -102,5 +105,7 @@ function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
  * @param costPerKWH - cost of Energy per kilowatts-hour in cents (.01)
  */
 function getCostOfEnergyConsumedPerDay(wattage, timeOn, costPerKWH) { // jshint ignore:line
+  console.log("cost");
+  console.log(costPerKWH);
   return getEnergyConsumedPerDay(wattage, timeOn) * costPerKWH; //Cost in $/day
 }
