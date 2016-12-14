@@ -17,7 +17,7 @@ angular.module('clientApp')
     stats.costPerKWH = 0.5;
     var usageTotal = 0;
     var costTotal = 0;
-    var outlet = {};
+    //var outlet = {};
     var usageGraph;
     var costGraph;
     deviceService.getDevices(null, deviceId).success(function(data) {
@@ -28,18 +28,20 @@ angular.module('clientApp')
         console.log(err);
       }
     });
-    $scope.getEnergyConsumedPerDay = function() {
+  /*  $scope.getEnergyConsumedPerDay = function() {
       return getEnergyConsumedPerDay(outlet.wattage, outlet.elapsedTimeOn);
     };
     $scope.getCostOfEnergyConsumedPerDay = function() {
       return getCostOfEnergyConsumedPerDay(outlet.wattage, outlet.elapsedTimeOn, stats.costPerKWH);
-    };
+    };*/
     $scope.saveClickedOutletData = function(outletData) {
       stats.outlet = outletData;
       //power Consumption
       var usageSeries = [getEnergyConsumedPerDay(parseInt(stats.outlet.wattage), 86400000),
         getEnergyConsumedPerDay(652, 86400000 / 2),
-        getEnergyConsumedPerDay(785, 86400000 / 5)];
+        getEnergyConsumedPerDay(785, 86400000 / 5)
+      ];
+      console.log(usageSeries);
       var costSeries = [getCostOfEnergyConsumedPerDay(parseInt(stats.outlet.wattage), 86400000, stats.costPerKWH),
         getCostOfEnergyConsumedPerDay(652, 86400000 / 2, stats.costPerKWH),
         getCostOfEnergyConsumedPerDay(785, 86400000 / 5, stats.costPerKWH)
