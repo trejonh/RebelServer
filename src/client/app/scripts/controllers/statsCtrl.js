@@ -87,8 +87,10 @@ angular.module('clientApp')
       }
     };
 
-    $scope.scheduleTask = function(){
+    $scope.scheduleTasks = function(){
       console.log(stats.taskScheduler);
+      console.log(Date.parse(stats.taskScheduler.scheduleOn));
+      console.log(Date.parse(stats.taskScheduler.scheduleOff));
     };
   });
 

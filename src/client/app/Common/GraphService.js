@@ -20,7 +20,7 @@
         startAngle: 270,
         total: gaugeData.total,
         showLabel: true,
-        labelDirection: 'explode',
+        labelDirection: 'implode',
         height: '400px'
       });
     };

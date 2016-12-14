@@ -32,3 +32,6 @@ h1#welcomeUser{
 tr#outletStatRow:hover{
   cursor: pointer;
 }
+.ct-label{
+  font-size: 1.75rem !important;
+}
