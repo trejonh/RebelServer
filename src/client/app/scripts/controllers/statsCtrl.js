@@ -37,7 +37,9 @@ angular.module('clientApp')
     $scope.saveClickedOutletData = function(outletData) {
       stats.outlet = outletData;
       //power Consumption
-      var usageSeries = [getEnergyConsumedPerDay(parseInt(stats.outlet.wattage), 86400000), getEnergyConsumedPerDay(652, 86400000 / 2), getEnergyConsumedPerDay(785, 86400000 / 5)];
+      var usageSeries = [getEnergyConsumedPerDay(parseInt(stats.outlet.wattage), 86400000),
+        getEnergyConsumedPerDay(652, 86400000 / 2),
+        getEnergyConsumedPerDay(785, 86400000 / 5)];
       var costSeries = [getCostOfEnergyConsumedPerDay(parseInt(stats.outlet.wattage), 86400000, stats.costPerKWH),
         getCostOfEnergyConsumedPerDay(652, 86400000 / 2, stats.costPerKWH),
         getCostOfEnergyConsumedPerDay(785, 86400000 / 5, stats.costPerKWH)
@@ -46,7 +48,6 @@ angular.module('clientApp')
       for (var i = 0; i < costSeries.length && i < usageSeries.length; i++) {
         costTotal += costSeries[i];
         usageSeries += usageSeries[i];
-        console.log(costTotal);
       }
       costTotal = costTotal * 2;
       usageTotal = usageTotal * 2;
@@ -88,11 +89,8 @@ angular.module('clientApp')
  * @param timeOn - total time on in one day in milliseconds
  */
 function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
-  console.log("logging wattage then time on");
-  console.log(wattage);
-  console.log(timeOn);
   timeOn = (((timeOn / 1000) / 60) / 60); //ms->secs->mins->hours
-  return (wattage * timeOn) / 1000; //Energy in kilowatts-hours/day
+  return parseInt((wattage * timeOn) / 1000); //Energy in kilowatts-hours/day
 }
 
 /**
@@ -105,7 +103,5 @@ function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
  * @param costPerKWH - cost of Energy per kilowatts-hour in cents (.01)
  */
 function getCostOfEnergyConsumedPerDay(wattage, timeOn, costPerKWH) { // jshint ignore:line
-  console.log("cost");
-  console.log(costPerKWH);
   return getEnergyConsumedPerDay(wattage, timeOn) * costPerKWH; //Cost in $/day
 }
