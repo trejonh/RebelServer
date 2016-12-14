@@ -41,7 +41,6 @@ angular.module('clientApp')
         getEnergyConsumedPerDay(652, 86400000 / 2),
         getEnergyConsumedPerDay(785, 86400000 / 5)
       ];
-      console.log(usageSeries);
       var costSeries = [getCostOfEnergyConsumedPerDay(parseInt(stats.outlet.wattage), 86400000, stats.costPerKWH),
         getCostOfEnergyConsumedPerDay(652, 86400000 / 2, stats.costPerKWH),
         getCostOfEnergyConsumedPerDay(785, 86400000 / 5, stats.costPerKWH)
@@ -49,7 +48,7 @@ angular.module('clientApp')
       //power cost
       for (var i = 0; i < costSeries.length && i < usageSeries.length; i++) {
         costTotal += costSeries[i];
-        usageSeries += usageSeries[i];
+        usageTotal += usageSeries[i];
       }
       costTotal = costTotal * 2;
       usageTotal = usageTotal * 2;
@@ -70,7 +69,6 @@ angular.module('clientApp')
         total: costTotal
       };
       console.log(graphData);
-      console.log(graphData2);
       if (usageGraph || costGraph) {
         usageGraph.update(graphData);
         costGraph.update(graphData2);
@@ -92,7 +90,7 @@ angular.module('clientApp')
  */
 function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
   timeOn = (((timeOn / 1000) / 60) / 60); //ms->secs->mins->hours
-  return parseInt((wattage * timeOn) / 1000); //Energy in kilowatts-hours/day
+  return (wattage * timeOn) / 1000; //Energy in kilowatts-hours/day
 }
 
 /**
