@@ -15,6 +15,8 @@ angular.module('clientApp')
     $scope.outlets = [];
     stats.outlet = {};
     stats.costPerKWH = 0.5;
+    var usageTotal = 0;
+    var costTotal = 0;
     var outlet = {};
     var usageGraph;
     var costGraph;
@@ -36,9 +38,8 @@ angular.module('clientApp')
       stats.outlet = outletData;
       //power Consumption
       var usageSeries = [getEnergyConsumedPerDay(outlet.wattage, 86400000), getEnergyConsumedPerDay(652, 86400000/2), getEnergyConsumedPerDay(785, 86400000/5)];
-      var usageTotal = 0;
       usageSeries.forEach(function(item) {
-        usageTotal += item;
+        usageTotal += parseInt(item);
       });
       usageTotal = usageTotal * 2;
       var graphData = {
@@ -52,9 +53,8 @@ angular.module('clientApp')
         getCostOfEnergyConsumedPerDay(652, 86400000/2, stats.costPerKWH),
         getCostOfEnergyConsumedPerDay(785, 86400000/5, stats.costPerKWH)
       ];
-      var costTotal = 0;
       costSeries.forEach(function(item) {
-        costTotal += item;
+        costTotal += parseInt(item);
       });
       costTotal = costTotal * 2;
       console.log(costTotal);
