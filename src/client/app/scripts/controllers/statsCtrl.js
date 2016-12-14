@@ -88,10 +88,10 @@ angular.module('clientApp')
     };
 
     $scope.scheduleTasks = function() {
-      var offTime = new Date("" + stats.taskScheduler.scheduleOff);
-      var onTime = new Date("" + stats.taskScheduler.scheduleOn);
-      stats.taskScheduler.scheduleOn = "" + onTime.getHours() + ":" + onTime.getMinutes();
-      stats.taskScheduler.scheduleOff = "" + offTime.getHours() + ":" + offTime.getMinutes();
+      var offTime = (new Date("" + stats.taskScheduler.scheduleOff)).getHours()+":"+(new Date("" + stats.taskScheduler.scheduleOff)).getMinutes();
+      var onTime = (new Date("" + stats.taskScheduler.scheduleOn)).getHours()+":"+(new Date("" + stats.taskScheduler.scheduleOn)).getMinutes();
+      stats.taskScheduler.scheduleOn = onTime;
+      stats.taskScheduler.scheduleOff = offTime;
       console.log(stats.taskScheduler);
     };
   });
