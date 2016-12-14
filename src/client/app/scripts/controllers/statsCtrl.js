@@ -28,12 +28,12 @@ angular.module('clientApp')
         console.log(err);
       }
     });
-  /*  $scope.getEnergyConsumedPerDay = function() {
-      return getEnergyConsumedPerDay(outlet.wattage, outlet.elapsedTimeOn);
-    };
-    $scope.getCostOfEnergyConsumedPerDay = function() {
-      return getCostOfEnergyConsumedPerDay(outlet.wattage, outlet.elapsedTimeOn, stats.costPerKWH);
-    };*/
+    /*  $scope.getEnergyConsumedPerDay = function() {
+        return getEnergyConsumedPerDay(outlet.wattage, outlet.elapsedTimeOn);
+      };
+      $scope.getCostOfEnergyConsumedPerDay = function() {
+        return getCostOfEnergyConsumedPerDay(outlet.wattage, outlet.elapsedTimeOn, stats.costPerKWH);
+      };*/
     $scope.saveClickedOutletData = function(outletData) {
       stats.outlet = outletData;
       //power Consumption
@@ -68,7 +68,6 @@ angular.module('clientApp')
         series: costSeries,
         total: costTotal
       };
-      console.log(graphData);
       if (usageGraph || costGraph) {
         usageGraph.update(graphData);
         costGraph.update(graphData2);
@@ -76,6 +75,8 @@ angular.module('clientApp')
       } else {
         usageGraph = GraphService.initGaugeGraph(graphData);
         costGraph = GraphService.initGaugeGraph(graphData2);
+        usageGraph.update();
+        costGraph.update();
       }
     };
   });

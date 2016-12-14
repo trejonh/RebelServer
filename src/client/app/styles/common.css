@@ -32,6 +32,3 @@ h1#welcomeUser{
 tr#outletStatRow:hover{
   cursor: pointer;
 }
-div#graphRows div.col-sm-6{
-  min-height: 400px;
-}
