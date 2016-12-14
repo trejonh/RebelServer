@@ -64,12 +64,12 @@ angular.module('clientApp')
         total: costTotal
       };
       var costGraph;
-      $("#detailedStats").on("shown.bs.modal", function() { //jshint ignore:line
+      //$("#detailedStats").on("shown.bs.modal", function() { //jshint ignore:line
         usageGraph = GraphService.initGaugeGraph(graphData);
         costGraph = GraphService.initGaugeGraph(graphData2);
         usageGraph.update();
         costGraph.update();
-      });
+      //});
     };
   });
 
