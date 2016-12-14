@@ -13,6 +13,7 @@ angular.module('clientApp')
     var deviceId = $route.current.params.deviceID;
     stats.device = {};
     $scope.outlets = [];
+    stats.outlet ={};
     stats.costPerKWH = 0.5;
     var outlet = {};
     deviceService.getDevices(null, deviceId).success(function(data) {
@@ -30,7 +31,7 @@ angular.module('clientApp')
       return getCostOfEnergyConsumedPerDay(outlet.wattage, outlet.elapsedTimeOn, stats.costPerKWH);
     };
     $scope.saveClickedOutletData = function(outletData) {
-      outlet = outletData;
+      stats.outlet = outletData;
       //power Consumption
       var usageSeries = [getEnergyConsumedPerDay(outlet.wattage, 100000000), getEnergyConsumedPerDay(652, 8054684215), getEnergyConsumedPerDay(785, 8695412)];
       var usageTotal;
@@ -38,8 +39,8 @@ angular.module('clientApp')
         console.log("in usageSeries");
         console.log(item);
         usageTotal+=item;
+        console.log("usageTotal "+usageTotal);
       });
-      console.log(usageTotal);
       usageTotal=usageTotal*2;
       var graphData = {
         title: "Power Consumption",
@@ -57,6 +58,7 @@ angular.module('clientApp')
         console.log("in cost series");
         console.log(item);
         costTotal+=item;
+        console.log("cost "+costTotal);
       });
       console.log(costTotal);
       costTotal=costTotal*2;
