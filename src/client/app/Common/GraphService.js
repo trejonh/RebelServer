@@ -18,7 +18,7 @@
         donut: true,
         donutWidth: 60,
         startAngle: 270,
-        total: 200,
+        total: gaugeData.total,
         showLabel: true,
         labelDirection: 'explode'
       });
