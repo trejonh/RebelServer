@@ -35,6 +35,8 @@ angular.module('clientApp')
       var usageSeries = [getEnergyConsumedPerDay(outlet.wattage, 100000000), getEnergyConsumedPerDay(652, 80), getEnergyConsumedPerDay(785, 8695412)];
       var usageTotal;
       usageSeries.forEach(function(item){
+        console.log("in usageSeries");
+        console.log(item);
         usageTotal+=item;
       });
       usageTotal=usageTotal*2;
@@ -52,6 +54,8 @@ angular.module('clientApp')
           getCostOfEnergyConsumedPerDay(785, 8695412, stats.costPerKWH)];
       var costTotal;
       costSeries.forEach(function(item){
+        console.log("in cost series");
+        console.log(item);
         costTotal+=item;
       });
       costTotal=costTotal*2;
