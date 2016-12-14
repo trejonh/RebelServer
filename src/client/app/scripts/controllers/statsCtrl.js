@@ -13,9 +13,11 @@ angular.module('clientApp')
     var deviceId = $route.current.params.deviceID;
     stats.device = {};
     $scope.outlets = [];
-    stats.outlet ={};
+    stats.outlet = {};
     stats.costPerKWH = 0.5;
     var outlet = {};
+    var usageGraph;
+    var costGraph;
     deviceService.getDevices(null, deviceId).success(function(data) {
       stats.device = data[0];
       $scope.outlets = data[0].outlets;
@@ -33,15 +35,12 @@ angular.module('clientApp')
     $scope.saveClickedOutletData = function(outletData) {
       stats.outlet = outletData;
       //power Consumption
-      var usageSeries = [getEnergyConsumedPerDay(outlet.wattage, 100000000), getEnergyConsumedPerDay(652, 8054684215), getEnergyConsumedPerDay(785, 8695412)];
-      var usageTotal;
-      usageSeries.forEach(function(item){
-        console.log("in usageSeries");
-        console.log(item);
-        usageTotal+=item;
-        console.log("usageTotal "+usageTotal);
+      var usageSeries = [getEnergyConsumedPerDay(outlet.wattage, 86400000), getEnergyConsumedPerDay(652, 86400000/2), getEnergyConsumedPerDay(785, 86400000/5)];
+      var usageTotal = 0;
+      usageSeries.forEach(function(item) {
+        usageTotal += item;
       });
-      usageTotal=usageTotal*2;
+      usageTotal = usageTotal * 2;
       var graphData = {
         title: "Power Consumption",
         container: "#currentUsage",
@@ -49,19 +48,15 @@ angular.module('clientApp')
         series: usageSeries,
         total: usageTotal
       };
-      var usageGraph;
-      var costSeries = [getCostOfEnergyConsumedPerDay(outlet.wattage, 100000000, stats.costPerKWH),
-          getCostOfEnergyConsumedPerDay(652, 8054684215, stats.costPerKWH),
-          getCostOfEnergyConsumedPerDay(785, 8695412, stats.costPerKWH)];
-      var costTotal;
-      costSeries.forEach(function(item){
-        console.log("in cost series");
-        console.log(item);
-        costTotal+=item;
-        console.log("cost "+costTotal);
+      var costSeries = [getCostOfEnergyConsumedPerDay(outlet.wattage, 86400000, stats.costPerKWH),
+        getCostOfEnergyConsumedPerDay(652, 86400000/2, stats.costPerKWH),
+        getCostOfEnergyConsumedPerDay(785, 86400000/5, stats.costPerKWH)
+      ];
+      var costTotal = 0;
+      costSeries.forEach(function(item) {
+        costTotal += item;
       });
-      console.log(costTotal);
-      costTotal=costTotal*2;
+      costTotal = costTotal * 2;
       //power cost
 
       var graphData2 = {
@@ -71,12 +66,15 @@ angular.module('clientApp')
         series: costSeries,
         total: costTotal
       };
-      var costGraph;
       //$("#detailedStats").on("shown.bs.modal", function() { //jshint ignore:line
+      if (usageGraph || costGraph) {
+        usageGraph.update(graphData);
+        costGraph.update(graphData2);
+
+      } else {
         usageGraph = GraphService.initGaugeGraph(graphData);
         costGraph = GraphService.initGaugeGraph(graphData2);
-        usageGraph.update();
-        costGraph.update();
+      }
       //});
     };
   });
@@ -104,5 +102,5 @@ function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
  * @param costPerKWH - cost of Energy per kilowatts-hour in cents (.01)
  */
 function getCostOfEnergyConsumedPerDay(wattage, timeOn, costPerKWH) { // jshint ignore:line
-  return getEnergyConsumedPerDay(wattage, timeOn) * costPerKWH ; //Cost in $/day
+  return getEnergyConsumedPerDay(wattage, timeOn) * costPerKWH; //Cost in $/day
 }
