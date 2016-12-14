@@ -45,6 +45,7 @@ angular.module('clientApp')
         series: usageSeries,
         total: usageTotal
       };
+      console.log(usageTotal);
       var usageGraph;
       var costSeries = [getCostOfEnergyConsumedPerDay(outlet.wattage, 100000000, stats.costPerKWH),
           getCostOfEnergyConsumedPerDay(652, 80, stats.costPerKWH),
@@ -54,6 +55,7 @@ angular.module('clientApp')
         costTotal+=item;
       });
       costTotal=costTotal*2;
+      console.log(costTotal);
       //power cost
 
       var graphData2 = {
