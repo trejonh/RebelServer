@@ -14,6 +14,13 @@ angular.module('clientApp')
     stats.device = {};
     $scope.outlets = [];
     stats.outlet = {};
+    stats.taskScheduler={
+      manualOn : true,
+      scheduleOn: "",
+      repeatOn: true,
+      scheduleOff: "",
+      repeatOff: true
+    };
     stats.costPerKWH = 0.5;
     var usageTotal = 0;
     var costTotal = 0;
@@ -78,6 +85,10 @@ angular.module('clientApp')
         usageGraph.update();
         costGraph.update();
       }
+    };
+
+    $scope.scheduleTask = function(){
+      console.log(stats.taskScheduler);
     };
   });
 
