@@ -14,8 +14,8 @@ angular.module('clientApp')
     stats.device = {};
     $scope.outlets = [];
     stats.outlet = {};
-    stats.taskScheduler={
-      manualOn : true,
+    stats.taskScheduler = {
+      manualOn: true,
       scheduleOn: "",
       repeatOn: true,
       scheduleOff: "",
@@ -87,10 +87,12 @@ angular.module('clientApp')
       }
     };
 
-    $scope.scheduleTasks = function(){
+    $scope.scheduleTasks = function() {
+      var offTime = Date.parse("" + stats.taskScheduler.scheduleOff);
+      var onTime = Date.parse("" + stats.taskScheduler.scheduleOn);
+      stats.taskScheduler.scheduleOn = "" + onTime.getHours() + ":" + onTime.getMinutes();
+      stats.taskScheduler.scheduleOff = "" + offTime.getHours() + ":" + offTime.getMinutes();
       console.log(stats.taskScheduler);
-      console.log(Date.parse(stats.taskScheduler.scheduleOn));
-      console.log(Date.parse(stats.taskScheduler.scheduleOff));
     };
   });
 
