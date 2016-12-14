@@ -37,8 +37,8 @@ angular.module('clientApp')
     $scope.saveClickedOutletData = function(outletData) {
       stats.outlet = outletData;
       //power Consumption
-      var usageSeries = [getEnergyConsumedPerDay(parseInt(outlet.wattage), 86400000), getEnergyConsumedPerDay(652, 86400000 / 2), getEnergyConsumedPerDay(785, 86400000 / 5)];
-      var costSeries = [getCostOfEnergyConsumedPerDay(parseInt(outlet.wattage), 86400000, stats.costPerKWH),
+      var usageSeries = [getEnergyConsumedPerDay(parseInt(stats.outlet.wattage), 86400000), getEnergyConsumedPerDay(652, 86400000 / 2), getEnergyConsumedPerDay(785, 86400000 / 5)];
+      var costSeries = [getCostOfEnergyConsumedPerDay(parseInt(stats.outlet.wattage), 86400000, stats.costPerKWH),
         getCostOfEnergyConsumedPerDay(652, 86400000 / 2, stats.costPerKWH),
         getCostOfEnergyConsumedPerDay(785, 86400000 / 5, stats.costPerKWH)
       ];
