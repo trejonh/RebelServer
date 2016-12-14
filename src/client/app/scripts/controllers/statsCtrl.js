@@ -37,11 +37,7 @@ angular.module('clientApp')
     $scope.saveClickedOutletData = function(outletData) {
       stats.outlet = outletData;
       //power Consumption
-      var usageSeries = [getEnergyConsumedPerDay(outlet.wattage, 86400000), getEnergyConsumedPerDay(652, 86400000/2), getEnergyConsumedPerDay(785, 86400000/5)];
-      usageSeries.forEach(function(item) {
-        usageTotal += parseInt(item);
-      });
-      usageTotal = usageTotal * 2;
+      var usageSeries = [getEnergyConsumedPerDay(outlet.wattage, 86400000), getEnergyConsumedPerDay(652, 86400000 / 2), getEnergyConsumedPerDay(785, 86400000 / 5)];
       var graphData = {
         title: "Power Consumption",
         container: "#currentUsage",
@@ -50,14 +46,9 @@ angular.module('clientApp')
         total: usageTotal
       };
       var costSeries = [getCostOfEnergyConsumedPerDay(outlet.wattage, 86400000, stats.costPerKWH),
-        getCostOfEnergyConsumedPerDay(652, 86400000/2, stats.costPerKWH),
-        getCostOfEnergyConsumedPerDay(785, 86400000/5, stats.costPerKWH)
+        getCostOfEnergyConsumedPerDay(652, 86400000 / 2, stats.costPerKWH),
+        getCostOfEnergyConsumedPerDay(785, 86400000 / 5, stats.costPerKWH)
       ];
-      costSeries.forEach(function(item) {
-        costTotal += parseInt(item);
-      });
-      costTotal = costTotal * 2;
-      console.log(costTotal);
       //power cost
 
       var graphData2 = {
@@ -67,7 +58,13 @@ angular.module('clientApp')
         series: costSeries,
         total: costTotal
       };
-      //$("#detailedStats").on("shown.bs.modal", function() { //jshint ignore:line
+      for (var i = 0; i < costSeries.length && i < usageSeries.length; i++) {
+        costTotal += costSeries[i];
+        usageSeries += usageSeries[i];
+      }
+      costTotal = costTotal * 2;
+      usageTotal = usageTotal * 2;
+      console.log(costTotal);
       if (usageGraph || costGraph) {
         usageGraph.update(graphData);
         costGraph.update(graphData2);
@@ -76,7 +73,6 @@ angular.module('clientApp')
         usageGraph = GraphService.initGaugeGraph(graphData);
         costGraph = GraphService.initGaugeGraph(graphData2);
       }
-      //});
     };
   });
 

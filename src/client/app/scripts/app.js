@@ -76,21 +76,15 @@ angular
     $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) { // jshint ignore:line
       var autheRequiredPath = $location.path() === '/profile' || $location.path() === '/mydevices';
       if (autheRequiredPath && !authentication.isLoggedIn()) {
-        $rootScope.lgBtn = {
-          display: "none"
-        };
         $location.path('/'); // jshint ignore:line
+        angular.element("#logoutBtn").scope.loggedIn = true;
       }
       if (authentication.isLoggedIn()) {
-        $rootScope.lgBtn = {
-          display: "inline-block"
-        };
+        angular.element("#logoutBtn").scope.loggedIn = false;
       }
       $rootScope.logout = function() {
         authentication.logout();
-        $rootScope.lgBtn = {
-          display: "none"
-        };
+        angular.element("#logoutBtn").scope.loggedIn = true;
         $location.path('/'); // jshint ignore:line
       };
     });
