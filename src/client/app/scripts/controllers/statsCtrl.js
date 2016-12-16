@@ -9,7 +9,6 @@
  */
 angular.module('clientApp')
   .controller('StatsCtrl', function($scope, $route, deviceService, GraphService) {
-    console.log($scope);
     var stats = this;
     var deviceId = $route.current.params.deviceID;
     stats.device = {};
@@ -111,7 +110,6 @@ angular.module('clientApp')
       }
       stats.taskScheduler.setOnTime = onTime;
       stats.taskScheduler.setOffTime = offTime;
-      console.log(stats.taskScheduler);
     };
   });
 
