@@ -1,0 +1,52 @@
+#mainContent{
+  margin-top: 75px;
+}
+#loginJumbotron{
+  text-align: center;
+}
+form{
+  text-align: left;
+}
+footer.footer{
+  margin-top: 75px;
+}
+/*#navbar-collapse{
+  position: relative;
+}
+#pages{
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  transform: translateY(-50%);
+  float: right;
+}*/
+#logoutBtn{
+  margin-top: 2%;
+  line-height: 100%;
+}
+button#accountDropdown{
+  border-color: none;
+  border: none;
+  background-color: transparent;
+}
+h1#welcomeUser{
+  padding-top:50px;
+  padding-bottom: 50px;
+}
+tr#outletStatRow:hover{
+  cursor: pointer;
+}
+.ct-label{
+  font-size: 1.5rem !important;
+  color: black !important;
+  fill: black !important;
+  font-weight: bolder;
+}
+@media only screen and (max-width: 768px) {
+  .ct-label{
+    font-size: 8px !important;
+    color: black !important;
+    fill: black !important;
+    font-weight: bolder;
+  }
+}

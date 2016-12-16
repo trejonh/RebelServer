@@ -1,0 +1,33 @@
+#mainContent{
+  margin-top: 75px;
+}
+#loginJumbotron{
+  text-align: center;
+}
+form{
+  text-align: left;
+}
+footer.footer{
+  margin-top: 75px;
+}
+#navbar-collapse{
+  position: relative;
+}
+#pages{
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  transform: translateY(-50%);
+  float: right;
+}
+button#accountDropdown{
+  border-color: none;
+  border: none;
+  background-color: transparent;
+}
+h1#welcomeUser{
+  padding-top:50px;
+  padding-bottom: 50px;
+}
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbW1vbi5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxpQkFBaUI7Q0FDbEI7QUFDRDtFQUNFLG1CQUFtQjtDQUNwQjtBQUNEO0VBQ0UsaUJBQWlCO0NBQ2xCO0FBQ0Q7RUFDRSxpQkFBaUI7Q0FDbEI7QUFDRDtFQUNFLG1CQUFtQjtDQUNwQjtBQUNEO0VBQ0UsbUJBQW1CO0VBQ25CLFNBQVM7RUFDVCxXQUFXO0VBQ1gsNEJBQTRCO0VBQzVCLGFBQWE7Q0FDZDtBQUNEO0VBQ0UsbUJBQW1CO0VBQ25CLGFBQWE7RUFDYiw4QkFBOEI7Q0FDL0I7QUFDRDtFQUNFLGlCQUFpQjtFQUNqQixxQkFBcUI7Q0FDdEIiLCJmaWxlIjoiY29tbW9uLmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiNtYWluQ29udGVudHtcbiAgbWFyZ2luLXRvcDogNzVweDtcbn1cbiNsb2dpbkp1bWJvdHJvbntcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xufVxuZm9ybXtcbiAgdGV4dC1hbGlnbjogbGVmdDtcbn1cbmZvb3Rlci5mb290ZXJ7XG4gIG1hcmdpbi10b3A6IDc1cHg7XG59XG4jbmF2YmFyLWNvbGxhcHNle1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG59XG4jcGFnZXN7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgdG9wOiA1MCU7XG4gIHJpZ2h0OiAwcHg7XG4gIHRyYW5zZm9ybTogdHJhbnNsYXRlWSgtNTAlKTtcbiAgZmxvYXQ6IHJpZ2h0O1xufVxuYnV0dG9uI2FjY291bnREcm9wZG93bntcbiAgYm9yZGVyLWNvbG9yOiBub25lO1xuICBib3JkZXI6IG5vbmU7XG4gIGJhY2tncm91bmQtY29sb3I6IHRyYW5zcGFyZW50O1xufVxuaDEjd2VsY29tZVVzZXJ7XG4gIHBhZGRpbmctdG9wOjUwcHg7XG4gIHBhZGRpbmctYm90dG9tOiA1MHB4O1xufVxuIl19 */
