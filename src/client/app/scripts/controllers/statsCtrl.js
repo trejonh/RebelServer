@@ -9,6 +9,7 @@
  */
 angular.module('clientApp')
   .controller('StatsCtrl', function($scope, $route, deviceService, GraphService) {
+    console.log($scope);
     var stats = this;
     var deviceId = $route.current.params.deviceID;
     stats.device = {};
@@ -32,7 +33,7 @@ angular.module('clientApp')
     deviceService.getDevices(null, deviceId).success(function(data) {
       stats.device = data[0];
       $scope.outlets = data[0].outlets;
-        $("tr#outletStatRow")[0].click();//jshint ignore:line
+      //  $("tr#outletStatRow")[0].click();//jshint ignore:line
     }).error(function(err) {
       if (err) {
         console.log(err);
