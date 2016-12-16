@@ -20,6 +20,10 @@ footer.footer{
   transform: translateY(-50%);
   float: right;
 }*/
+#logoutBtn{
+  margin-top: 2%;
+  line-height: 100%;
+}
 button#accountDropdown{
   border-color: none;
   border: none;
