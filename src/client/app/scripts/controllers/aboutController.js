@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('AboutCtrl', function($scope,$location,meanData,authentication) {
+  .controller('AboutCtrl', function($scope,$location,meanData) {
     var profile = this;
     profile.user = {};
     meanData.getProfile()

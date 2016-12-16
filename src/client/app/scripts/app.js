@@ -73,7 +73,6 @@ angular
     return UsersRestangular.service("registeredUsers");
   })
   .run(function($rootScope, $location, authentication) {
-    console.log($rootScope);
     $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) { // jshint ignore:line
       var autheRequiredPath = $location.path() === '/profile' || $location.path() === '/mydevices';
       if (autheRequiredPath && !authentication.isLoggedIn()) {
