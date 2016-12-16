@@ -19,7 +19,9 @@ angular.module('clientApp')
       scheduleOn: "",
       repeatOn: true,
       scheduleOff: "",
-      repeatOff: true
+      repeatOff: true,
+      setOnTime: [],
+      setOffTime:[]
     };
     stats.costPerKWH = 0.5;
     var usageTotal = 0;
@@ -88,10 +90,30 @@ angular.module('clientApp')
     };
 
     $scope.scheduleTasks = function() {
-      var offTime = (new Date("" + stats.taskScheduler.scheduleOff)).getHours()+":"+(new Date("" + stats.taskScheduler.scheduleOff)).getMinutes();
-      var onTime = (new Date("" + stats.taskScheduler.scheduleOn)).getHours()+":"+(new Date("" + stats.taskScheduler.scheduleOn)).getMinutes();
-      stats.taskScheduler.scheduleOn = onTime;
-      stats.taskScheduler.scheduleOff = offTime;
+      var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(),(new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
+      var onTime = [(new Date(stats.taskScheduler.scheduleOn)).getHours(),(new Date(stats.taskScheduler.scheduleOn)).getMinutes()];
+      if(stats.taskScheduler.scheduleOn && onTime.indexOf(NaN) !== -1){
+        var timeSet = stats.taskScheduler.scheduleOn;
+        timeSet = timeSet.trim().split(":");
+        if((timeSet[0] < 0 || timeSet[0] > 24) || (timeSet[1] < 0 || timeSet[1] > 59)){
+          alert("Please enter a proper date"); //jshint ignore:line
+          return;
+        }else{
+          onTime = timeSet;
+        }
+      }
+      if(stats.taskScheduler.scheduleOff && offTime.indexOf(NaN) !== -1){
+        var timeSet = stats.taskScheduler.scheduleOff;//jshint ignore:line
+        timeSet = timeSet.trim().split(":");
+        if((timeSet[0] < 0 || timeSet[0] > 24) || (timeSet[1] < 0 || timeSet[1] > 59)){
+          alert("Please enter a proper date"); //jshint ignore:line
+          return;
+        }else{
+          offTime = timeSet;
+        }
+      }
+      stats.taskScheduler.setOnTime = onTime;
+      stats.taskScheduler.setOffTime = offTime;
       console.log(stats.taskScheduler);
     };
   });

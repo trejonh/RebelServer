@@ -10,7 +10,7 @@ form{
 footer.footer{
   margin-top: 75px;
 }
-#navbar-collapse{
+/*#navbar-collapse{
   position: relative;
 }
 #pages{
@@ -19,7 +19,7 @@ footer.footer{
   right: 0px;
   transform: translateY(-50%);
   float: right;
-}
+}*/
 button#accountDropdown{
   border-color: none;
   border: none;
