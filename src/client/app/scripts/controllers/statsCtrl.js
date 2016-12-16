@@ -105,6 +105,7 @@ angular.module('clientApp')
       if(stats.taskScheduler.scheduleOff && offTime.indexOf(NaN) !== -1){
         var timeSet = stats.taskScheduler.scheduleOff;//jshint ignore:line
         timeSet = timeSet.trim().split(":");
+        console.log(timeSet);
         if((timeSet[0] < 0 || timeSet[0] > 24) || (timeSet[1] < 0 || timeSet[1] > 59)){
           alert("Please enter a proper date"); //jshint ignore:line
           return;
