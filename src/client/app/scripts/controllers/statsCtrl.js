@@ -90,29 +90,30 @@ angular.module('clientApp')
     };
 
     $scope.scheduleTasks = function() {
+      console.log(stats.taskScheduler);
       var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(),(new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
       var onTime = [(new Date(stats.taskScheduler.scheduleOn)).getHours(),(new Date(stats.taskScheduler.scheduleOn)).getMinutes()];
-      if(stats.taskScheduler.scheduleOn && onTime.indexOf(NaN) !== -1){
-        var timeSet = stats.taskScheduler.scheduleOn;
-        timeSet = timeSet.trim().split(":");
-        if((timeSet[0] < 0 || timeSet[0] > 24) || (timeSet[1] < 0 || timeSet[1] > 59)){
+    /*  if(stats.taskScheduler.scheduleOn && onTime.indexOf(NaN) !== -1){
+        var timeSetOn = stats.taskScheduler.scheduleOn;
+        timeSetOn = timeSetOn.trim().split(":");
+        if((timeSetOn[0] < 0 || timeSetOn[0] > 24) || (timeSetOn[1] < 0 || timeSetOn[1] > 59)){
           alert("Please enter a proper date"); //jshint ignore:line
           return;
         }else{
-          onTime = timeSet;
+          onTime = timeSetOn;
         }
       }
       if(stats.taskScheduler.scheduleOff && offTime.indexOf(NaN) !== -1){
-        var timeSet = stats.taskScheduler.scheduleOff;//jshint ignore:line
-        timeSet = timeSet.trim().split(":");
-        console.log(timeSet);
-        if((timeSet[0] < 0 || timeSet[0] > 24) || (timeSet[1] < 0 || timeSet[1] > 59)){
+        var timeSetOff = stats.taskScheduler.scheduleOff;//jshint ignore:line
+        timeSetOff = timeSetOff.trim().split(":");
+        console.log(timeSetOff);
+        if((timeSetOff[0] < 0 || timeSetOff[0] > 24) || (timeSetOff[1] < 0 || timeSetOff[1] > 59)){
           alert("Please enter a proper date"); //jshint ignore:line
           return;
         }else{
-          offTime = timeSet;
+          offTime = timeSetOff;
         }
-      }
+      }*/
       stats.taskScheduler.setOnTime = onTime;
       stats.taskScheduler.setOffTime = offTime;
       console.log(stats.taskScheduler);
