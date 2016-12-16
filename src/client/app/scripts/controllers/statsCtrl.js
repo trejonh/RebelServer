@@ -32,17 +32,12 @@ angular.module('clientApp')
     deviceService.getDevices(null, deviceId).success(function(data) {
       stats.device = data[0];
       $scope.outlets = data[0].outlets;
+        $("tr#outletStatRow")[0].click();//jshint ignore:line
     }).error(function(err) {
       if (err) {
         console.log(err);
       }
     });
-    /*  $scope.getEnergyConsumedPerDay = function() {
-        return getEnergyConsumedPerDay(outlet.wattage, outlet.elapsedTimeOn);
-      };
-      $scope.getCostOfEnergyConsumedPerDay = function() {
-        return getCostOfEnergyConsumedPerDay(outlet.wattage, outlet.elapsedTimeOn, stats.costPerKWH);
-      };*/
     $scope.saveClickedOutletData = function(outletData) {
       stats.outlet = outletData;
       //power Consumption
@@ -90,11 +85,10 @@ angular.module('clientApp')
     };
 
     $scope.scheduleTasks = function() {
-      console.log(stats.taskScheduler);
       var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(),(new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
       var onTime = [(new Date(stats.taskScheduler.scheduleOn)).getHours(),(new Date(stats.taskScheduler.scheduleOn)).getMinutes()];
-    /*  if(stats.taskScheduler.scheduleOn && onTime.indexOf(NaN) !== -1){
-        var timeSetOn = stats.taskScheduler.scheduleOn;
+      if(stats.taskScheduler.scheduleOn && $("#scheduleOn")[0].type === "text"){ //jshint ignore:line
+        var timeSetOn = $("#scheduleOn").val(); //jshint ignore:line
         timeSetOn = timeSetOn.trim().split(":");
         if((timeSetOn[0] < 0 || timeSetOn[0] > 24) || (timeSetOn[1] < 0 || timeSetOn[1] > 59)){
           alert("Please enter a proper date"); //jshint ignore:line
@@ -103,8 +97,8 @@ angular.module('clientApp')
           onTime = timeSetOn;
         }
       }
-      if(stats.taskScheduler.scheduleOff && offTime.indexOf(NaN) !== -1){
-        var timeSetOff = stats.taskScheduler.scheduleOff;//jshint ignore:line
+      if(stats.taskScheduler.scheduleOff && $("#scheduleOff")[0].type === "text"){ //jshint ignore:line
+        var timeSetOff = $("#scheduleOff").val();//jshint ignore:line
         timeSetOff = timeSetOff.trim().split(":");
         console.log(timeSetOff);
         if((timeSetOff[0] < 0 || timeSetOff[0] > 24) || (timeSetOff[1] < 0 || timeSetOff[1] > 59)){
@@ -113,7 +107,7 @@ angular.module('clientApp')
         }else{
           offTime = timeSetOff;
         }
-      }*/
+      }
       stats.taskScheduler.setOnTime = onTime;
       stats.taskScheduler.setOffTime = offTime;
       console.log(stats.taskScheduler);

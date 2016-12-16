@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-fixed-top" ng-controller="HeaderCtrl as header">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
@@ -19,3 +19,18 @@
     </div>
   </div>
 </nav>
+<script>
+  var ctrl = angular.module("clientApp");
+  ctrl.controller("HeaderCtrl", function($scope, $location, authentication) {
+    var header = this;
+    if (authentication.isLoggedIn()) {
+      $scope.loggedIn = false;
+    } else {
+      $scope.loggedIn = true;
+    }
+    $scope.logout = function() {
+      authentication.logout();
+      $location.path("/");
+    };
+  });
+</script>

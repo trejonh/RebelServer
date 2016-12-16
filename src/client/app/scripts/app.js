@@ -77,15 +77,6 @@ angular
       var autheRequiredPath = $location.path() === '/profile' || $location.path() === '/mydevices';
       if (autheRequiredPath && !authentication.isLoggedIn()) {
         $location.path('/'); // jshint ignore:line
-        angular.element("#logoutBtn").scope.loggedIn = true;
       }
-      if (authentication.isLoggedIn()) {
-        angular.element("#logoutBtn").scope.loggedIn = false;
-      }
-      $rootScope.logout = function() {
-        authentication.logout();
-        angular.element("#logoutBtn").scope.loggedIn = true;
-        $location.path('/'); // jshint ignore:line
-      };
     });
   });
