@@ -16,4 +16,4 @@ and testing a programmable power switch that can be controlled by a mobile app.
 ##Other Repositories
 ###[Rebel MC - Micro-Controller](https://github.com/msoeSE/RebelMC)
 
-#[Live Site](ec2-54-214-154-163.us-west-2.compute.amazonaws.com)
+#[Live Site](http://www.ec2-54-214-154-163.us-west-2.compute.amazonaws.com)

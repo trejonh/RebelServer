@@ -20,11 +20,6 @@ angular
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
-      .when('/mySmartDevices', {
-        templateUrl: 'views/mysmartdevices.html',
-        controller: 'MysmartdevicesCtrl',
-        controllerAs: 'mySmartDevices'
-      })
       .when('/registerUser', {
         templateUrl: 'views/registeruser.html',
         controller: 'RegisteruserCtrl',
@@ -40,10 +35,15 @@ angular
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
+      .when('/mydevices/:deviceID/stats', {
+        templateUrl: 'views/stats.html',
+        controller: 'StatsCtrl',
+        controllerAs: 'stats'
+      })
       .when('/mydevices', {
         templateUrl: 'views/mydevices.html',
-        controller: 'MyDeviceCtrl',
-        controllerAs: 'mydevice'
+        controller: 'MydevicesCtrl',
+        controllerAs: 'mydevices'
       })
       .otherwise({
         redirectTo: '/'
@@ -76,22 +76,7 @@ angular
     $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) { // jshint ignore:line
       var autheRequiredPath = $location.path() === '/profile' || $location.path() === '/mydevices';
       if (autheRequiredPath && !authentication.isLoggedIn()) {
-        $rootScope.lgBtn = {
-          display: "none"
-        };
         $location.path('/'); // jshint ignore:line
       }
-      if (authentication.isLoggedIn()) {
-        $rootScope.lgBtn = {
-          display: "inline-block"
-        };
-      }
-      $rootScope.logout = function() {
-        authentication.logout();
-        $rootScope.lgBtn = {
-          display: "none"
-        };
-        $location.path('/'); // jshint ignore:line
-      };
     });
   });

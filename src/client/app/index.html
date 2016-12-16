@@ -8,16 +8,13 @@
   <meta name="viewport" content="width=device-width">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/ico" sizes="16x16" href="./images/favicon.ico">
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
   <link rel="stylesheet" href="./styles/font-awesome.min.css">
   <link rel="stylesheet" href="./styles/common.css">
   <link rel="stylesheet" href="./styles/passwordMeter.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="https://bootswatch.com/united/bootstrap.min.css">
-
-  <!-- Latest compiled and minified JavaScript -->
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+  <link rel="stylesheet" href="bower_components/chartist/dist/chartist.min.css">
 </head>
 
 <body ng-app="clientApp">
@@ -35,6 +32,7 @@
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="bower_components/lodash/lodash.js"></script>
   <script src="bower_components/restangular/dist/restangular.js"></script>
+  <script src="bower_components/chartist/dist/chartist.min.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -44,10 +42,13 @@
   <script src="scripts/controllers/registeruser.js"></script>
   <script src="scripts/controllers/profileController.js"></script>
   <script src="scripts/controllers/aboutController.js"></script>
-  <script src="scripts/controllers/mydevicesCtrl.js"></script>
+  <script src="scripts/controllers/statsCtrl.js"></script>
+  <script src="scripts/controllers/headerCtrl.js"></script>
   <script src="./Common/AuthService.js"></script>
   <script src="./Common/DataService.js"></script>
   <script src="./Common/DeviceService.js"></script>
+  <script src="./Common/GraphService.js"></script>
+  <script src="scripts/controllers/mydevices.js"></script>
   <!-- endbuild -->
 </body>
 
