@@ -38,7 +38,4 @@ var OutletDataSchema = new mongoose.Schema({
     }
 });
 
-OutletDataSchema.methods.setDate = function() {
-    this.date = new Date().toString();
-};
 module.exports = mongoose.model("outletDataModel", OutletDataSchema);

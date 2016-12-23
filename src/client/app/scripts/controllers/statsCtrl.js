@@ -11,6 +11,7 @@ angular.module('clientApp')
   .controller('StatsCtrl', function($scope, $route, deviceService, GraphService) {
     var stats = this;
     var deviceId = $route.current.params.deviceID;
+    $scope.clickedOutlet = true;
     stats.device = {};
     $scope.outlets = [];
     stats.outlet = {};
@@ -21,7 +22,16 @@ angular.module('clientApp')
       scheduleOff: "",
       repeatOff: true,
       setOnTime: [],
-      setOffTime:[]
+      setOffTime: []
+    };
+    stats.isActive = function() {
+      var lastSeen = Date.Parse(stats.device.lastSeenOnline);
+      var now = Date.now();
+      if (now - lastSeen <= 30000) {
+        return "green";
+      } else {
+        return "red";
+      }
     };
     stats.costPerKWH = 0.5;
     var usageTotal = 0;
@@ -39,6 +49,7 @@ angular.module('clientApp')
       }
     });
     $scope.saveClickedOutletData = function(outletData) {
+      $scope.clickedOutlet = false;
       stats.outlet = outletData;
       //power Consumption
       var usageSeries = [getEnergyConsumedPerDay(parseInt(stats.outlet.wattage), 86400000),
@@ -85,26 +96,26 @@ angular.module('clientApp')
     };
 
     $scope.scheduleTasks = function() {
-      var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(),(new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
-      var onTime = [(new Date(stats.taskScheduler.scheduleOn)).getHours(),(new Date(stats.taskScheduler.scheduleOn)).getMinutes()];
-      if((stats.taskScheduler.scheduleOn || stats.taskScheduler.scheduleOn === undefined) && $("#scheduleOn")[0].type === "text"){ //jshint ignore:line
+      var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(), (new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
+      var onTime = [(new Date(stats.taskScheduler.scheduleOn)).getHours(), (new Date(stats.taskScheduler.scheduleOn)).getMinutes()];
+      if ((stats.taskScheduler.scheduleOn || stats.taskScheduler.scheduleOn === undefined) && $("#scheduleOn")[0].type === "text") { //jshint ignore:line
         var timeSetOn = $("#scheduleOn").val(); //jshint ignore:line
         timeSetOn = timeSetOn.trim().split(":");
-        if((timeSetOn[0] < 0 || timeSetOn[0] > 24) || (timeSetOn[1] < 0 || timeSetOn[1] > 59)){
+        if ((timeSetOn[0] < 0 || timeSetOn[0] > 24) || (timeSetOn[1] < 0 || timeSetOn[1] > 59)) {
           alert("Please enter a proper date"); //jshint ignore:line
           return;
-        }else{
+        } else {
           onTime = timeSetOn;
         }
       }
-      if((stats.taskScheduler.scheduleOff || stats.taskScheduler.scheduleOff === undefined) && $("#scheduleOff")[0].type === "text"){ //jshint ignore:line
-        var timeSetOff = $("#scheduleOff").val();//jshint ignore:line
+      if ((stats.taskScheduler.scheduleOff || stats.taskScheduler.scheduleOff === undefined) && $("#scheduleOff")[0].type === "text") { //jshint ignore:line
+        var timeSetOff = $("#scheduleOff").val(); //jshint ignore:line
         timeSetOff = timeSetOff.trim().split(":");
         console.log(timeSetOff);
-        if((timeSetOff[0] < 0 || timeSetOff[0] > 24) || (timeSetOff[1] < 0 || timeSetOff[1] > 59)){
+        if ((timeSetOff[0] < 0 || timeSetOff[0] > 24) || (timeSetOff[1] < 0 || timeSetOff[1] > 59)) {
           alert("Please enter a proper date"); //jshint ignore:line
           return;
-        }else{
+        } else {
           offTime = timeSetOff;
         }
       }

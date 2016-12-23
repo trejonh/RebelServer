@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 var SmartDeviceSchema = new mongoose.Schema({
     deviceName: {
         type: String,
-        required: true
+        required: false
     },
     owner: {
         type: String,
@@ -16,6 +16,10 @@ var SmartDeviceSchema = new mongoose.Schema({
     outlets: {
         type: [],
         required: true
+    },
+    lastSeenOnline:{
+      type: String,
+      required: false
     }
 });
 

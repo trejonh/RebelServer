@@ -28,9 +28,19 @@
       });
     };
 
+    var changeDeviceName = function(device) {
+      return $http.post('http://' + window.location.hostname + ':3000/changeDeviceName', device);
+    };
+
+    var changeOutletNickname = function(outlet) {
+      return $http.post('http://' + window.location.hostname + ':3000/changeOutletNickname', outlet);
+    };
+
     return {
       addDevice: addDevice,
-      getDevices: getDevices
+      getDevices: getDevices,
+      changeDeviceName: changeDeviceName,
+      changeOutletNickname: changeOutletNickname
     };
   }
 

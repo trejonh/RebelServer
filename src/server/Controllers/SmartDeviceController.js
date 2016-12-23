@@ -20,7 +20,7 @@ module.exports.getDevices = function(req, res) {
 };
 module.exports.addDevice = function(deviceID, username) {
     var newDevice = new Device();
-    newDevice.deviceName = "Some Name";
+    newDevice.lastSeenOnline = (new Date()).toTimeString();
     newDevice.deviceID = deviceID;
     newDevice.owner = username;
     ctrlOutlet.getOutlets(deviceID, function(err, outlets) {
@@ -33,5 +33,25 @@ module.exports.addDevice = function(deviceID, username) {
             if (err)
                 console.log(err);
         });
+    });
+};
+
+module.exports.changeDeviceName = function(req, res) {
+    var searchQuery = req.query.username ? {
+        owner: req.body.username
+    } : {
+        deviceID: req.body.deviceID
+    };
+    Device.find(searchQuery,function(err, device) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.json(err);
+            return;
+        }
+        else{
+          device[0].deviceName = req.body.deviceName;
+          device.save();
+        }
     });
 };
