@@ -37,21 +37,22 @@ module.exports.addDevice = function(deviceID, username) {
 };
 
 module.exports.changeDeviceName = function(req, res) {
-    var searchQuery = req.query.username ? {
-        owner: req.body.username
-    } : {
-        deviceID: req.body.deviceID
+    var searchQuery = {
+        $and: [{
+            owner: req.body.username
+        }, {
+            deviceID: req.body.deviceID
+        }]
     };
-    Device.find(searchQuery,function(err, device) {
+    Device.find(searchQuery, function(err, device) {
         if (err) {
             console.log(err);
             res.status(500);
             res.json(err);
             return;
-        }
-        else{
-          device[0].deviceName = req.body.deviceName;
-          device.save();
+        } else {
+            device[0].deviceName = req.body.deviceName;
+            device.save();
         }
     });
-};
+s};

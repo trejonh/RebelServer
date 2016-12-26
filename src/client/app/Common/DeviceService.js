@@ -36,11 +36,16 @@
       return $http.post('http://' + window.location.hostname + ':3000/changeOutletNickname', outlet);
     };
 
+    var scheduleTask = function(task){
+      return $http.post('http://' + window.location.hostname + ':3000/scheduleTask', task);
+    };
+
     return {
       addDevice: addDevice,
       getDevices: getDevices,
       changeDeviceName: changeDeviceName,
-      changeOutletNickname: changeOutletNickname
+      changeOutletNickname: changeOutletNickname,
+      scheduleTask: scheduleTask
     };
   }
 

@@ -1,4 +1,4 @@
-<h1>{{stats.device.deviceName}}</h1><span><i class="fa fa-3x fa-power-off" aria-hidden="true" style="color:{{isActive}};"></i></span>
+<h1><span><i class="fa fa-pencil" alt="edit device name" aria-hidden="true" data-toggle="modal" data-target="#changeDeviceNameModal"></i><span>{{stats.device.deviceName}}</h1><span><i class="fa fa-3x fa-power-off" aria-hidden="true" style="color:{{isActive()}};"></i></span>
 <br>
 <br>
 <br>
@@ -15,9 +15,9 @@
     <th>Power Drawn</th>
     <th>Total Time On</th>
   </tr>
-  <tr ng-repeat="outlet in outlets" id="outletStatRow" data-toggle="modal" data-target="#detailedStats" ng-click="saveClickedOutletData(outlet)">
+  <tr ng-repeat="outlet in outlets" id="outletStatRow" ng-click="saveClickedOutletData(outlet)">
     <td>{{outlet.outletNumber}}</td>
-    <td>{{outlet.nickname}}</td>
+    <td><span><i class="fa fa-pencil" alt="edit device name" aria-hidden="true" data-toggle="modal" data-target="#changeOutletNicknameModal"></i><span>{{outlet.nickname}}</td>
     <td>{{outlet.isOn}}</td>
     <td>{{outlet.wattage}}</td>
     <td>{{outlet.elapsedTimeOn}}</td>
@@ -69,3 +69,59 @@
     </div>
   </div>
 </div>
+<!-- changeDeviceName  Modal-->
+<div id="changeDeviceNameModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Change Device Name</h4>
+      </div>
+      <div class="modal-body">
+        <h1>
+          Please enter a new device name
+        </h1>
+        <div class="form-group">
+          <label for="deviceId">Device ID</label>
+          <input type="text" name="deviceName" class="form-control" id="deviceName" placeholder="{{stats.device.deviceName}}" ng-model="stats.device.deviceName">
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="changeDeviceName()">Confirm</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- changeDeviceName  Modal-->
+<div id="changeOutletNicknameModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Change Outlet Name</h4>
+      </div>
+      <div class="modal-body">
+        <h1>
+          Please enter a new outlet name
+        </h1>
+        <div class="form-group">
+          <label for="deviceId">Device ID</label>
+          <input type="text" name="outletname" class="form-control" id="outlet" placeholder="{{stats.outlet.nickname}}" ng-model="stats.outlet.nickname">
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="changeOutletName()">Confirm</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

@@ -94,7 +94,10 @@ angular.module('clientApp')
         costGraph.update();
       }
     };
-
+    /*
+     * schedule home automation tasks
+     *
+     */
     $scope.scheduleTasks = function() {
       var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(), (new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
       var onTime = [(new Date(stats.taskScheduler.scheduleOn)).getHours(), (new Date(stats.taskScheduler.scheduleOn)).getMinutes()];
@@ -121,6 +124,46 @@ angular.module('clientApp')
       }
       stats.taskScheduler.setOnTime = onTime;
       stats.taskScheduler.setOffTime = offTime;
+      var task = {};
+      task.deviceID = stats.outlet.deviceID;
+      task.outletNumber = stats.outlet.outletNumber;
+      if (stats.taskScheduler.manualOn) {
+        task.isOn = 1;
+      } else {
+        task.isOn = 0;
+      }
+      task.timeSetOff = offTime;
+      task.timeSetOn = onTime;
+      deviceService.scheduleTask(task).success(function() {
+
+      }).error(function(err) {
+        console.log(err);
+      });
+    };
+
+    //changeDeviceName
+    $scope.changeDeviceName = function() {
+      $("#changeDeviceNameModal").modal("hide"); //jshint ignore:line
+      $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) {//jshint ignore:line
+        deviceService.changeDeviceName(stats.device).success(function(data) {
+          console.log(data);
+          stats.device = data;
+        }).error(function(err) {
+          console.log(err);
+        });
+      });
+    };
+    //changeOutletName
+    $scope.changeOutletName = function(){
+      $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
+      $("#changeOutletNameModal").on("hidden.bs.modal", function(eve) {//jshint ignore:line
+        deviceService.changeOutletNickname(stats.outlet).success(function(data) {
+          console.log(data);
+          stats.outlet = data;
+        }).error(function(err) {
+          console.log(err);
+        });
+      });
     };
   });
 

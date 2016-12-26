@@ -14,7 +14,7 @@ var OutletDataSchema = new mongoose.Schema({
     },
     nickname: {
         type: String,
-        required: true
+        required: false
     },
     isOn: {
         type: Number,
@@ -25,16 +25,24 @@ var OutletDataSchema = new mongoose.Schema({
         required: true
     },
     timeSetOn: {
-        type: Number,
-        required: true
+        type: Object,
+        required: false
     },
     timeSetOff: {
-        type: Number,
-        required: true
+        type: Object,
+        required: false
     },
     elapsedTimeOn: {
         type: Number,
         required: true
+    },
+    timeSinceLastUpdate:{
+      type: Number,
+      required: true
+    },
+    lastKnownPowerStatus:{
+      type: Boolean,
+      required:true
     }
 });
 

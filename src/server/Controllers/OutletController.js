@@ -1,16 +1,19 @@
   /*
-                    Will be used only for submodule testing not for dev
-                    */
+                                Will be used only for submodule testing not for dev
+                                */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
-  module.exports.setOutletData = function(req, res) {
+  module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
       data = data.split(",");
       for (var i = 0; i < data.length; i++) {
           var outletData = data[i].split(":");
-          //  console.log(outletData);
+          /*
+           *TODO: only need to parse device id, accessToken, and outlet number and power monitoring stuff
+           *everything else can be calculated on the server
+           */
           switch (i) {
               case 0:
                   outlet.deviceID = outletData[1].trim();
@@ -22,22 +25,10 @@
                   outlet.outletNumber = parseInt(outletData[2]);
                   break;
               case 3:
-                  outlet.nickname = outletData[1];
-                  break;
-              case 4:
                   outlet.isOn = parseInt(outletData[1]);
                   break;
-              case 5:
-                  outlet.wattage = parseInt(outletData[1]);
-                  break;
-              case 6:
-                  outlet.timeSetOn = parseInt(outletData[1]);
-                  break;
-              case 7:
-                  outlet.timeSetOff = parseInt(outletData[1]);
-                  break;
-              case 8:
-                  outlet.elapsedTimeOn = parseInt(outletData[1].substring(0, outletData[1].indexOf('}')));
+              case 4:
+                  outlet.wattage = parseInt(outletData[1].substring(0, outletData[1].indexOf('}')));
                   break;
           }
       }
@@ -48,65 +39,72 @@
           if (err) {
               console.log("this device hasn't been created yet in db");
               return;
-          } else if (doc.length !== 0) {
+          } else if (doc.length === 1) {
               doc[0].lastSeenOnline = (new Date()).toTimeString();
               doc[0].update();
           }
       });
+      var outletObj = new Outlets();
+      outletObj.deviceID = outlet.deviceID;
+      outletObj.accessToken = outlet.accessToken;
+      outletObj.outletNumber = outlet.outletNumber;
+      outletObj.nickname = "I am outlet " + outlet.outletNumber;
+      outletObj.isOn = outlet.isOn;
+      outletObj.wattage = outlet.wattage;
+      outletObj.elapsedTimeOn = 0;
+      outletObj.lastKnownPowerStatus = true;
+      outletObj.timeSinceLastUpdate = Date.now();
+
+      outletObj.save(function(err, doc) {
+          if (err) {
+              console.log(err);
+              res.status(500);
+              res.json({
+                  "error": err
+              });
+              return;
+          }
+          res.status(200);
+      });
+  };
+
+  module.exports.updateOutletData = function(req, res) {
+      var data = req.body.data;
       Outlets.find({
-          deviceID: outlet.deviceID,
-          outletNumber: outlet.outletNumber
+          deviceID: data.deviceID,
+          outletNumber: data.outletNumber
       }, function(err, doc) {
           if (err) {
               console.log(err);
               res.json(err);
               res.status(500);
               return;
-          }
-          if (doc.length === 0) {
-              var outletObj = new Outlets();
-              outletObj.deviceID = outlet.deviceID;
-              outletObj.accessToken = outlet.accessToken;
-              outletObj.outletNumber = outlet.outletNumber;
-              outletObj.nickname = outlet.nickname;
-              outletObj.isOn = outlet.isOn;
-              outletObj.wattage = outlet.wattage;
-              outletObj.timeSetOn = outlet.timeSetOn;
-              outletObj.timeSetOff = outlet.timeSetOff;
-              outletObj.elapsedTimeOn = outlet.elapsedTimeOn;
+          } else if (doc.length === 0) {
+              console.log("no docs found with id: " + data.deviceID);
+              res.json({
+                  error: "no docs found with id: " + data.deviceID
+              });
+              res.status(500);
 
-              outletObj.save(function(err, doc) {
-                  if (err) {
-                      console.log(err);
-                      res.status(500);
-                      res.json({
-                          "error": err
-                      });
-                      return;
-                  }
-                  res.status(200);
-              });
-          } else {
-              doc[0].nickname = outlet.nickname;
-              doc[0].isOn = outlet.isOn;
-              doc[0].wattage = outlet.wattage;
-              doc[0].timeSetOn = outlet.timeSetOn;
-              doc[0].timeSetOff = outlet.timeSetOff;
-              doc[0].elapsedTimeOn = outlet.elapsedTimeOn;
-              doc[0].update(function(err, doc) {
-                  if (err) {
-                      console.log(err);
-                      res.status(500);
-                      res.json({
-                          "error": err
-                      });
-                      return;
-                  }
-                  res.status(200);
-              });
           }
+          doc[0].wattage = data.wattage;
+          //TODO: verify time
+          if (doc[0].lastKnownPowerStatus) {
+              doc[0].elapsedTimeOn = Date.now() - doc[0].timeSinceLastUpdate;
+              doc[0].timeSinceLastUpdate = Date.now();
+          }
+          doc[0].update(function(err, doc) {
+              if (err) {
+                  console.log(err);
+                  res.status(500);
+                  res.json({
+                      "error": err
+                  });
+                  return;
+              }
+              res.status(200);
+          });
       });
-      res.status(200);
   };
 
   module.exports.getOutletData = function(req, res) {
@@ -136,44 +134,74 @@
               console.log(err);
               callback(err, null);
           } else {
+              for (var i = 0; i < outlets.length; i++) {
+                  if (outlets[i].lastKnownPowerStatus) {
+                      outlets[i].elapsedTimeOn += (Date.now() - outlets[0].timeSinceLastUpdate);
+                      outlets[i].timeSinceLastUpdate = Date.now();
+                      outlets[i].update();
+                  }
+
+              }
               callback(null, outlets);
           }
       });
   };
   module.exports.changeOutletName = function(req, res) {
-      var searchQuery = {$and:[{
-          deviceID: req.body.deviceID},
-          {outletNumber: req.body.outletNumber}]
+      var searchQuery = {
+          $and: [{
+              deviceID: req.body.deviceID
+          }, {
+              outletNumber: req.body.outletNumber
+          }]
       };
-      Device.find(searchQuery,function(err, outlet) {
+      Device.find(searchQuery, function(err, outlet) {
           if (err) {
               console.log(err);
               res.status(500);
               res.json(err);
               return;
-          }
-          else{
-            outlet[0].nickname = req.body.nickname;
-            outlet[0].update();
+          } else {
+              outlet[0].nickname = req.body.nickname;
+              if (outlet[0].lastKnownPowerStatus) {
+                  outlet[0].elapsedTimeOn += (Date.now() - outlet[0].timeSinceLastUpdate);
+                  outlet[0].timeSinceLastUpdate = Date.now();
+              }
+              outlet[0].update();
           }
       });
   };
 
   module.exports.scheduleTask = function(req, res) {
-      var searchQuery = {$and:[{
-          deviceID: req.body.deviceID},
-          {outletNumber: req.body.outletNumber}]
+      var searchQuery = {
+          $and: [{
+              deviceID: req.body.deviceID
+          }, {
+              outletNumber: req.body.outletNumber
+          }]
       };
-      Device.find(searchQuery,function(err, outlet) {
+      Outlets.find(searchQuery, function(err, outlet) {
           if (err) {
               console.log(err);
               res.status(500);
               res.json(err);
               return;
-          }
-          else{
-            outlet[0].isOn = req.body.isOn;
-            outlet[0].update();
+          } else {
+              outlet[0].isOn = req.body.isOn;
+              outlet[0].timeSetOn = req.body.timeSetOn;
+              outlet[0].timeSetOff = req.body.timeSetOff;
+              if (outlet[0].lastKnownPowerStatus) {
+                  outlet[0].elapsedTimeOn += (Date.now() - outlet[0].timeSinceLastUpdate);
+                  outlet[0].timeSinceLastUpdate = Date.now();
+              }
+              if (!req.body.isOn) {
+                  outlet[0].lastKnownPowerStatus = false;
+              } else {
+                  outlet[0].lastKnownPowerStatus = true;
+                  outlet[0].timeSinceLastUpdate = Date.now();
+              }
+              outlet[0].update(function() {
+                  res.status(200).json(outlet[0]);
+              });
           }
       });
   };
