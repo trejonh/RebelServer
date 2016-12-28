@@ -1,4 +1,4 @@
-<h1><span><i class="fa fa-pencil" alt="edit device name" aria-hidden="true" data-toggle="modal" data-target="#changeDeviceNameModal"></i><span>{{stats.device.deviceName}}</h1><span><i class="fa fa-3x fa-power-off" aria-hidden="true" style="color:{{isActive()}};"></i></span>
+<h1><span><i class="fa fa-pencil" style="margin-right:15px;" alt="edit device name" aria-hidden="true" data-toggle="modal" data-target="#changeDeviceNameModal"></i><span>{{stats.device.deviceName}}<span><i class="fa fa-power-off" style="margin-left: 25px;" aria-hidden="true" style="color:{{isActive()}};"></i></span></h1>
 <br>
 <br>
 <br>
@@ -31,18 +31,18 @@
     <div class="col-sm-9">
       <div class="row">
         <div class="col-sm-12">
-          <h2 ng-hide="clickedOutLet">Usage</h2>
+          <h2 ng-hide="clickedOutlet">Usage</h2>
           <div id="currentUsage"></div>
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <h2 ng-hide="clickedOutLet">Cost</h2>
+            <h2 ng-hide="clickedOutlet">Cost</h2>
             <div id="currentCost"></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-sm-3" ng-hide="clickedOutLet">
+    <div class="col-sm-3" ng-hide="clickedOutlet">
       <form id="taskSchedulerForm">
         <div class="form-group">
           <label for="manualOnOff">Turn outlet on/off</label>

@@ -25,6 +25,7 @@ angular.module('clientApp')
       setOffTime: []
     };
     stats.isActive = function() {
+      console.log("hello");
       var lastSeen = Date.Parse(stats.device.lastSeenOnline);
       var now = Date.now();
       if (now - lastSeen <= 30000) {
