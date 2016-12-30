@@ -154,6 +154,7 @@ angular.module('clientApp')
     };
     //changeOutletName
     $scope.changeOutletName = function(){
+      console.log("debugging");
       $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
       $("#changeOutletNameModal").on("hidden.bs.modal", function(eve) {//jshint ignore:line
         console.log(stats.outlet);
