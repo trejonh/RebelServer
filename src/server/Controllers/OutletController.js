@@ -154,7 +154,7 @@
               outletNumber: req.body.outletNumber
           }]
       };
-      Device.findOne(searchQuery, function(err, outlet) {
+      Outlets.findOne(searchQuery, function(err, outlet) {
           if (err) {
               console.log(err);
               res.status(500);
