@@ -146,7 +146,6 @@ angular.module('clientApp')
       $("#changeDeviceNameModal").modal("hide"); //jshint ignore:line
       $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) {//jshint ignore:line
         deviceService.changeDeviceName(stats.device).success(function(data) {
-          console.log(data);
           stats.device = data;
         }).error(function(err) {
           console.log(err);

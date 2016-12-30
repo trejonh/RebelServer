@@ -33,7 +33,7 @@
     };
 
     var changeOutletNickname = function(outlet) {
-      return $http.post('http://' + window.location.hostname + ':3000/changeOutletNickname', outlet);
+      return $http.post('http://' + window.location.hostname + ':3000/updateOutletNickname', outlet);
     };
 
     var scheduleTask = function(task){
