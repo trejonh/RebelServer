@@ -44,19 +44,15 @@ module.exports.changeDeviceName = function(req, res) {
             deviceID: req.body.deviceID
         }]
     };
-    Device.find(searchQuery, function(err, device) {
+    Device.findOne(searchQuery, function(err, device) {
         if (err) {
             console.log(err);
             res.status(500);
             res.json(err);
             return;
         } else {
-            device[0].deviceName = req.body.deviceName;
-            device[0].update({
-                $set: {
-                    deviceName: req.body.deviceName
-                }
-            }, function() {
+            device.deviceName = req.body.deviceName;
+            device.save(function() {
                 res.status(200).json(device[0]);
             });
         }
