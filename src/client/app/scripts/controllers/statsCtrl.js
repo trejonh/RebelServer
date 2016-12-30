@@ -161,6 +161,7 @@ angular.module('clientApp')
     //changeOutletName
     $scope.changeOutletName = function() {
       $("#changeOutletNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
+        console.log("in hidden");
         console.log(stats.outlet);
         deviceService.changeOutletNickname(stats.outlet).success(function(data) {
           console.log(data);
