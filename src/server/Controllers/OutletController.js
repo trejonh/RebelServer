@@ -166,7 +166,9 @@
                   outlet[0].elapsedTimeOn += (Date.now() - outlet[0].timeSinceLastUpdate);
                   outlet[0].timeSinceLastUpdate = Date.now();
               }
-              outlet[0].update();
+              outlet[0].update(function(){
+                res.status(200).json(outlet[0]);
+              });
           }
       });
   };
