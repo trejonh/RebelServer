@@ -28,9 +28,15 @@ angular.module('clientApp')
       var lastSeen = Date.parse(stats.device.lastSeenOnline);
       var now = Date.now();
       if (now - lastSeen <= 30000) {
-        return {"color":"green", "margin-left": "55px"};
+        return {
+          "color": "green",
+          "margin-left": "55px"
+        };
       } else {
-        return {"color":"red", "margin-left": "55px"};
+        return {
+          "color": "red",
+          "margin-left": "55px"
+        };
       }
     };
     stats.costPerKWH = 0.5;
@@ -143,20 +149,18 @@ angular.module('clientApp')
 
     //changeDeviceName
     $scope.changeDeviceName = function() {
-      $("#changeDeviceNameModal").modal("hide"); //jshint ignore:line
-      $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) {//jshint ignore:line
+      $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
         deviceService.changeDeviceName(stats.device).success(function(data) {
           stats.device = data;
         }).error(function(err) {
           console.log(err);
         });
       });
+      $("#changeDeviceNameModal").modal("hide"); //jshint ignore:line
     };
     //changeOutletName
-    $scope.changeOutletName = function(){
-      console.log("debugging");
-      $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
-      $("#changeOutletNameModal").on("hidden.bs.modal", function(eve) {//jshint ignore:line
+    $scope.changeOutletName = function() {
+      $("#changeOutletNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
         console.log(stats.outlet);
         deviceService.changeOutletNickname(stats.outlet).success(function(data) {
           console.log(data);
@@ -165,6 +169,7 @@ angular.module('clientApp')
           console.log(err);
         });
       });
+      $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
     };
   });
 
