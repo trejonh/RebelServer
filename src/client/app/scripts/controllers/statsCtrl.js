@@ -48,7 +48,6 @@ angular.module('clientApp')
     deviceService.getDevices(null, deviceId).success(function(data) {
       stats.device = data[0];
       $scope.outlets = data[0].outlets;
-      //  $("tr#outletStatRow")[0].click();//jshint ignore:line
     }).error(function(err) {
       if (err) {
         console.log(err);
@@ -164,7 +163,7 @@ angular.module('clientApp')
       $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
       deviceService.changeOutletNickname(stats.outlet).success(function(data) {
         console.log(data);
-        stats.outlet = data;
+        stats.device = data;
       }).error(function(err) {
         console.log(err);
       });

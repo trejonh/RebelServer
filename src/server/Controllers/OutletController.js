@@ -1,6 +1,6 @@
   /*
-                                Will be used only for submodule testing not for dev
-                                */
+                                  Will be used only for submodule testing not for dev
+                                  */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
@@ -166,8 +166,23 @@
                   outlet.elapsedTimeOn += (Date.now() - outlet.timeSinceLastUpdate);
                   outlet.timeSinceLastUpdate = Date.now();
               }
-              outlet.save(function(err,raw){
-                res.status(200).json(outlet);
+              outlet.save(function(err, raw) {
+                  Devices.findOne({
+                      deviceID: req.body.deviceID
+                  }, function(err, device) {
+                      if (err) {
+                          res.status(500).json(err);
+                          return;
+                      }
+                      for (var i = 0; i < device.outlets.length; i++) {
+                          if (device.outelets[i].outletNumber === outlet.outletNumber) {
+                              device.outlet[i] = outlet;
+                              device.save(function(err, raw) {//jshint ignore:line
+                                  res.status(200).json(device);
+                              });
+                          }
+                      }
+                  });
               });
           }
       });
