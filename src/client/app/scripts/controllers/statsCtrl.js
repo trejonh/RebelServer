@@ -25,8 +25,7 @@ angular.module('clientApp')
       setOffTime: []
     };
     $scope.isActive = function() {
-      console.log("hello");
-      var lastSeen = Date.Parse(stats.device.lastSeenOnline);
+      var lastSeen = Date.parse(stats.device.lastSeenOnline);
       var now = Date.now();
       if (now - lastSeen <= 30000) {
         return "color:green; margin-left: 55px;";
