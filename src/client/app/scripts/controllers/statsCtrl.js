@@ -28,9 +28,9 @@ angular.module('clientApp')
       var lastSeen = Date.parse(stats.device.lastSeenOnline);
       var now = Date.now();
       if (now - lastSeen <= 30000) {
-        return "color:green; margin-left: 55px;";
+        return {"color":"green", "margin-left": "55px"};
       } else {
-        return "color:red; margin-left: 55px;";
+        return {"color":"red", "margin-left": "55px"};
       }
     };
     stats.costPerKWH = 0.5;
