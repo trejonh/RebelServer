@@ -175,7 +175,7 @@
                           return;
                       }
                       for (var i = 0; i < device.outlets.length; i++) {
-                          if (device.outelets[i].outletNumber === outlet.outletNumber) {
+                          if (device.outlets[i].outletNumber === outlet.outletNumber) {
                               device.outlet[i] = outlet;
                               device.save(function(err, raw) {//jshint ignore:line
                                   res.status(200).json(device);
