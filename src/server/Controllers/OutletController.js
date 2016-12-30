@@ -154,20 +154,20 @@
               outletNumber: req.body.outletNumber
           }]
       };
-      Device.find(searchQuery, function(err, outlet) {
+      Device.findOne(searchQuery, function(err, outlet) {
           if (err) {
               console.log(err);
               res.status(500);
               res.json(err);
               return;
           } else {
-              outlet[0].nickname = req.body.nickname;
-              if (outlet[0].lastKnownPowerStatus) {
-                  outlet[0].elapsedTimeOn += (Date.now() - outlet[0].timeSinceLastUpdate);
-                  outlet[0].timeSinceLastUpdate = Date.now();
+              outlet.nickname = req.body.nickname;
+              if (outlet.lastKnownPowerStatus) {
+                  outlet.elapsedTimeOn += (Date.now() - outlet.timeSinceLastUpdate);
+                  outlet.timeSinceLastUpdate = Date.now();
               }
-              outlet[0].update(function(){
-                res.status(200).json(outlet[0]);
+              outlet.save(function(err,raw){
+                res.status(200).json(outlet);
               });
           }
       });

@@ -33,7 +33,6 @@
     };
 
     var changeOutletNickname = function(outlet) {
-      console.log("in device service");
       return $http.post('http://' + window.location.hostname + ':3000/updateOutletNickname', outlet);
     };
 

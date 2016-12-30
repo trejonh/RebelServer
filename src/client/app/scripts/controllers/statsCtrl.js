@@ -151,6 +151,7 @@ angular.module('clientApp')
     $scope.changeDeviceName = function() {
       $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
         deviceService.changeDeviceName(stats.device).success(function(data) {
+          console.log(data);
           stats.device = data;
         }).error(function(err) {
           console.log(err);
@@ -161,7 +162,6 @@ angular.module('clientApp')
     //changeOutletName
     $scope.changeOutletName = function() {
       $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
-      console.log(stats.outlet);
       deviceService.changeOutletNickname(stats.outlet).success(function(data) {
         console.log(data);
         stats.outlet = data;
