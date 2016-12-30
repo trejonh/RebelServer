@@ -52,8 +52,12 @@ module.exports.changeDeviceName = function(req, res) {
             return;
         } else {
             device[0].deviceName = req.body.deviceName;
-            device[0].update(function(){
-              res.status(200).json(device[0]);
+            device[0].update({
+                $set: {
+                    deviceName: req.body.deviceName
+                }
+            }, function() {
+                res.status(200).json(device[0]);
             });
         }
     });
