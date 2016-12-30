@@ -52,7 +52,9 @@ module.exports.changeDeviceName = function(req, res) {
             return;
         } else {
             device[0].deviceName = req.body.deviceName;
-            device[0].update();
+            device[0].update(function(){
+              res.stats(200).json(device[0]);
+            });
         }
     });
-s};
+};

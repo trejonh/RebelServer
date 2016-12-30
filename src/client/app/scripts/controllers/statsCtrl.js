@@ -24,14 +24,14 @@ angular.module('clientApp')
       setOnTime: [],
       setOffTime: []
     };
-    stats.isActive = function() {
+    $scope.isActive = function() {
       console.log("hello");
       var lastSeen = Date.Parse(stats.device.lastSeenOnline);
       var now = Date.now();
       if (now - lastSeen <= 30000) {
-        return "green";
+        return "color:green; margin-left: 55px;";
       } else {
-        return "red";
+        return "color:red; margin-left: 55px;";
       }
     };
     stats.costPerKWH = 0.5;
