@@ -38,6 +38,7 @@ module.exports.addDevice = function(deviceID, username) {
 };
 
 module.exports.changeDeviceName = function(req, res) {
+  console.log(req.body);
     var searchQuery = {
         $and: [{
             owner: req.body.username
