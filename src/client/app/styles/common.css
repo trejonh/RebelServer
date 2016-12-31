@@ -45,3 +45,9 @@ i#editName:hover{
     font-weight: bolder;
   }
 }
+a#deviceLink{
+  color: #ef540b;
+}
+a#deviceLink:hover{
+  color: red;
+}

@@ -23,6 +23,7 @@ module.exports.addDevice = function(deviceID, username) {
     newDevice.lastSeenOnline = (new Date()).toTimeString();
     newDevice.deviceID = deviceID;
     newDevice.owner = username;
+    newDevice.deviceName = "Smart Power Strip"+(new Date()).toLocaleDateString();
     ctrlOutlet.getOutlets(deviceID, function(err, outlets) {
         if (err) {
             console.log(err);

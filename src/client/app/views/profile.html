@@ -22,7 +22,7 @@
     <h2>Owned Devices</h2>
     <div class="container">
       <div ng-repeat="device in devices">
-        <h3>Device: {{device.deviceID}}</h3>
+        <a id="deviceLink" href="#/{{device.deviceID}}/stats"><h3>Device: {{device.deviceID}}</h3></a>
       <table class="table table-hover table-condensed table-responsive">
         <tr>
           <th>Outlet Number</th>
