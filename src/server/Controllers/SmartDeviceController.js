@@ -23,7 +23,7 @@ module.exports.addDevice = function(deviceID, username) {
     newDevice.lastSeenOnline = (new Date()).toTimeString();
     newDevice.deviceID = deviceID;
     newDevice.owner = username;
-    newDevice.deviceName = "Smart Power Strip"+(new Date()).toLocaleDateString();
+    newDevice.deviceName = "Smart Power Strip" + (new Date()).toLocaleDateString();
     ctrlOutlet.getOutlets(deviceID, function(err, outlets) {
         if (err) {
             console.log(err);
@@ -51,10 +51,14 @@ module.exports.changeDeviceName = function(req, res) {
             res.status(500);
             res.json(err);
             return;
-        } else {
+        } else if (device) {
             device.deviceName = req.body.deviceName;
-            device.save(function(err,raw) {
+            device.save(function(err, raw) {
                 res.status(200).json(device);
+            });
+        } else {
+            res.status(500).json({
+                error: "device is null"
             });
         }
     });

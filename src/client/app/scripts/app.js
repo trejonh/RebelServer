@@ -46,7 +46,7 @@ angular
         controllerAs: 'mydevices'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/profile'
       });
   }).directive('fileModel', ['$parse', function($parse) {
     return {

@@ -51,6 +51,6 @@ a#deviceLink{
 a#deviceLink:hover{
   color: red;
 }
-i#profileImg{
+img#profileImg{
   max-width: 75%;
 }
