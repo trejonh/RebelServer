@@ -38,13 +38,9 @@ module.exports.addDevice = function(deviceID, username) {
 };
 
 module.exports.changeDeviceName = function(req, res) {
-  console.log(req.body);
+  //console.log(req.body);
     var searchQuery = {
-        $and: [{
-            owner: req.body.username
-        }, {
-            deviceID: req.body.deviceID
-        }]
+        _id: req.body._id
     };
     Device.findOne(searchQuery, function(err, device) {
         if (err) {
