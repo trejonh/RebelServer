@@ -38,7 +38,7 @@ module.exports.addDevice = function(deviceID, username) {
 };
 
 module.exports.changeDeviceName = function(req, res) {
-  //console.log(req.body);
+    //need to search on _id field, more stable reults
     var searchQuery = {
         _id: req.body._id
     };

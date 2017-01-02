@@ -70,16 +70,15 @@
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
-      Outlets.find({
-          deviceID: data.deviceID,
-          outletNumber: data.outletNumber
-      }, function(err, doc) {
+      Outlets.findOne({
+          _id: data._id
+      }, function(err, outlet) {
           if (err) {
               console.log(err);
               res.json(err);
               res.status(500);
               return;
-          } else if (doc.length === 0) {
+          } else if(!outlet) {
               console.log("no docs found with id: " + data.deviceID);
               res.json({
                   error: "no docs found with id: " + data.deviceID
@@ -87,13 +86,13 @@
               res.status(500);
 
           }
-          doc[0].wattage = data.wattage;
+        outlet.wattage = data.wattage;
           //TODO: verify time
-          if (doc[0].lastKnownPowerStatus) {
-              doc[0].elapsedTimeOn = Date.now() - doc[0].timeSinceLastUpdate;
-              doc[0].timeSinceLastUpdate = Date.now();
+          if (outlet.lastKnownPowerStatus) {
+              outlet.elapsedTimeOn = Date.now() - outlet.timeSinceLastUpdate;
+            outlet.timeSinceLastUpdate = Date.now();
           }
-          doc[0].update(function(err, doc) {
+          outlet.save(function(err, raw) {
               if (err) {
                   console.log(err);
                   res.status(500);
@@ -102,7 +101,7 @@
                   });
                   return;
               }
-              res.status(200);
+              res.status(200).json(outlet);
           });
       });
   };
@@ -110,20 +109,20 @@
   module.exports.getOutletData = function(req, res) {
       Outlets
           .findOne({
-              deviceID: req.body.deviceID
-          }).sort({
-              outletNumber: 'asc'
-          })
-          .exec(function(err, doc) {
+              _id: req.body._id
+          },function(err, outlet) {
               if (err) {
                   console.log(err);
-                  res.status(400);
+                  res.status(400).json({error:err});
                   return;
               }
-              res.status(200).json(doc);
+              res.status(200).json(outlet);
           });
   };
-
+/**
+*this is called when a device is created
+*locally called, not by angular directly
+**/
   module.exports.getOutlets = function(deviceID, callback) {
       Outlets.find({
           deviceID: deviceID
@@ -136,9 +135,9 @@
           } else {
               for (var i = 0; i < outlets.length; i++) {
                   if (outlets[i].lastKnownPowerStatus) {
-                      outlets[i].elapsedTimeOn += (Date.now() - outlets[0].timeSinceLastUpdate);
+                      outlets[i].elapsedTimeOn += (Date.now() - outlets[i].timeSinceLastUpdate);
                       outlets[i].timeSinceLastUpdate = Date.now();
-                      outlets[i].update();
+                      outlets[i].save();
                   }
 
               }
@@ -148,11 +147,7 @@
   };
   module.exports.changeOutletName = function(req, res) {
       var searchQuery = {
-          $and: [{
-              deviceID: req.body.deviceID
-          }, {
-              outletNumber: req.body.outletNumber
-          }]
+          _id:req.body._id
       };
       Outlets.findOne(searchQuery, function(err, outlet) {
           if (err) {
@@ -175,7 +170,7 @@
                           return;
                       }
                       for (var i = 0; i < device.outlets.length; i++) {
-                          if (device.outlets[i].outletNumber === outlet.outletNumber) {
+                          if (device.outlets[i]._id === outlet._id) {
                               device.outlets[i] = outlet;
                               device.save(function(err, raw) {//jshint ignore:line
                                   res.status(200).json(device);
