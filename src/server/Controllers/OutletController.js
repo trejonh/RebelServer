@@ -148,8 +148,6 @@
       });
   };
   module.exports.changeOutletName = function(req, res) {
-    console.log("trying to changeOutletName");
-    console.log(req.body);
       var searchQuery = {
           _id: req.body._id
       };
@@ -175,11 +173,17 @@
                       }
                       for (var i = 0; i < device.outlets.length; i++) {
                           if (device.outlets[i]._id === outlet._id) {
+                              console.log("found it ");
+                              console.log(device.outlets[i]);
                               device.outlets[i] = outlet;
                               break;
                           }
                       }
                       device.save(function(err, raw) { //jshint ignore:line
+                        console.log("raw");
+                        console.log(raw);
+                        console.log("===================");
+                        console.log(this);
                           res.status(200).json(device);
                       });
                   });
