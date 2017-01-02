@@ -1,6 +1,6 @@
   /*
-                                  Will be used only for submodule testing not for dev
-                                  */
+                                    Will be used only for submodule testing not for dev
+                                    */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
@@ -78,7 +78,7 @@
               res.json(err);
               res.status(500);
               return;
-          } else if(!outlet) {
+          } else if (!outlet) {
               console.log("no docs found with id: " + data.deviceID);
               res.json({
                   error: "no docs found with id: " + data.deviceID
@@ -86,11 +86,11 @@
               res.status(500);
 
           }
-        outlet.wattage = data.wattage;
+          outlet.wattage = data.wattage;
           //TODO: verify time
           if (outlet.lastKnownPowerStatus) {
               outlet.elapsedTimeOn = Date.now() - outlet.timeSinceLastUpdate;
-            outlet.timeSinceLastUpdate = Date.now();
+              outlet.timeSinceLastUpdate = Date.now();
           }
           outlet.save(function(err, raw) {
               if (err) {
@@ -110,19 +110,21 @@
       Outlets
           .findOne({
               _id: req.body._id
-          },function(err, outlet) {
+          }, function(err, outlet) {
               if (err) {
                   console.log(err);
-                  res.status(400).json({error:err});
+                  res.status(400).json({
+                      error: err
+                  });
                   return;
               }
               res.status(200).json(outlet);
           });
   };
-/**
-*this is called when a device is created
-*locally called, not by angular directly
-**/
+  /**
+   *this is called when a device is created
+   *locally called, not by angular directly
+   **/
   module.exports.getOutlets = function(deviceID, callback) {
       Outlets.find({
           deviceID: deviceID
@@ -147,7 +149,7 @@
   };
   module.exports.changeOutletName = function(req, res) {
       var searchQuery = {
-          _id:req.body._id
+          _id: req.body._id
       };
       Outlets.findOne(searchQuery, function(err, outlet) {
           if (err) {
@@ -155,7 +157,7 @@
               res.status(500);
               res.json(err);
               return;
-          } else {
+          } else if (outlet) {
               outlet.nickname = req.body.nickname;
               if (outlet.lastKnownPowerStatus) {
                   outlet.elapsedTimeOn += (Date.now() - outlet.timeSinceLastUpdate);
@@ -172,12 +174,17 @@
                       for (var i = 0; i < device.outlets.length; i++) {
                           if (device.outlets[i]._id === outlet._id) {
                               device.outlets[i] = outlet;
-                              device.save(function(err, raw) {//jshint ignore:line
-                                  res.status(200).json(device);
-                              });
+                              break;
                           }
                       }
+                      device.save(function(err, raw) { //jshint ignore:line
+                          res.status(200).json(device);
+                      });
                   });
+              });
+          } else {
+              res.status(500).json({
+                  error: "outlet is null"
               });
           }
       });
@@ -185,35 +192,49 @@
 
   module.exports.scheduleTask = function(req, res) {
       var searchQuery = {
-          $and: [{
-              deviceID: req.body.deviceID
-          }, {
-              outletNumber: req.body.outletNumber
-          }]
+          _id:req.body._id
       };
-      Outlets.find(searchQuery, function(err, outlet) {
+      Outlets.findOne(searchQuery, function(err, outlet) {
           if (err) {
               console.log(err);
               res.status(500);
               res.json(err);
               return;
-          } else {
-              outlet[0].isOn = req.body.isOn;
-              outlet[0].timeSetOn = req.body.timeSetOn;
-              outlet[0].timeSetOff = req.body.timeSetOff;
-              if (outlet[0].lastKnownPowerStatus) {
-                  outlet[0].elapsedTimeOn += (Date.now() - outlet[0].timeSinceLastUpdate);
-                  outlet[0].timeSinceLastUpdate = Date.now();
+          } else if(outlet) {
+              outlet.isOn = req.body.isOn;
+              outlet.timeSetOn = req.body.timeSetOn;
+              outlet.timeSetOff = req.body.timeSetOff;
+              if (outlet.lastKnownPowerStatus) {
+                  outlet.elapsedTimeOn += (Date.now() - outlet[0].timeSinceLastUpdate);
+                  outlet.timeSinceLastUpdate = Date.now();
               }
               if (!req.body.isOn) {
-                  outlet[0].lastKnownPowerStatus = false;
+                  outlet.lastKnownPowerStatus = false;
               } else {
-                  outlet[0].lastKnownPowerStatus = true;
-                  outlet[0].timeSinceLastUpdate = Date.now();
+                  outlet.lastKnownPowerStatus = true;
+                  outlet.timeSinceLastUpdate = Date.now();
               }
-              outlet[0].update(function() {
-                  res.status(200).json(outlet[0]);
+              outlet.save(function(err,raw) {
+                  Devices.findOne({
+                      deviceID: req.body.deviceID
+                  }, function(err, device) {
+                      if (err) {
+                          res.status(500).json(err);
+                          return;
+                      }
+                      for (var i = 0; i < device.outlets.length; i++) {
+                          if (device.outlets[i]._id === outlet._id) {
+                              device.outlets[i] = outlet;
+                              break;
+                          }
+                      }
+                      device.save(function(err, raw) { //jshint ignore:line
+                          res.status(200).json(device);
+                      });
+                  });
               });
+          }else{
+            res.status(500).json({error:"outlet is null"});
           }
       });
   };
