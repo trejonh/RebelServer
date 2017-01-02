@@ -1,6 +1,6 @@
   /*
-                                    Will be used only for submodule testing not for dev
-                                    */
+                                      Will be used only for submodule testing not for dev
+                                      */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
@@ -176,13 +176,11 @@
                       console.log("=============================");
                       console.log(device.outlets);
                       for (var i = 0; i < device.outlets.length; i++) {
-                          if (device.outlets[i]._id === (""+outlet._id)) {
-                              console.log("found it ");
+                          if (device.outlets[i]._id) {
                               console.log(device.outlets[i]);
-                              device.outlets[i] = outlet;
-                              break;
+                              //  device.outlets[i] = outlet;
+                              //break;
                           }
-                          console.log("did not find it");
                       }
                       device.save(function(err, raw) { //jshint ignore:line
                           res.status(200).json(device);
@@ -199,7 +197,7 @@
 
   module.exports.scheduleTask = function(req, res) {
       var searchQuery = {
-          _id:req.body._id
+          _id: req.body._id
       };
       Outlets.findOne(searchQuery, function(err, outlet) {
           if (err) {
@@ -207,7 +205,7 @@
               res.status(500);
               res.json(err);
               return;
-          } else if(outlet) {
+          } else if (outlet) {
               outlet.isOn = req.body.isOn;
               outlet.timeSetOn = req.body.timeSetOn;
               outlet.timeSetOff = req.body.timeSetOff;
@@ -221,7 +219,7 @@
                   outlet.lastKnownPowerStatus = true;
                   outlet.timeSinceLastUpdate = Date.now();
               }
-              outlet.save(function(err,raw) {
+              outlet.save(function(err, raw) {
                   Devices.findOne({
                       deviceID: req.body.deviceID
                   }, function(err, device) {
@@ -240,8 +238,10 @@
                       });
                   });
               });
-          }else{
-            res.status(500).json({error:"outlet is null"});
+          } else {
+              res.status(500).json({
+                  error: "outlet is null"
+              });
           }
       });
   };
