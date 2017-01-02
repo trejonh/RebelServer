@@ -148,6 +148,8 @@
       });
   };
   module.exports.changeOutletName = function(req, res) {
+    console.log("trying to changeOutletName");
+    console.log(req.body);
       var searchQuery = {
           _id: req.body._id
       };

@@ -163,8 +163,10 @@ angular.module('clientApp')
     $scope.changeOutletName = function() {
       $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
       deviceService.changeOutletNickname(stats.outlet).success(function(data) {
-        console.log(data);
         stats.device = data;
+        console.log("new outlet data");
+        console.log(stats.device);
+        console.log(stats.device.outlets);
       }).error(function(err) {
         console.log(err);
       });
