@@ -176,7 +176,7 @@
                       console.log("=============================");
                       console.log(device.outlets);
                       for (var i = 0; i < device.outlets.length; i++) {
-                          if (device.outlets[i]._id === outlet._id) {
+                          if (device.outlets[i]._id === (""+outlet._id)) {
                               console.log("found it ");
                               console.log(device.outlets[i]);
                               device.outlets[i] = outlet;
