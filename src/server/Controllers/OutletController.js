@@ -1,6 +1,6 @@
   /*
-                                      Will be used only for submodule testing not for dev
-                                      */
+                                        Will be used only for submodule testing not for dev
+                                        */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
@@ -101,7 +101,23 @@
                   });
                   return;
               }
-              res.status(200).json(outlet);
+              Devices.findOne({
+                  deviceID: req.body.deviceID
+              }, function(err, device) {
+                  if (err) {
+                      res.status(500).json(err);
+                      return;
+                  }
+                  for (var i = 0; i < device.outlets.length; i++) {
+                      if (device.outlets[i]._id.equals(outlet._id)) { //must use .equals() when comparing Objectids in mongoose
+                          device.outlets[i] = outlet;
+                          break;
+                      }
+                  }
+                  device.save(function(err, raw) { //jshint ignore:line
+                      res.status(200).json(device);
+                  });
+              });
           });
       });
   };
@@ -171,14 +187,10 @@
                           res.status(500).json(err);
                           return;
                       }
-                      console.log("looking for this one");
-                      console.log(outlet._id);
-                      console.log("=============================");
                       for (var i = 0; i < device.outlets.length; i++) {
-                          if (device.outlets[i]._id.equals(outlet._id)) {
-                              console.log(device.outlets[i]._id);
-                              //  device.outlets[i] = outlet;
-                              //break;
+                          if (device.outlets[i]._id.equals(outlet._id)) { //must use .equals() when comparing Objectids in mongoose
+                              device.outlets[i] = outlet;
+                              break;
                           }
                       }
                       device.save(function(err, raw) { //jshint ignore:line
@@ -227,7 +239,7 @@
                           return;
                       }
                       for (var i = 0; i < device.outlets.length; i++) {
-                          if (device.outlets[i]._id === outlet._id) {
+                          if (device.outlets[i]._id.equals(outlet._id)) {
                               device.outlets[i] = outlet;
                               break;
                           }
