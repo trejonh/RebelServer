@@ -174,10 +174,9 @@
                       console.log("looking for this one");
                       console.log(outlet);
                       console.log("=============================");
-                      console.log(device.outlets);
                       for (var i = 0; i < device.outlets.length; i++) {
                           if (device.outlets[i]._id) {
-                              console.log(device.outlets[i]);
+                              console.log(device.outlets[i]._id);
                               //  device.outlets[i] = outlet;
                               //break;
                           }
