@@ -171,6 +171,10 @@
                           res.status(500).json(err);
                           return;
                       }
+                      console.log("looking for this one");
+                      console.log(outlet);
+                      console.log("=============================");
+                      console.log(device.outlets);
                       for (var i = 0; i < device.outlets.length; i++) {
                           if (device.outlets[i]._id === outlet._id) {
                               console.log("found it ");
@@ -178,12 +182,9 @@
                               device.outlets[i] = outlet;
                               break;
                           }
+                          console.log("did not find it");
                       }
                       device.save(function(err, raw) { //jshint ignore:line
-                        console.log("raw");
-                        console.log(raw);
-                        console.log("===================");
-                        console.log(this);
                           res.status(200).json(device);
                       });
                   });

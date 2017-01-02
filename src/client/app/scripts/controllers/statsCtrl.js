@@ -165,7 +165,6 @@ angular.module('clientApp')
       deviceService.changeOutletNickname(stats.outlet).success(function(data) {
         stats.device = data;
         console.log("new outlet data");
-        console.log(stats.device);
         console.log(stats.device.outlets);
       }).error(function(err) {
         console.log(err);
