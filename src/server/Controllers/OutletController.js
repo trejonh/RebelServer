@@ -1,6 +1,6 @@
   /*
-                                        Will be used only for submodule testing not for dev
-                                        */
+                                            Will be used only for submodule testing not for dev
+                                            */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
@@ -179,25 +179,40 @@
                   outlet.elapsedTimeOn += (Date.now() - outlet.timeSinceLastUpdate);
                   outlet.timeSinceLastUpdate = Date.now();
               }
-              outlet.save(function(err, raw) {
-                  Devices.findOne({
-                      deviceID: req.body.deviceID
-                  }, function(err, device) {
-                      if (err) {
-                          res.status(500).json(err);
-                          return;
+              //  outlet.save(function(err, raw) {
+              Devices.findOne({
+                  deviceID: req.body.deviceID
+              }, function(err, device) {
+                  if (err) {
+                      res.status(500).json(err);
+                      return;
+                  }
+                  for (var i = 0; i < device.outlets.length; i++) {
+                      if (device.outlets[i]._id.equals(outlet._id)) { //must use .equals() when comparing Objectids in mongoose
+                          device.outlets[i] = outlet;
+                          device.outlets[i].save(function(err, raw) { //jshint ignore:line
+                              if (err) {
+                                  console.log(err);
+                                  res.status(500).json({
+                                      err: err
+                                  });
+                              }
+
+                              device.save(function(err, raw) { //jshint ignore:line
+                                  if (err) {
+                                      console.log(err);
+                                      res.status(500).json({
+                                          err: err
+                                      });
+                                  }
+                                  res.status(200).json(device);
+                              });
+                          });
+                          break;
                       }
-                      for (var i = 0; i < device.outlets.length; i++) {
-                          if (device.outlets[i]._id.equals(outlet._id)) { //must use .equals() when comparing Objectids in mongoose
-                              device.outlets[i] = outlet;
-                              break;
-                          }
-                      }
-                      device.save(function(err, raw) { //jshint ignore:line
-                          res.status(200).json(device);
-                      });
-                  });
+                  }
               });
+              //  });
           } else {
               res.status(500).json({
                   error: "outlet is null"
