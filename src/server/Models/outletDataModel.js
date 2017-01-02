@@ -38,11 +38,11 @@ var OutletDataSchema = new mongoose.Schema({
     },
     timeSinceLastUpdate:{
       type: Number,
-      required: true
+      required: false
     },
     lastKnownPowerStatus:{
       type: Boolean,
-      required:true
+      required:false
     }
 });
 
