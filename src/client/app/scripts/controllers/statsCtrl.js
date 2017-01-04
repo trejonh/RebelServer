@@ -151,8 +151,6 @@ angular.module('clientApp')
       $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
         deviceService.changeDeviceName(stats.device).success(function(data) {
           stats.device = data;
-          console.log("new stats");
-          console.log(stats.device);
         }).error(function(err) {
           console.log(err);
         });
@@ -165,7 +163,7 @@ angular.module('clientApp')
       deviceService.changeOutletNickname(stats.outlet).success(function(data) {
         stats.device = data;
         console.log("new outlet data");
-        console.log(stats.device.outlets);
+        console.log(stats.device);
       }).error(function(err) {
         console.log(err);
       });

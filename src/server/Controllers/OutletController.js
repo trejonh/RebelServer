@@ -190,14 +190,17 @@
                   for (var i = 0; i < device.outlets.length; i++) {
                       if (device.outlets[i]._id.equals(outlet._id)) { //must use .equals() when comparing Objectids in mongoose
                           device.outlets[i] = outlet;
+                          console.log("new outlet");
+                          console.log(device.outlets[i]);
                           device.outlets[i].save(function(err, raw) { //jshint ignore:line
                               if (err) {
                                   console.log(err);
                                   res.status(500).json({
                                       err: err
                                   });
+                                  return;
                               }
-
+                              console.log("saved");
                               device.save(function(err, raw) { //jshint ignore:line
                                   if (err) {
                                       console.log(err);
@@ -205,6 +208,7 @@
                                           err: err
                                       });
                                   }
+                                  console.log(device);
                                   res.status(200).json(device);
                               });
                           });
