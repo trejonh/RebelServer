@@ -255,7 +255,9 @@
                   }
                   for (var i = 0; i < device.outlets.length; i++) {
                       if (device.outlets[i]._id.equals(outlet._id)) {
-                          device.outlets[i] = outlet;
+                      //http://mongoosejs.com/docs/faq.html for why array wasn't saving
+                      //must notify mongoose of change first
+                          device.outlets.set(i,outlet);
                           break;
                       }
                   }
