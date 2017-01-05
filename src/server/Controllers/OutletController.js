@@ -233,6 +233,7 @@
               return;
           } else if (outlet) {
               outlet.isOn = req.body.isOn;
+              outlet.nickname = req.body.nickname;
               outlet.timeSetOn = req.body.timeSetOn;
               outlet.timeSetOff = req.body.timeSetOff;
               if (outlet.lastKnownPowerStatus) {
