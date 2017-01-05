@@ -1,6 +1,6 @@
 {
   "name": "RebelServer",
-  "version": "0.0.1",
+  "version": "0.9.1",
   "description": "Rebel Kangaroo Server.",
   "main": "server.js",
   "author": "TreJon House",

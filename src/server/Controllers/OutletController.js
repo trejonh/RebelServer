@@ -255,10 +255,12 @@
                       return;
                   }
                   for (var i = 0; i < device.outlets.length; i++) {
-                      if (device.outlets[i]._id.equals(outlet._id)) {
+                      if (device.outlets[i].outletNumber === outlet.outletNumber) {
+                        console.log(found);
                       //http://mongoosejs.com/docs/faq.html for why array wasn't saving
                       //must notify mongoose of change first
                           device.outlets.set(i,outlet);
+                          device.markModified("outlets");
                           break;
                       }
                   }
