@@ -256,13 +256,14 @@
                   }
                   for (var i = 0; i < device.outlets.length; i++) {
                       if (device.outlets[i].outletNumber === outlet.outletNumber) {
-                        console.log(found);
+                        console.log("found");
                       //http://mongoosejs.com/docs/faq.html for why array wasn't saving
                       //must notify mongoose of change first
                           device.outlets.set(i,outlet);
                           device.markModified("outlets");
                           break;
                       }
+                      console.log("not found");
                   }
                   device.save(function(err, raw) { //jshint ignore:line
                       res.status(200).json(device);
