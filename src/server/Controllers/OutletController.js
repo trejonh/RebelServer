@@ -192,25 +192,32 @@
                           device.outlets[i] = outlet;
                           console.log("new outlet");
                           console.log(device.outlets[i]);
-                          device.outlets[i].save(function(err, raw) { //jshint ignore:line
-                              if (err) {
-                                  console.log(err);
-                                  res.status(500).json({
-                                      err: err
-                                  });
-                                  return;
-                              }
-                              console.log("saved");
-                              device.save(function(err, raw) { //jshint ignore:line
-                                  if (err) {
-                                      console.log(err);
-                                      res.status(500).json({
-                                          err: err
-                                      });
-                                  }
-                                  console.log(device);
-                                  res.status(200).json(device);
-                              });
+                          device.outlets[i].save(function(err, raw){//jshint ignore:line
+                            if(err){
+                              console.log(err);
+                              res.status(500).json({err:err});
+                              return;
+                            }
+                            device.outlets[i].save(function(err, raw) { //jshint ignore:line
+                                if (err) {
+                                    console.log(err);
+                                    res.status(500).json({
+                                        err: err
+                                    });
+                                    return;
+                                }
+                                console.log("saved");
+                                device.save(function(err, raw) { //jshint ignore:line
+                                    if (err) {
+                                        console.log(err);
+                                        res.status(500).json({
+                                            err: err
+                                        });
+                                    }
+                                    console.log(device);
+                                    res.status(200).json(device);
+                                });
+                            });
                           });
                           break;
                       }
