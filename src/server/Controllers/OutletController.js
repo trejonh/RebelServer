@@ -164,6 +164,8 @@
       });
   };
   module.exports.changeOutletName = function(req, res) {
+    console.log("trashed");
+    /*
       var searchQuery = {
           _id: req.body._id
       };
@@ -218,7 +220,7 @@
                   error: "outlet is null"
               });
           }
-      });
+      });*/
   };
 
   module.exports.scheduleTask = function(req, res) {
