@@ -250,10 +250,12 @@
               Devices.findOne({$and:[{
                   deviceID: req.body.deviceID, owner: req.body.owner}]
               }, function(err, device) {
+                console.log("in devices find one");
                   if (err) {
                       res.status(500).json(err);
                       return;
                   }
+                  console.log(device.outlets.length);
                   for (var i = 0; i < device.outlets.length; i++) {
                       if (device.outlets[i].outletNumber === outlet.outletNumber) {
                         console.log("found");
