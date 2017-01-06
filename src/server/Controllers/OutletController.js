@@ -226,6 +226,7 @@
           _id: req.body._id
       };
       Outlets.findOne(searchQuery, function(err, outlet) {
+        console.log("in outlet findone");
           if (err) {
               console.log(err);
               res.status(500);
@@ -268,6 +269,7 @@
                       console.log("not found");
                   }
                   device.save(function(err, raw) { //jshint ignore:line
+                    console.log("saved");
                       res.status(200).json(device);
                   });
               });
