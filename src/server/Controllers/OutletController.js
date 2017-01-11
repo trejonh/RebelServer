@@ -5,7 +5,7 @@
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
   var Scheduler = require("node-schedule");
-  var http = require("http");
+  var https = require("https");
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -241,7 +241,7 @@
               path: path+"turnOn",
               method: 'POST'
           };
-          var myReq = http.request(options, (res) => {//jshint ignore:line
+          var myReq = https.request(options, (res) => {//jshint ignore:line
               console.log('statusCode:', res.statusCode);
               console.log('headers:', res.headers);
 
@@ -261,7 +261,7 @@
               path: path+"turnOff",
               method: 'POST'
           };
-          var myReq = http.request(options, (res) => {//jshint ignore:line
+          var myReq = https.request(options, (res) => {//jshint ignore:line
               console.log('statusCode:', res.statusCode);
               console.log('headers:', res.headers);
 
