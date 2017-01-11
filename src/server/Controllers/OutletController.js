@@ -246,21 +246,13 @@
       */
       console.log(req.body);
       if (req.body.manualOn) {
-          request.post(host + "turnOn?access_token=" + req.body.access_token, {
-              json: {
-                  outletNumber: req.body.outletNumber
-              }
-          }, function(err, response, body) {
+          request.post(host + "turnOn?access_token=" + req.body.access_token+"&value=0", function(err, response, body) {
               console.log(response);
               console.log("===============================");
               console.log(body);
           });
       } else {
-          request.post(host + "turnOff?access_token=" + req.body.access_token, {
-              json: {
-                  outletNumber: req.body.outletNumber
-              }
-          }, function(err, response, body) {
+          request.post(host + "turnOff?access_token=" + req.body.access_token+"&value=0", function(err, response, body) {
               console.log(response);
               console.log("===============================");
               console.log(body);
