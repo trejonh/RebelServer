@@ -143,6 +143,7 @@ angular.module('clientApp')
       task.owner = stats.device.owner;
       task._id = stats.outlet._id;
       task.outletNumber = stats.outlet.outletNumber;
+      task.access_token = stats.outlet.accessToken;
       deviceService.scheduleTask(task).success(function() {
 
       }).error(function(err) {

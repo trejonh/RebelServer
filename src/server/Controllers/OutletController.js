@@ -1,11 +1,11 @@
   /*
-                                                                Will be used only for submodule testing not for dev
-                                                                */
+                                                                  Will be used only for submodule testing not for dev
+                                                                  */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
   var Scheduler = require("node-schedule");
-  var https = require("https");
+  var request = require("request");
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -233,48 +233,35 @@
       var searchQuery = {
           _id: req.body._id
       };
-      var path = "/v1/devices/"+req.body.deviceID+"/";
-      var host = "api.particle.io";
+      var host = "https://api.particle.io/v1/devices/" + req.body.deviceID + "/";
+      /*request.post(
+    'http://www.yoursite.com/formpage',
+    { json: { key: 'value' } },
+    function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body)
+        }
+    }
+);
+      */
       if (req.body.manualOn) {
-          var options = {
-              hostname: host,
-              path: path+"turnOn",
-              method: 'POST'
-          };
-          var myReq = https.request(options, (res) => {//jshint ignore:line
-              console.log('statusCode:', res.statusCode);
-              console.log('headers:', res.headers);
-
-              res.on('data', (d) => {//jshint ignore:line
-                  process.stdout.write(d);
-              });
+          request.post(host + "turnOn?access_token=" + req.body.access_token, {
+              json: {
+                  outletNumber: req.body.outletNumber
+              }
+          }, function(err, response, body) {
+              console.log(response);
+              console.log(body);
           });
-
-          myReq.on('error', (e) => {//jshint ignore:line
-              console.error(e);
-          });
-          myReq.write(req.body.outletNumber);
-          myReq.end();
       } else {
-          var options = {//jshint ignore:line
-              hostname: host,
-              path: path+"turnOff",
-              method: 'POST'
-          };
-          var myReq = https.request(options, (res) => {//jshint ignore:line
-              console.log('statusCode:', res.statusCode);
-              console.log('headers:', res.headers);
-
-              res.on('data', (d) => {//jshint ignore:line
-                  process.stdout.write(d);
-              });
+          request.post(host + "turnOff?access_token=" + req.body.access_token, {
+              json: {
+                  outletNumber: req.body.outletNumber
+              }
+          }, function(err, response, body) {
+              console.log(response);
+              console.log(body);
           });
-
-          myReq.on('error', (e) => {//jshint ignore:line
-              console.error(e);
-          });
-          myReq.write(req.body.outletNumber);
-          myReq.end();
       }
       var timeOn = "* " + req.body.onTime[1] + " " + req.body.onTime[0] + " * * *";
       var timeOff = "* " + req.body.offTime[1] + " " + req.body.offTime[0] + " * * *";
