@@ -1,9 +1,11 @@
   /*
-                                                        Will be used only for submodule testing not for dev
-                                                        */
+                                                                Will be used only for submodule testing not for dev
+                                                                */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
+  var Scheduler = require("node-schedule");
+  var http = require("http");
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -207,17 +209,21 @@
                   break;
               }
           }
-          console.log(device._id);
           Devices.findByIdAndUpdate(device._id, {
               $set: {
                   outlets: deviceOutlets
               }
-          }, function(err,dev) {
-            console.log(err);
-            console.log(dev);
-                  res.status(200).json(device);
-                  console.log(doc);
+          }, function(err, dev) {
+              if (err) {
+                  res.status(500).json({
+                      err: err
+                  });
+                  console.log(err);
                   return;
+              } else {
+                  res.status(200).json(dev);
+                  return;
+              }
           });
       });
 
@@ -227,61 +233,132 @@
       var searchQuery = {
           _id: req.body._id
       };
-      Outlets.findOne(searchQuery, function(err, outlet) {
-          console.log("in outlet findone");
+      var path = "/v1/devices/"+req.body.deviceID+"/";
+      var host = "api.particle.io";
+      if (req.body.manualOn) {
+          var options = {
+              hostname: host,
+              path: path+"turnOn",
+              method: 'POST'
+          };
+          var myReq = http.request(options, (res) => {//jshint ignore:line
+              console.log('statusCode:', res.statusCode);
+              console.log('headers:', res.headers);
+
+              res.on('data', (d) => {//jshint ignore:line
+                  process.stdout.write(d);
+              });
+          });
+
+          myReq.on('error', (e) => {//jshint ignore:line
+              console.error(e);
+          });
+          myReq.write(req.body.outletNumber);
+          myReq.end();
+      } else {
+          var options = {//jshint ignore:line
+              hostname: host,
+              path: path+"turnOff",
+              method: 'POST'
+          };
+          var myReq = http.request(options, (res) => {//jshint ignore:line
+              console.log('statusCode:', res.statusCode);
+              console.log('headers:', res.headers);
+
+              res.on('data', (d) => {//jshint ignore:line
+                  process.stdout.write(d);
+              });
+          });
+
+          myReq.on('error', (e) => {//jshint ignore:line
+              console.error(e);
+          });
+          myReq.write(req.body.outletNumber);
+          myReq.end();
+      }
+      var timeOn = "* " + req.body.onTime[1] + " " + req.body.onTime[0] + " * * *";
+      var timeOff = "* " + req.body.offTime[1] + " " + req.body.offTime[0] + " * * *";
+      var onScheduler;
+      if (req.body.repeatOn) {
+          onScheduler = Scheduler.scheduleJob(timeOn, function() {});
+      } else {
+          onScheduler = Scheduler.scheduleJob(timeOn, function() {
+              this.cancel();
+          });
+      }
+      var offScheduler;
+      if (req.body.repeatOff) {
+          offScheduler = Scheduler.scheduleJob(timeOff, function() {});
+      } else {
+          offScheduler = Scheduler.scheduleJob(timeOff, function() {
+              this.cancel();
+          });
+      }
+      Outlets.findOne({
+          _id: req.body._id
+      }, function(err, outlet) {
           if (err) {
               console.log(err);
-              res.status(500);
-              res.json(err);
-              return;
-          } else if (outlet) {
-              outlet.isOn = req.body.isOn;
-              outlet.nickname = req.body.nickname;
-              outlet.timeSetOn = req.body.timeSetOn;
-              outlet.timeSetOff = req.body.timeSetOff;
-              if (outlet.lastKnownPowerStatus) {
-                  outlet.elapsedTimeOn += (Date.now() - outlet[0].timeSinceLastUpdate);
-                  outlet.timeSinceLastUpdate = Date.now();
-              }
-              if (!req.body.isOn) {
-                  outlet.lastKnownPowerStatus = false;
-              } else {
-                  outlet.lastKnownPowerStatus = true;
-                  outlet.timeSinceLastUpdate = Date.now();
-              }
-              outlet.save();
-              Devices.findOne({
-                  $and: [{
-                      deviceID: req.body.deviceID,
-                      owner: req.body.owner
-                  }]
-              }, function(err, device) {
-                  console.log("in devices find one");
-                  if (err) {
-                      res.status(500).json(err);
-                      return;
-                  }
-                  console.log(device.outlets.length);
-                  for (var i = 0; i < device.outlets.length; i++) {
-                      if (device.outlets[i].outletNumber === outlet.outletNumber) {
-                          console.log("found");
-                          //http://mongoosejs.com/docs/faq.html for why array wasn't saving
-                          //must notify mongoose of change first
-                          device.outlets.set(i, outlet);
-                          device.markModified("outlets");
-                          break;
-                      }
-                      console.log("not found");
-                  }
-                  device.save(function(err, raw) { //jshint ignore:line
-                      console.log("saved");
-                      res.status(200).json(device);
-                  });
-              });
-          } else {
               res.status(500).json({
-                  error: "outlet is null"
+                  err: err
               });
+              return;
           }
+          outlet.onScheduler.cancel();
+          outlet.offScheduler.cancel();
+          Outlets.findByIdAndUpdate(req.body._id, {
+              $set: {
+                  onScheduler: onScheduler,
+                  offScheduler: offScheduler
+              }
+          }, function(err, doc) {
+              if (err) {
+                  console.log(err);
+                  res.status(500).json({
+                      err: err
+                  });
+                  return;
+              } else if (doc) {
+                  var deviceOutlets = null;
+                  Devices.findOne({
+                      $and: [{
+                          deviceID: req.body.deviceID
+                      }, {
+                          owner: req.body.owner
+                      }]
+                  }, function(err, device) {
+                      if (err) {
+                          console.log(err);
+                          res.status(500).json({
+                              err: err
+                          });
+                          return;
+                      }
+                      deviceOutlets = device.outlets;
+                      for (var i = 0; i < deviceOutlets.length; i++) {
+                          if (deviceOutlets[i].outletNumber === doc.outletNumber) {
+                              deviceOutlets[i] = doc;
+                              break;
+                          }
+                      }
+                      Devices.findByIdAndUpdate(device._id, {
+                          $set: {
+                              outlets: deviceOutlets
+                          }
+                      }, function(err, dev) {
+                          if (err) {
+                              res.status(500).json({
+                                  err: err
+                              });
+                              console.log(err);
+                              return;
+                          } else if (dev) {
+                              res.status(200).json(dev);
+                              return;
+                          }
+                      });
+                  });
+              }
+          });
       });
   };

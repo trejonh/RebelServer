@@ -139,6 +139,10 @@ angular.module('clientApp')
       }
       task.timeSetOff = offTime;
       task.timeSetOn = onTime;
+      task.deviceID = stats.device.deviceID;
+      task.owner = stats.device.owner;
+      task._id = stats.outlet._id;
+      task.outletNumber = stats.outlet.outletNumber;
       deviceService.scheduleTask(task).success(function() {
 
       }).error(function(err) {

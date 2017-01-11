@@ -43,6 +43,14 @@ var OutletDataSchema = new mongoose.Schema({
     lastKnownPowerStatus:{
       type: Boolean,
       required:false
+    },
+    onScheduler:{
+      type: Object,
+      required:false
+    },
+    offScheduler:{
+      type: Object,
+      required:false
     }
 });
 

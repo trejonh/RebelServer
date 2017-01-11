@@ -17,7 +17,7 @@
   </tr>
   <tr ng-repeat="outlet in outlets" id="outletStatRow" ng-click="saveClickedOutletData(outlet)">
     <td>{{outlet.outletNumber}}</td>
-    <td><span><i id="editName" class="fa fa-pencil" alt="edit device name" aria-hidden="true" data-toggle="modal" data-target="#changeOutletNicknameModal"></i><span>{{outlet.nickname}}</td>
+    <td><span><i id="editName" class="fa fa-pencil" alt="edit device name" aria-hidden="true" data-toggle="modal" data-target="#changeOutletNicknameModal"></i><span>&nbsp;&nbsp;&nbsp;{{outlet.nickname}}</td>
     <td>{{outlet.isOn}}</td>
     <td>{{outlet.wattage}}</td>
     <td>{{outlet.elapsedTimeOn}}</td>
