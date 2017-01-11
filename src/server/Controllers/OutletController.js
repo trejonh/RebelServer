@@ -1,6 +1,6 @@
   /*
-                                                Will be used only for submodule testing not for dev
-                                                */
+                                                    Will be used only for submodule testing not for dev
+                                                    */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
@@ -164,11 +164,11 @@
       });
   };
   module.exports.changeOutletName = function(req, res) {
-    console.log("trashed");
-    /*
       var searchQuery = {
           _id: req.body._id
       };
+
+      var newOutlet;
       Outlets.findOne(searchQuery, function(err, outlet) {
           if (err) {
               console.log(err);
@@ -181,46 +181,54 @@
                   outlet.elapsedTimeOn += (Date.now() - outlet.timeSinceLastUpdate);
                   outlet.timeSinceLastUpdate = Date.now();
               }
-              //  outlet.save(function(err, raw) {
-              Devices.findOne({
-                  deviceID: req.body.deviceID
-              }, function(err, device) {
-                  if (err) {
-                      res.status(500).json(err);
-                      return;
-                  }
-                  for (var i = 0; i < device.outlets.length; i++) {
-                      if (device.outlets[i]._id.equals(outlet._id)) { //must use .equals() when comparing Objectids in mongoose
-                          device.outlets[i] = outlet;
-                          device.outlets[i].save(function(err, raw) { //jshint ignore:line
-                              if (err) {
-                                  console.log(err);
-                                  res.status(500).json({
-                                      err: err
-                                  });
-                                  return;
-                              }
-                              device.save(function(err, raw) { //jshint ignore:line
-                                  if (err) {
-                                      console.log(err);
-                                      res.status(500).json({
-                                          err: err
-                                      });
-                                  }
-                                  res.status(200).json(device);
-                              });
-                          });
-                          break;
-                      }
-                  }
+              outlet.save();
+              newOutlet = outlet;
+          }
+      });
+      var deviceOutlets = null;
+      Devices.findOne({
+          $and: [{
+              deviceID: req.body.deviceID
+          }, {
+              owner: req.body.owner
+          }]
+      }, function(err, device) {
+          if (err) {
+              console.log(err);
+              res.status(500).json({
+                  err: err
               });
-              //  });
+              return;
+          }
+          deviceOutlets = device.outlets;
+      });
+      while (deviceOutlets === null) { /*do nothing*/ }
+      for (var i = 0; i < deviceOutlets.length; i++) {
+          if (deviceOutlets[i]._id.equals(newOutlet._id))
+              deviceOutlets[i] = newOutlet;
+      }
+      Devices.findOneAndUpdate({
+          $and: [{
+              deviceID: req.body.deviceID
+          }, {
+              owner: req.body.owner
+          }]
+      }, {
+          $set: {
+              outlets: deviceOutlets
+          }
+      }, function(device) {
+          if (device) {
+              res.status(200).json(device);
+              console.log(device);
+              return;
           } else {
               res.status(500).json({
-                  error: "outlet is null"
+                  err: "device is null"
               });
           }
-      });*/
+      });
+
   };
 
   module.exports.scheduleTask = function(req, res) {
@@ -228,7 +236,7 @@
           _id: req.body._id
       };
       Outlets.findOne(searchQuery, function(err, outlet) {
-        console.log("in outlet findone");
+          console.log("in outlet findone");
           if (err) {
               console.log(err);
               res.status(500);
@@ -250,10 +258,13 @@
                   outlet.timeSinceLastUpdate = Date.now();
               }
               outlet.save();
-              Devices.findOne({$and:[{
-                  deviceID: req.body.deviceID, owner: req.body.owner}]
+              Devices.findOne({
+                  $and: [{
+                      deviceID: req.body.deviceID,
+                      owner: req.body.owner
+                  }]
               }, function(err, device) {
-                console.log("in devices find one");
+                  console.log("in devices find one");
                   if (err) {
                       res.status(500).json(err);
                       return;
@@ -261,17 +272,17 @@
                   console.log(device.outlets.length);
                   for (var i = 0; i < device.outlets.length; i++) {
                       if (device.outlets[i].outletNumber === outlet.outletNumber) {
-                        console.log("found");
-                      //http://mongoosejs.com/docs/faq.html for why array wasn't saving
-                      //must notify mongoose of change first
-                          device.outlets.set(i,outlet);
+                          console.log("found");
+                          //http://mongoosejs.com/docs/faq.html for why array wasn't saving
+                          //must notify mongoose of change first
+                          device.outlets.set(i, outlet);
                           device.markModified("outlets");
                           break;
                       }
                       console.log("not found");
                   }
                   device.save(function(err, raw) { //jshint ignore:line
-                    console.log("saved");
+                      console.log("saved");
                       res.status(200).json(device);
                   });
               });
