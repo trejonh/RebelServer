@@ -244,6 +244,7 @@
     }
 );
       */
+      console.log(req.body);
       if (req.body.manualOn) {
           request.post(host + "turnOn?access_token=" + req.body.access_token, {
               json: {
@@ -251,6 +252,7 @@
               }
           }, function(err, response, body) {
               console.log(response);
+              console.log("===============================");
               console.log(body);
           });
       } else {
@@ -260,6 +262,7 @@
               }
           }, function(err, response, body) {
               console.log(response);
+              console.log("===============================");
               console.log(body);
           });
       }
