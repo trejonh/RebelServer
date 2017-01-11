@@ -1,11 +1,11 @@
   /*
-                                                                  Will be used only for submodule testing not for dev
-                                                                  */
+                                                                    Will be used only for submodule testing not for dev
+                                                                    */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
   var Scheduler = require("node-schedule");
-  var request = require("request");
+  var Particle = require("partile-api-js");
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -230,34 +230,46 @@
   };
 
   module.exports.scheduleTask = function(req, res) {
-      var searchQuery = {
-          _id: req.body._id
-      };
-      var host = "https://api.particle.io/v1/devices/" + req.body.deviceID + "/";
-      /*request.post(
-    'http://www.yoursite.com/formpage',
-    { json: { key: 'value' } },
-    function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            console.log(body)
-        }
-    }
-);
-      */
       console.log(req.body);
       if (req.body.manualOn) {
-          request.post(host + "turnOn?access_token=" + req.body.access_token+"&value=0", function(err, response, body) {
-              console.log(response);
-              console.log("===============================");
-              console.log(body);
+          Particle.callFunction({
+              deviceId: req.body.deviceID,
+              name: "turnOn",
+              argument: req.body.outletNumber,
+              auth: req.body.access_token
+          }).then(function(data) {
+              console.log(data);
+              updateTasks(req, res);
+          }, function(err) {
+              if (err) {
+                  console.log(err);
+                  res.status(500).json({
+                      err: err
+                  });
+              }
           });
       } else {
-          request.post(host + "turnOff?access_token=" + req.body.access_token+"&value=0", function(err, response, body) {
-              console.log(response);
-              console.log("===============================");
-              console.log(body);
+          Particle.callFunction({
+              deviceId: req.body.deviceID,
+              name: "turnOff",
+              argument: req.body.outletNumber,
+              auth: req.body.access_token
+          }).then(function(data) {
+              console.log(data);
+              updateTasks(req, res);
+          }, function(err) {
+              if (err) {
+                  console.log(err);
+                  res.status(500).json({
+                      err: err
+                  });
+              }
           });
       }
+  };
+
+  function updateTasks(req, res) {
+
       var timeOn = "* " + req.body.onTime[1] + " " + req.body.onTime[0] + " * * *";
       var timeOff = "* " + req.body.offTime[1] + " " + req.body.offTime[0] + " * * *";
       var onScheduler;
@@ -343,4 +355,4 @@
               }
           });
       });
-  };
+  }
