@@ -202,8 +202,11 @@
           }
           deviceOutlets = device.outlets;
       });
+      console.log("waiting for deviceOutlets");
       while (deviceOutlets === null) { /*do nothing*/ }
+      console.log(deviceOutlets);
       for (var i = 0; i < deviceOutlets.length; i++) {
+        console.log("looking");
           if (deviceOutlets[i]._id.equals(newOutlet._id))
               deviceOutlets[i] = newOutlet;
       }
