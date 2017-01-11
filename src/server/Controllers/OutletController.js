@@ -5,7 +5,7 @@
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
   var Scheduler = require("node-schedule");
-  var Particle = require("partile-api-js");
+  var Particle = require("particle-api-js");
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();

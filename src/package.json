@@ -4,6 +4,8 @@
   "description": "Rebel Kangaroo Server.",
   "main": "server.js",
   "author": "TreJon House",
+  "repository":"https://github.com/msoeSE/RebelServer",
+  "license":null,
   "dependencies": {
     "angular": "^1.5.8",
     "body-parser": "^1.15.2",
