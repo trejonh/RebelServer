@@ -1,6 +1,6 @@
   /*
-                                                      Will be used only for submodule testing not for dev
-                                                      */
+                                                        Will be used only for submodule testing not for dev
+                                                        */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
@@ -203,23 +203,20 @@
           deviceOutlets = device.outlets;
           for (var i = 0; i < deviceOutlets.length; i++) {
               console.log("looking");
-              if (deviceOutlets[i]._id.equals(newOutlet._id))
+              if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
                   deviceOutlets[i] = newOutlet;
+                  break;
+              }
           }
-          Devices.findOneAndUpdate({
-              $and: [{
-                  deviceID: req.body.deviceID
-              }, {
-                  owner: req.body.owner
-              }]
-          }, {
+          console.log(device._id);
+          Devices.findByIdAndUpdate(device._id, {
               $set: {
                   outlets: deviceOutlets
               }
-          }, function(device) {
-              if (device) {
-                  res.status(200).json(device);
-                  console.log(device);
+          }, function(doc) {
+              if (doc) {
+                  res.status(200).json(doc);
+                  console.log(doc);
                   return;
               } else {
                   res.status(500).json({
