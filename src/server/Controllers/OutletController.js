@@ -1,6 +1,6 @@
   /*
-                                                    Will be used only for submodule testing not for dev
-                                                    */
+                                                      Will be used only for submodule testing not for dev
+                                                      */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
@@ -201,36 +201,62 @@
               return;
           }
           deviceOutlets = device.outlets;
-      });
-      console.log("waiting for deviceOutlets");
-      while (deviceOutlets === null) { /*do nothing*/ }
-      console.log(deviceOutlets);
-      for (var i = 0; i < deviceOutlets.length; i++) {
-        console.log("looking");
-          if (deviceOutlets[i]._id.equals(newOutlet._id))
-              deviceOutlets[i] = newOutlet;
-      }
-      Devices.findOneAndUpdate({
-          $and: [{
-              deviceID: req.body.deviceID
+          for (var i = 0; i < deviceOutlets.length; i++) {
+              console.log("looking");
+              if (deviceOutlets[i]._id.equals(newOutlet._id))
+                  deviceOutlets[i] = newOutlet;
+          }
+          Devices.findOneAndUpdate({
+              $and: [{
+                  deviceID: req.body.deviceID
+              }, {
+                  owner: req.body.owner
+              }]
           }, {
-              owner: req.body.owner
-          }]
-      }, {
-          $set: {
-              outlets: deviceOutlets
-          }
-      }, function(device) {
-          if (device) {
-              res.status(200).json(device);
-              console.log(device);
-              return;
-          } else {
-              res.status(500).json({
-                  err: "device is null"
-              });
-          }
+              $set: {
+                  outlets: deviceOutlets
+              }
+          }, function(device) {
+              if (device) {
+                  res.status(200).json(device);
+                  console.log(device);
+                  return;
+              } else {
+                  res.status(500).json({
+                      err: "device is null"
+                  });
+              }
+          });
       });
+      //console.log("waiting for deviceOutlets");
+      //while (deviceOutlets === null) { /*do nothing*/ }
+      // //  console.log(deviceOutlets);
+      //   for (var i = 0; i < deviceOutlets.length; i++) {
+      //     console.log("looking");
+      //       if (deviceOutlets[i]._id.equals(newOutlet._id))
+      //           deviceOutlets[i] = newOutlet;
+      //   }
+      //   Devices.findOneAndUpdate({
+      //       $and: [{
+      //           deviceID: req.body.deviceID
+      //       }, {
+      //           owner: req.body.owner
+      //       }]
+      //   }, {
+      //       $set: {
+      //           outlets: deviceOutlets
+      //       }
+      //   }, function(device) {
+      //       if (device) {
+      //           res.status(200).json(device);
+      //           console.log(device);
+      //           return;
+      //       } else {
+      //           res.status(500).json({
+      //               err: "device is null"
+      //           });
+      //       }
+      //   });
 
   };
 
