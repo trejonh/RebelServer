@@ -230,7 +230,6 @@
   };
 
   module.exports.scheduleTask = function(req, res) {
-      console.log(req.body);
       if (req.body.manualOn) {
           Particle.callFunction({
               deviceId: req.body.deviceID,
