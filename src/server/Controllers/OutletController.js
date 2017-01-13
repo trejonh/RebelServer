@@ -231,7 +231,7 @@
 
   module.exports.scheduleTask = function(req, res) {
     console.log(req.body);
-    if (req.body.manualOn===1) {
+    if (req.body.isOn===1) {
         Particle.callFunction({
             deviceId: req.body.deviceID,
             name: "turnOn",
