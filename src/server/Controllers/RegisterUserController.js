@@ -1,6 +1,4 @@
 //setup
-//var Resource = require("resourcejs");
-//var restful = require("node-restful");
 var passport = require('passport');
 var mongoose = require('mongoose');
 var User = mongoose.model('registeredUserModel');

@@ -24,26 +24,35 @@ module.exports.profileRead = function(req, res) {
 
 module.exports.profileDelete = function(req, res) {
     User.findByIdAndRemove(req.query._id, function() {
-        res.status(200);
+        res.status(200).end();
+        return;
     });
 };
 
 module.exports.updateUser = function(req, res) {
-    User.findById(req.body._id,function(err, user){
-        if(err){
-          res.status(500);
-          res.json(err);
-          return;
+    User.findById(req.body._id, function(err, user) {
+        if (err) {
+            res.status(500);
+            res.json(err);
+            return;
+        } else if (user) {
+            if (req.body.newPassword)
+                user.setPassword(req.body.newPassword);
+            if (req.body.newPic)
+                user.profileImage = req.body.newPic;
+            if (req.body.deviceID && user.devices.indexOf(req.body.deviceID) === -1) {
+                deviceCtrl.addDevice(req.body.deviceID, req.body.username);
+                user.devices.push(req.body.deviceID);
+            }
+            user.save(function(err) {
+                if (!process.env["TestDB"]) //jshint ignore:line
+                    console.log(err);
+                res.status(200).json(user);
+            });
+        } else {
+            res.status(500).json({
+                err: "user not found"
+            });
         }
-        if(req.body.newPassword)
-          user.setPassword(req.body.newPassword);
-        if(req.body.newPic)
-          user.profileImage =req.body.newPic;
-        if(req.body.deviceID && user.devices.indexOf(req.body.deviceID) === -1){
-          deviceCtrl.addDevice(req.body.deviceID, req.body.username);
-          user.devices.push(req.body.deviceID);
-        }
-        user.save();
-        res.status(200);
     });
 };
