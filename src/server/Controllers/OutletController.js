@@ -230,41 +230,45 @@
   };
 
   module.exports.scheduleTask = function(req, res) {
-      if (req.body.manualOn) {
-          Particle.callFunction({
-              deviceId: req.body.deviceID,
-              name: "turnOn",
-              argument: req.body.outletNumber,
-              auth: req.body.access_token
-          }).then(function(data) {
-              console.log(data);
-              updateTasks(req, res);
-          }, function(err) {
-              if (err) {
-                  console.log(err);
-                  res.status(500).json({
-                      err: err
-                  });
-              }
-          });
-      } else {
-          Particle.callFunction({
-              deviceId: req.body.deviceID,
-              name: "turnOff",
-              argument: req.body.outletNumber,
-              auth: req.body.access_token
-          }).then(function(data) {
-              console.log(data);
-              updateTasks(req, res);
-          }, function(err) {
-              if (err) {
-                  console.log(err);
-                  res.status(500).json({
-                      err: err
-                  });
-              }
-          });
-      }
+    console.log(req.body);
+    if (req.body.manualOn) {
+        Particle.callFunction({
+            deviceId: req.body.deviceID,
+            name: "turnOn",
+            argument: req.body.outletNumber,
+            auth: req.body.access_token
+        }).then(function(data) {
+            console.log(data);
+            updateTasks(req, res);
+        }, function(err) {
+            if (err) {
+                console.log(err);
+                res.status(500).json({
+                    err: err
+                });
+            }
+        });
+    } else if(!req.body.manualOn){
+        Particle.callFunction({
+            deviceId: req.body.deviceID,
+            name: "turnOff",
+            argument: req.body.outletNumber,
+            auth: req.body.access_token
+        }).then(function(data) {
+            console.log(data);
+            updateTasks(req, res);
+        }, function(err) {
+            if (err) {
+                console.log(err);
+                res.status(500).json({
+                    err: err
+                });
+            }
+        });
+    }else{
+      res.status(500).json({err:"something went wrong"});
+      console.log("need to fix");
+    }
   };
 
   function updateTasks(req, res) {
