@@ -26,7 +26,7 @@ router.get('/devices', ctrlDevice.getDevices);
 router.get('/outlets',ctrlOutlet.getOutlets);
 router.get('/outletDataRetrival',ctrlOutlet.getOutletData);
 router.post('/createOutlet', ctrlOutlet.createOutlet);
-router.post('/updateOutletData', ctrlOutlet.updateOutletData);
+router.put('/updateOutletData', ctrlOutlet.updateOutletData);
 router.post('/updateOutletNickname',ctrlOutlet.changeOutletName);
 router.post('/scheduleTask',ctrlOutlet.scheduleTask);
 router.post('/changeDeviceName',ctrlDevice.changeDeviceName);

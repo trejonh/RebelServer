@@ -1,6 +1,6 @@
   /*
-                                                                    Will be used only for submodule testing not for dev
-                                                                    */
+                                                                                    Will be used only for submodule testing not for dev
+                                                                                    */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
@@ -34,18 +34,6 @@
                   break;
           }
       }
-
-      Devices.find({
-          deviceID: outlet.deviceId
-      }, function(err, doc) {
-          if (err) {
-              console.log("this device hasn't been created yet in db");
-              return;
-          } else if (doc.length === 1) {
-              doc[0].lastSeenOnline = (new Date()).toTimeString();
-              doc[0].update();
-          }
-      });
       var outletObj = new Outlets();
       outletObj.deviceID = outlet.deviceID;
       outletObj.accessToken = outlet.accessToken;
@@ -66,14 +54,19 @@
               });
               return;
           }
-          res.status(200);
+          res.status(200).end(); //if not sending json or other data need to .end()
+          return;
       });
   };
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
       Outlets.findOne({
-          _id: data._id
+          $and: [{
+              deviceID: data.deviceID
+          }, {
+              outletNumber: data.outletNumber
+          }]
       }, function(err, outlet) {
           if (err) {
               console.log(err);
@@ -109,16 +102,14 @@
                   if (err) {
                       res.status(500).json(err);
                       return;
+                  } else if (device) {
+                      updateOutletsInDevice(device, res);
+                  } else {
+                      res.status(500).json({
+                          err: "no device has been created to house this outlet, but data has been saved.",
+                          outlet: outlet
+                      });
                   }
-                  for (var i = 0; i < device.outlets.length; i++) {
-                      if (device.outlets[i]._id.equals(outlet._id)) { //must use .equals() when comparing Objectids in mongoose
-                          device.outlets[i] = outlet;
-                          break;
-                      }
-                  }
-                  device.save(function(err, raw) { //jshint ignore:line
-                      res.status(200).json(device);
-                  });
               });
           });
       });
@@ -187,7 +178,6 @@
               newOutlet = outlet;
           }
       });
-      var deviceOutlets = null;
       Devices.findOne({
           $and: [{
               deviceID: req.body.deviceID
@@ -201,30 +191,12 @@
                   err: err
               });
               return;
+          } else if (device) {
+              updateOutletsInDevice(device, res);
+          } else if (process.env["TestDB"]) { //jshint ignore:line
+              res.status(200).json(newOutlet);
+              return;
           }
-          deviceOutlets = device.outlets;
-          for (var i = 0; i < deviceOutlets.length; i++) {
-              if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
-                  deviceOutlets[i] = newOutlet;
-                  break;
-              }
-          }
-          Devices.findByIdAndUpdate(device._id, {
-              $set: {
-                  outlets: deviceOutlets
-              }
-          }, function(err, dev) {
-              if (err) {
-                  res.status(500).json({
-                      err: err
-                  });
-                  console.log(err);
-                  return;
-              } else {
-                  res.status(200).json(dev);
-                  return;
-              }
-          });
       });
 
   };
@@ -312,7 +284,6 @@
                   });
                   return;
               } else if (doc) {
-                  var deviceOutlets = null;
                   Devices.findOne({
                       $and: [{
                           deviceID: req.body.deviceID
@@ -327,31 +298,35 @@
                           });
                           return;
                       }
-                      deviceOutlets = device.outlets;
-                      for (var i = 0; i < deviceOutlets.length; i++) {
-                          if (deviceOutlets[i].outletNumber === doc.outletNumber) {
-                              deviceOutlets[i] = doc;
-                              break;
-                          }
-                      }
-                      Devices.findByIdAndUpdate(device._id, {
-                          $set: {
-                              outlets: deviceOutlets
-                          }
-                      }, function(err, dev) {
-                          if (err) {
-                              res.status(500).json({
-                                  err: err
-                              });
-                              console.log(err);
-                              return;
-                          } else if (dev) {
-                              res.status(200).json(dev);
-                              return;
-                          }
-                      });
+                      updateOutletsInDevice(device, res);
                   });
               }
           });
+      });
+  }
+
+  function updateOutletsInDevice(device, res) {
+      var deviceOutlets = device.outlets;
+      for (var i = 0; i < deviceOutlets.length; i++) {
+          if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
+              deviceOutlets[i] = newOutlet;
+              break;
+          }
+      }
+      Devices.findByIdAndUpdate(device._id, {
+          $set: {
+              outlets: deviceOutlets
+          }
+      }, function(err, dev) {
+          if (err) {
+              res.status(500).json({
+                  err: err
+              });
+              console.log(err);
+              return;
+          } else if (dev) {
+              res.status(200).json(dev);
+              return;
+          }
       });
   }

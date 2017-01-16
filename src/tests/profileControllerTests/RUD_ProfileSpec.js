@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 var atob = require("atob");
 require("../../server/Models/registeredUserModel");
 var userModel = mongoose.model('registeredUserModel');
-// jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 describe("test CRUD abilities of profile", function() {
     var server;
     var _id;
