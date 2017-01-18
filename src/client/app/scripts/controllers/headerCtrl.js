@@ -8,7 +8,7 @@ angular.module('clientApp')
       $scope.loggedIn = !authentication.isLoggedIn();
     }, 5000);
     $scope.logout = function() {
-      $scope.loggedIn = !authentication.isLoggedIn(); //true == hidden, false==visible
+      $scope.loggedIn = true; //true == hidden, false==visible
       authentication.logout();
       $location.path("/");
     };

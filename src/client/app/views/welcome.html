@@ -16,7 +16,7 @@
       <h4>Login Error!</h4>
       <p>
         Please verify the username and password are correct before trying again to login. If error continues, consider changing password or register a new account
-        <button type="button" class="close" aria-label="Close">
+        <button id="alertClose" type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
           Close
         </button>
@@ -29,7 +29,7 @@
 $(document).ready(function(){
   $("#loginFailure").hide();
 });
-$("button.close").click(function() {
+$("button#alertClose").click(function() {
   $("#loginFailure").hide();
 });
 </script>

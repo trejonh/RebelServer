@@ -1,11 +1,11 @@
   /*
-                                                                                    Will be used only for submodule testing not for dev
-                                                                                    */
+                                                                                        Will be used only for submodule testing not for dev
+                                                                                        */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
   var Scheduler = require("node-schedule");
-  var Particle = require("particle-api-js");
+  var particleRequest = require("request");
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -203,39 +203,9 @@
 
   module.exports.scheduleTask = function(req, res) {
       if (req.body.manualOn) {
-          Particle.callFunction({
-              deviceId: req.body.deviceID,
-              name: "turnOn",
-              argument: req.body.outletNumber,
-              auth: req.body.access_token
-          }).then(function(data) {
-              console.log(data);
-              updateTasks(req, res);
-          }, function(err) {
-              if (err) {
-                  console.log(err);
-                  res.status(500).json({
-                      err: err
-                  });
-              }
-          });
+          triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, res, "turnOn");
       } else {
-          Particle.callFunction({
-              deviceId: req.body.deviceID,
-              name: "turnOff",
-              argument: req.body.outletNumber,
-              auth: req.body.access_token
-          }).then(function(data) {
-              console.log(data);
-              updateTasks(req, res);
-          }, function(err) {
-              if (err) {
-                  console.log(err);
-                  res.status(500).json({
-                      err: err
-                  });
-              }
-          });
+          triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, res, "turnOff");
       }
   };
 
@@ -245,17 +215,23 @@
       var timeOff = "* " + req.body.offTime[1] + " " + req.body.offTime[0] + " * * *";
       var onScheduler;
       if (req.body.repeatOn) {
-          onScheduler = Scheduler.scheduleJob(timeOn, function() {});
+          onScheduler = Scheduler.scheduleJob(timeOn, function() {
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
+          });
       } else {
           onScheduler = Scheduler.scheduleJob(timeOn, function() {
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
               this.cancel();
           });
       }
       var offScheduler;
       if (req.body.repeatOff) {
-          offScheduler = Scheduler.scheduleJob(timeOff, function() {});
+          offScheduler = Scheduler.scheduleJob(timeOff, function() {
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOff");
+          });
       } else {
           offScheduler = Scheduler.scheduleJob(timeOff, function() {
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOff");
               this.cancel();
           });
       }
@@ -326,6 +302,27 @@
               return;
           } else if (dev) {
               res.status(200).json(dev);
+              return;
+          }
+      });
+  }
+
+  function triggerPower(deviceID, outletNumber, access_token, res, method) {
+      var particleUrl = "https://api.particle.io/v1/devices/";
+      particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
+          form: {
+              args: outletNumber
+          }
+      }, function(err, response, body) {
+          if (!err && response.statusCode === 200) {
+              updateTasks(req, res);
+          } else if (err) {
+              if (res) {
+                  res.status(response.statusCode).json({
+                      err: err
+                  });
+              }
+              console.log(err);
               return;
           }
       });

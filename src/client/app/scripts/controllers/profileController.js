@@ -27,17 +27,18 @@ angular.module('clientApp')
       username: ""
     };
     meanData.getProfile()
-      .success(function(data) {
+      .then(function(data) {
+        console.log(data);
         profile.user = data;
-        deviceService.getDevices(profile.user.username,null).success(function(data) {
+        deviceService.getDevices(profile.user.username, null).then(function(data) {
+          console.log(data);
           $scope.devices = data;
-        }).error(function(err) {
+        }, function error(err) {
           if (err) {
             console.log(err);
           }
         });
-      })
-      .error(function(e) {
+      }, function error(e) {
         console.log(e);
       });
     $scope.logout = function() {
@@ -69,7 +70,7 @@ angular.module('clientApp')
           profile.user.profileImage = reader.result;
           profile.pic.newPic = reader.result;
           profile.pic._id = profile.user._id;
-          authentication.changePassword(profile.pic);
+          authentication.changeProfilImg(profile.pic);
         };
         if (file !== undefined) {
           reader.readAsDataURL(file);
@@ -82,9 +83,10 @@ angular.module('clientApp')
         profile.addDevice.username = profile.user.username;
         profile.addDevice._id = profile.user._id;
         deviceService.addDevice(profile.addDevice);
-        deviceService.getDevices(profile.user.username,null).success(function(data) {
+        deviceService.getDevices(profile.user.username, null).then(function(data) {
+          console.log(data);
           $scope.devices = data;
-        }).error(function(err) {
+        }, function error(err) {
           if (err) {
             console.log(err);
           }
