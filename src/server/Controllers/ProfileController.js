@@ -11,7 +11,7 @@ module.exports.profileRead = function(req, res) {
     } else {
         // Otherwise continue
         User
-            .findById(req.payload._id)
+            .findById(req.payload._id,'-hash -salt')
             .exec(function(err, user) {
                 if (err) {
                     console.log(err);
@@ -30,7 +30,7 @@ module.exports.profileDelete = function(req, res) {
 };
 
 module.exports.updateUser = function(req, res) {
-    User.findById(req.body._id, function(err, user) {
+    User.findById(req.body._id,'-hash -salt', function(err, user) {
         if (err) {
             res.status(500);
             res.json(err);

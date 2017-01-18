@@ -29,10 +29,10 @@ angular.module('clientApp')
     meanData.getProfile()
       .then(function(data) {
         console.log(data);
-        profile.user = data;
+        profile.user = data.data;
         deviceService.getDevices(profile.user.username, null).then(function(data) {
           console.log(data);
-          $scope.devices = data;
+          $scope.devices = data.data;
         }, function error(err) {
           if (err) {
             console.log(err);
@@ -84,8 +84,7 @@ angular.module('clientApp')
         profile.addDevice._id = profile.user._id;
         deviceService.addDevice(profile.addDevice);
         deviceService.getDevices(profile.user.username, null).then(function(data) {
-          console.log(data);
-          $scope.devices = data;
+          $scope.devices = data.data.devices;
         }, function error(err) {
           if (err) {
             console.log(err);
