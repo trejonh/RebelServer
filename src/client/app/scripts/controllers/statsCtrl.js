@@ -11,6 +11,7 @@ angular.module('clientApp')
   .controller('StatsCtrl', function($scope, $route, deviceService, GraphService) {
     var stats = this;
     var deviceId = $route.current.params.deviceID;
+    $scope.clickedOutlet = true;
     stats.device = {};
     $scope.outlets = [];
     stats.outlet = {};
@@ -21,7 +22,22 @@ angular.module('clientApp')
       scheduleOff: "",
       repeatOff: true,
       setOnTime: [],
-      setOffTime:[]
+      setOffTime: []
+    };
+    $scope.isActive = function() {
+      var lastSeen = Date.parse(stats.device.lastSeenOnline);
+      var now = Date.now();
+      if (now - lastSeen <= 30000) {
+        return {
+          "color": "green",
+          "margin-left": "55px"
+        };
+      } else {
+        return {
+          "color": "red",
+          "margin-left": "55px"
+        };
+      }
     };
     stats.costPerKWH = 0.5;
     var usageTotal = 0;
@@ -32,13 +48,13 @@ angular.module('clientApp')
     deviceService.getDevices(null, deviceId).success(function(data) {
       stats.device = data[0];
       $scope.outlets = data[0].outlets;
-      //  $("tr#outletStatRow")[0].click();//jshint ignore:line
     }).error(function(err) {
       if (err) {
         console.log(err);
       }
     });
     $scope.saveClickedOutletData = function(outletData) {
+      $scope.clickedOutlet = false;
       stats.outlet = outletData;
       //power Consumption
       var usageSeries = [getEnergyConsumedPerDay(parseInt(stats.outlet.wattage), 86400000),
@@ -83,33 +99,78 @@ angular.module('clientApp')
         costGraph.update();
       }
     };
-
+    /*
+     * schedule home automation tasks
+     *
+     */
     $scope.scheduleTasks = function() {
-      var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(),(new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
-      var onTime = [(new Date(stats.taskScheduler.scheduleOn)).getHours(),(new Date(stats.taskScheduler.scheduleOn)).getMinutes()];
-      if((stats.taskScheduler.scheduleOn || stats.taskScheduler.scheduleOn === undefined) && $("#scheduleOn")[0].type === "text"){ //jshint ignore:line
+      var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(), (new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
+      var onTime = [(new Date(stats.taskScheduler.scheduleOn)).getHours(), (new Date(stats.taskScheduler.scheduleOn)).getMinutes()];
+      if ((stats.taskScheduler.scheduleOn || stats.taskScheduler.scheduleOn === undefined) && $("#scheduleOn")[0].type === "text") { //jshint ignore:line
         var timeSetOn = $("#scheduleOn").val(); //jshint ignore:line
         timeSetOn = timeSetOn.trim().split(":");
-        if((timeSetOn[0] < 0 || timeSetOn[0] > 24) || (timeSetOn[1] < 0 || timeSetOn[1] > 59)){
+        if ((timeSetOn[0] < 0 || timeSetOn[0] > 24) || (timeSetOn[1] < 0 || timeSetOn[1] > 59)) {
           alert("Please enter a proper date"); //jshint ignore:line
           return;
-        }else{
+        } else {
           onTime = timeSetOn;
         }
       }
-      if((stats.taskScheduler.scheduleOff || stats.taskScheduler.scheduleOff === undefined) && $("#scheduleOff")[0].type === "text"){ //jshint ignore:line
-        var timeSetOff = $("#scheduleOff").val();//jshint ignore:line
+      if ((stats.taskScheduler.scheduleOff || stats.taskScheduler.scheduleOff === undefined) && $("#scheduleOff")[0].type === "text") { //jshint ignore:line
+        var timeSetOff = $("#scheduleOff").val(); //jshint ignore:line
         timeSetOff = timeSetOff.trim().split(":");
         console.log(timeSetOff);
-        if((timeSetOff[0] < 0 || timeSetOff[0] > 24) || (timeSetOff[1] < 0 || timeSetOff[1] > 59)){
+        if ((timeSetOff[0] < 0 || timeSetOff[0] > 24) || (timeSetOff[1] < 0 || timeSetOff[1] > 59)) {
           alert("Please enter a proper date"); //jshint ignore:line
           return;
-        }else{
+        } else {
           offTime = timeSetOff;
         }
       }
       stats.taskScheduler.setOnTime = onTime;
       stats.taskScheduler.setOffTime = offTime;
+      var task = {};
+      task.deviceID = stats.outlet.deviceID;
+      task.outletNumber = stats.outlet.outletNumber;
+      if (stats.taskScheduler.manualOn) {
+        task.isOn = 1;
+      } else {
+        task.isOn = 0;
+      }
+      task.timeSetOff = offTime;
+      task.timeSetOn = onTime;
+      task.deviceID = stats.device.deviceID;
+      task.owner = stats.device.owner;
+      task._id = stats.outlet._id;
+      task.outletNumber = stats.outlet.outletNumber;
+      task.access_token = stats.outlet.accessToken;
+      deviceService.scheduleTask(task).success(function() {
+
+      }).error(function(err) {
+        console.log(err);
+      });
+    };
+
+    //changeDeviceName
+    $scope.changeDeviceName = function() {
+      $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
+        deviceService.changeDeviceName(stats.device).success(function(data) {
+          stats.device = data;
+        }).error(function(err) {
+          console.log(err);
+        });
+      });
+      $("#changeDeviceNameModal").modal("hide"); //jshint ignore:line
+    };
+    //changeOutletName
+    $scope.changeOutletName = function() {
+      $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
+      stats.outlet.owner = stats.device.owner;
+      deviceService.changeOutletNickname(stats.outlet).success(function(data) {
+        stats.device = data;
+      }).error(function(err) {
+        console.log(err);
+      });
     };
   });
 

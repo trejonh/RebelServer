@@ -20,9 +20,10 @@ module.exports.getDevices = function(req, res) {
 };
 module.exports.addDevice = function(deviceID, username) {
     var newDevice = new Device();
-    newDevice.deviceName = "Some Name";
+    newDevice.lastSeenOnline = (new Date()).toTimeString();
     newDevice.deviceID = deviceID;
     newDevice.owner = username;
+    newDevice.deviceName = "Smart Power Strip" + (new Date()).toLocaleDateString();
     ctrlOutlet.getOutlets(deviceID, function(err, outlets) {
         if (err) {
             console.log(err);
@@ -33,5 +34,29 @@ module.exports.addDevice = function(deviceID, username) {
             if (err)
                 console.log(err);
         });
+    });
+};
+
+module.exports.changeDeviceName = function(req, res) {
+    //need to search on _id field, more stable reults
+    var searchQuery = {
+        _id: req.body._id
+    };
+    Device.findOne(searchQuery, function(err, device) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.json(err);
+            return;
+        } else if (device) {
+            device.deviceName = req.body.deviceName;
+            device.save(function(err, raw) {
+                res.status(200).json(device);
+            });
+        } else {
+            res.status(500).json({
+                error: "device is null"
+            });
+        }
     });
 };

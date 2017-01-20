@@ -3,7 +3,7 @@
     <div class="col-sm-3">
       <div class="btn-group">
         <button id="accountDropdown" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="{{profile.user.profileImage}}" alt="{{profile.user.name}}" class="img-circle">
+            <img id="profileImg" src="{{profile.user.profileImage}}" alt="{{profile.user.name}}" class="img-circle">
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="accountImage" id="accountOptions">
           <li><a id="openChangePassModal" data-toggle="modal" data-target="#changePassModal">Change Password</a></li>
@@ -22,7 +22,7 @@
     <h2>Owned Devices</h2>
     <div class="container">
       <div ng-repeat="device in devices">
-        <h3>Device: {{device.deviceID}}</h3>
+        <a id="deviceLink" href="#/mydevices/{{device.deviceID}}/stats"><h3>Device: {{device.deviceID}}</h3></a>
       <table class="table table-hover table-condensed table-responsive">
         <tr>
           <th>Outlet Number</th>

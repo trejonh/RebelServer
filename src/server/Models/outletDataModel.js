@@ -14,7 +14,7 @@ var OutletDataSchema = new mongoose.Schema({
     },
     nickname: {
         type: String,
-        required: true
+        required: false
     },
     isOn: {
         type: Number,
@@ -25,20 +25,33 @@ var OutletDataSchema = new mongoose.Schema({
         required: true
     },
     timeSetOn: {
-        type: Number,
-        required: true
+        type: Object,
+        required: false
     },
     timeSetOff: {
-        type: Number,
-        required: true
+        type: Object,
+        required: false
     },
     elapsedTimeOn: {
         type: Number,
         required: true
+    },
+    timeSinceLastUpdate:{
+      type: Number,
+      required: false
+    },
+    lastKnownPowerStatus:{
+      type: Boolean,
+      required:false
+    },
+    onScheduler:{
+      type: Object,
+      required:false
+    },
+    offScheduler:{
+      type: Object,
+      required:false
     }
 });
 
-OutletDataSchema.methods.setDate = function() {
-    this.date = new Date().toString();
-};
 module.exports = mongoose.model("outletDataModel", OutletDataSchema);

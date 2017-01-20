@@ -17,10 +17,18 @@ router.get('/profile', auth, ctrlProfile.profileRead);
 router.delete('/profile', ctrlProfile.profileDelete);
 router.put('/profile', ctrlProfile.updateUser);
 
-// authentication
+// user data
 router.post('/register', ctrlAuth.register);
 router.post('/login', ctrlAuth.login);
-//particle test
+
+//device and outlet data
 router.get('/devices', ctrlDevice.getDevices);
-router.post('/particleJSON', ctrlOutlet.setOutletData);
+router.get('/outlets',ctrlOutlet.getOutlets);
+router.get('/outletDataRetrival',ctrlOutlet.getOutletData);
+router.post('/createOutlet', ctrlOutlet.createOutlet);
+router.post('/updateOutletData', ctrlOutlet.updateOutletData);
+router.post('/updateOutletNickname',ctrlOutlet.changeOutletName);
+router.post('/scheduleTask',ctrlOutlet.scheduleTask);
+router.post('/changeDeviceName',ctrlDevice.changeDeviceName);
+
 module.exports = router;
