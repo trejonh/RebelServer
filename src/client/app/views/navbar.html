@@ -12,8 +12,8 @@
     <div class="collapse navbar-collapse" id="navbar-collapse">
       <ul id="pages" class="nav navbar-nav">
         <li><a href="#/about">About</a></li>
-        <li><a href="#/mydevices">My Devices</a></li>
-        <li><a href="#/profile">My Profile</a></li>
+        <li><a id="myDevicesLink" ng-style="disabled" href="#/mydevices">My Devices</a></li>
+        <li><a id="profileLink" ng-style="disabled" href="#/profile" >My Profile</a></li>
         <li id="logoutBtn" class="btn btn-danger" role="button" ng-click="logout()" ng-hide="loggedIn">Logout</li>
       </ul>
     </div>

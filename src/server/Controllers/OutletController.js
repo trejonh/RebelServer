@@ -4,7 +4,7 @@
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
-  var Scheduler = require("node-schedule");
+  var Scheduler = require("node-cron");
   var particleRequest = require("request");
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
@@ -103,7 +103,7 @@
                       res.status(500).json(err);
                       return;
                   } else if (device) {
-                      updateOutletsInDevice(device, res);
+                      updateOutletsInDevice(device, res,outlet);
                   } else {
                       res.status(500).json({
                           err: "no device has been created to house this outlet, but data has been saved.",
@@ -174,28 +174,29 @@
                   outlet.elapsedTimeOn += (Date.now() - outlet.timeSinceLastUpdate);
                   outlet.timeSinceLastUpdate = Date.now();
               }
-              outlet.save();
+              outlet.save(function(){
               newOutlet = outlet;
-          }
-      });
-      Devices.findOne({
-          $and: [{
-              deviceID: req.body.deviceID
-          }, {
-              owner: req.body.owner
-          }]
-      }, function(err, device) {
-          if (err) {
-              console.log(err);
-              res.status(500).json({
-                  err: err
+                Devices.findOne({
+                    $and: [{
+                        deviceID: req.body.deviceID
+                    }, {
+                        owner: req.body.owner
+                    }]
+                }, function(err, device) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500).json({
+                            err: err
+                        });
+                        return;
+                    } else if (device) {
+                        updateOutletsInDevice(device, res,newOutlet);
+                    } else if (process.env["TestDB"]) { //jshint ignore:line
+                        res.status(200).json(newOutlet);
+                        return;
+                    }
+                });
               });
-              return;
-          } else if (device) {
-              updateOutletsInDevice(device, res);
-          } else if (process.env["TestDB"]) { //jshint ignore:line
-              res.status(200).json(newOutlet);
-              return;
           }
       });
 
@@ -274,14 +275,14 @@
                           });
                           return;
                       }
-                      updateOutletsInDevice(device, res);
+                      updateOutletsInDevice(device, res,doc);
                   });
               }
           });
       });
   }
 
-  function updateOutletsInDevice(device, res) {
+  function updateOutletsInDevice(device, res,newOutlet) {
       var deviceOutlets = device.outlets;
       for (var i = 0; i < deviceOutlets.length; i++) {
           if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
