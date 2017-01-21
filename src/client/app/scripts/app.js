@@ -74,7 +74,8 @@ angular
   })
   .run(function($rootScope, $location, authentication) {
     $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) { // jshint ignore:line
-      var autheRequiredPath = $location.path() === '/profile' || $location.path() === '/mydevices';
+      var path = $location.path();
+      var autheRequiredPath = path === '/profile' || path === '/mydevices' || path.indexOf('stats') >=0;
       if (autheRequiredPath && !authentication.isLoggedIn()) {
         $location.path('/'); // jshint ignore:line
       }

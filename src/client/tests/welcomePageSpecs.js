@@ -3,10 +3,11 @@ describe("Tests homepage functionality and content", function() {
   var EC = protractor.ExpectedConditions;
   var waitTime = 1000 * 100;
   jasmine.DEFAULT_TIMEOUT_INTERVAL = waitTime;
-  beforeEach(function() {
-    browser.get('index.html');
-  });
   describe("verify content", function() {
+    beforeEach(function() {
+      browser.get('index.html');
+      browser.executeScript('localStorage.clear();');
+    });
 
     it('should have a title', function() {
       expect(browser.getTitle()).toEqual('Rebel Server');
@@ -18,20 +19,16 @@ describe("Tests homepage functionality and content", function() {
 
     it('should have navbar items', function() {
       expect($$("#pages li").count()).toBe(4);
-      /*$$("#pages li").each(function(ele, index) {
-        browser.wait(EC.elementToBeClickable(ele), waitTime);
-      });*/
       expect(element(by.id("logoutBtn")).getCssValue("display")).toEqual("none");
     });
 
     it("should go back to welcome page if not logged in", function() {
-      browser.get('index.html#/profile');
+      element(by.linkText('My Profile')).click()
       browser.wait(EC.not(EC.urlContains('profile')), waitTime);
-      expect(browser.getLocationAbsUrl()).toMatch("/");
+      element(by.linkText('My Devices')).click()
       browser.wait(EC.not(EC.urlContains('mydevices')), waitTime);
-      expect(browser.getLocationAbsUrl()).toMatch("/");
-      browser.wait(EC.not(EC.urlContains('about')), waitTime);
-      expect(browser.getLocationAbsUrl()).toMatch("/");
+      browser.get('index.html#/mydevices/1234/stats');
+      browser.wait(EC.not(EC.urlContains('mydevices/1234/stats')), waitTime);
     });
 
   });
@@ -39,6 +36,10 @@ describe("Tests homepage functionality and content", function() {
   describe("verify functionality", function() {
     beforeAll(function() {
       browser.wait(EC.visibilityOf($('#loginForm')), waitTime);
+    });
+    beforeEach(function() {
+      browser.get('index.html');
+      browser.executeScript('localStorage.clear();');
     });
 
     it("should not login user in", function() {
@@ -49,6 +50,16 @@ describe("Tests homepage functionality and content", function() {
       browser.wait(EC.visibilityOf($('#loginFailure')), waitTime);
       element(by.id('alertClose')).click();
       browser.wait(EC.invisibilityOf($('#loginFailure')), waitTime);
+    });
+
+    it("should navigate to about page", function() {
+      element(by.linkText('About')).click()
+      expect(browser.getCurrentUrl()).toMatch('/about');
+    });
+
+    it("should navigate to registeration page", function() {
+      element(by.linkText('Register')).click()
+      expect(browser.getCurrentUrl()).toMatch('/registerUser');
     });
   });
 });

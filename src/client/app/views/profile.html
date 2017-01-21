@@ -4,6 +4,8 @@
       <div class="btn-group">
         <button id="accountDropdown" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img id="profileImg" src="{{profile.user.profileImage}}" alt="{{profile.user.name}}" class="img-circle">
+            <hr>
+            <span class="caret"></span> Click Me!
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="accountImage" id="accountOptions">
           <li><a id="openChangePassModal" data-toggle="modal" data-target="#changePassModal">Change Password</a></li>
@@ -19,7 +21,7 @@
   </div>
   <hr>
   <div id="listedDevices">
-    <h2>Owned Devices</h2>
+    <h2>Owned Devices <i id="addDeviceIcon" class="fa fa-plus-circle" aria-hidden="true" data-toggle="modal" data-target="#addDeviceModal"></i></h2>
     <div class="container">
       <div ng-repeat="device in devices">
         <a id="deviceLink" href="#/mydevices/{{device.deviceID}}/stats"><h3>Device: {{device.deviceID}}</h3></a>

@@ -12,6 +12,7 @@ var ctrlProfile = require('./Controllers/ProfileController');
 var ctrlAuth = require('./Controllers/RegisterUserController');
 var ctrlOutlet = require('./Controllers/OutletController');
 var ctrlDevice = require('./Controllers/SmartDeviceController');
+var ctrlTest = require('./Controllers/TestController');
 // profile
 router.get('/profile', auth, ctrlProfile.profileRead);
 router.delete('/profile', ctrlProfile.profileDelete);
@@ -30,5 +31,6 @@ router.put('/updateOutletData', ctrlOutlet.updateOutletData);
 router.post('/updateOutletNickname',ctrlOutlet.changeOutletName);
 router.post('/scheduleTask',ctrlOutlet.scheduleTask);
 router.post('/changeDeviceName',ctrlDevice.changeDeviceName);
-
+//for testing purpose only
+router.delete('/testing',ctrlTest.delete);
 module.exports = router;

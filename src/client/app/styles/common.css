@@ -54,3 +54,7 @@ a#deviceLink:hover{
 img#profileImg{
   max-width: 75%;
 }
+i#addDeviceIcon{
+  cursor: pointer;
+  color: #2FE71B;
+}

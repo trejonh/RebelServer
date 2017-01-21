@@ -17,11 +17,12 @@ module.exports.register = function(req, res) {
     user.setPassword(req.body.password);
     user.save(function(err, doc) {
         if (err) {
-            console.log(err);
             res.status(500);
+            if(err.code === 11000){
             res.json({
-                "error": err
+                "error": "Username is already taken."
             });
+          }
             return;
         }
         var token;
