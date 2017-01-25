@@ -17,7 +17,7 @@ function unbind() {
 angular.module('clientApp')
   .controller('HeaderCtrl', function($scope, $location, $interval, authentication, deviceService) {
     var header = this; // jshint ignore:line
-    header.alerts.notifications = {};
+    $scope.notifications = [];
     deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
       header.notifications = data.data.notifications;
     }, function error(err){
@@ -37,8 +37,8 @@ angular.module('clientApp')
         bind();
       }
       deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
-        header.alerts.notifications = [{name:""},{name:""},{name:""},{name:""}];//data.data.notifications;
-        header.alerts.length = 4;//data.data.length;
+      $scope.notifications = [{name:""},{name:""},{name:""},{name:""}];//data.data.notifications;
+        header.notifications = $scope.notifications.length;//data.data.length;
       }, function error(err){
         console.log(err);
       });

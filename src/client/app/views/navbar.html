@@ -18,9 +18,9 @@
       </ul>
     </div>
     <button id="notificationsBtn" class="btn btn-info dropdown-toggle hidden-sm hidden-xs visible-md-block" data-toggle="dropdown" aria-haspopup="true" type="button" ng-hide="loggedIn">
-      Notifications <span class="badge">{{header.alerts.length}}</span>
+      Notifications <span class="badge">{{header.notifications}}</span>
       <ul class="dropdown-menu">
-        <li ng-repeat="notification in header.alerts.notifications"></li>
+        <li ng-repeat="notification in notifications"></li>
       </ul>
     </button>
   </div>
