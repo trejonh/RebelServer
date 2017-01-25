@@ -202,7 +202,7 @@
   };
 
   module.exports.getNotifications = function(req, res) {
-      console.log(req.query.username);
+      console.log(req);
       Users.findOne({
           username: req.query.username
       }, function(err, user) {
