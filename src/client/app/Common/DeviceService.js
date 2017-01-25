@@ -19,7 +19,7 @@
       });
     };
 
-    var getDevices = function(username,deviceID) {
+    var getDevices = function(username, deviceID) {
       return $http.get('http://' + window.location.hostname + ':3000/devices', {
         params: {
           username: username,
@@ -36,16 +36,16 @@
       return $http.post('http://' + window.location.hostname + ':3000/updateOutletNickname', outlet);
     };
 
-    var scheduleTask = function(task){
+    var scheduleTask = function(task) {
       return $http.post('http://' + window.location.hostname + ':3000/scheduleTask', task);
     };
 
 
 
-    var getNotifications = function(username){
+    var getNotifications = function(user) {
       return $http.get('http://' + window.location.hostname + ':3000/notifications', {
         params: {
-          username: username
+          username: user
         }
       });
     };
@@ -56,7 +56,7 @@
       changeDeviceName: changeDeviceName,
       changeOutletNickname: changeOutletNickname,
       scheduleTask: scheduleTask,
-      getNotifications:getNotifications
+      getNotifications: getNotifications
     };
   }
 
