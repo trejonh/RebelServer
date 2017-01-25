@@ -204,7 +204,7 @@
   module.exports.getNotifications = function(req, res) {
       Users.findById({
           _id: req.query._id
-      }, function(err, user) {
+      }, '-hash -salt -_id -devices -profileImage -username -phoneNumber -name',function(err, user) {
           if (err) {
               console.log(err);
               res.status(500).json({
