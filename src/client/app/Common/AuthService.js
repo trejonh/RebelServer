@@ -39,6 +39,7 @@
         var payload = token.split('.')[1];
         payload = $window.atob(payload); //atob
         payload = JSON.parse(payload);
+        console.log(payload);
         return {
           username: payload.username,
           name: payload.name

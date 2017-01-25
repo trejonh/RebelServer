@@ -43,6 +43,7 @@
 
 
     var getNotifications = function(user) {
+      console.log(user);
       return $http.get('http://' + window.location.hostname + ':3000/notifications', {
         params: {
           username: user
