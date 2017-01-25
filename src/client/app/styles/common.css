@@ -58,3 +58,8 @@ i#addDeviceIcon{
   cursor: pointer;
   color: #2FE71B;
 }
+
+button#notificationsBtn{
+  float: right;
+  margin-top: -3.5%;
+}

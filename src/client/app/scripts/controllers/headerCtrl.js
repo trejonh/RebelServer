@@ -18,8 +18,11 @@ angular.module('clientApp')
   .controller('HeaderCtrl', function($scope, $location, $interval, authentication, deviceService) {
     var header = this; // jshint ignore:line
     header.notifications = {};
-    var nots = deviceService.getNotifications(authentication.currentUser().username);
-    console.log(nots);
+    deviceService.getNotifications(authentication.currentUser().username).then(function(data) {
+      console.log(data);
+    }, function error(err){
+      console.log(err);
+    });
     $scope.loggedIn = !authentication.isLoggedIn(); //true == hidden, false==visible
     $scope.hasNotifications = false;
     if (authentication.isLoggedIn) {

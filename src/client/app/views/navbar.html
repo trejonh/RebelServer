@@ -13,15 +13,15 @@
       <ul id="pages" class="nav navbar-nav">
         <li><a href="#/about">About</a></li>
         <li><a id="myDevicesLink" ng-style="disabled" href="#/mydevices">My Devices</a></li>
-        <li><a id="profileLink" ng-style="disabled" href="#/profile" >My Profile</a></li>
+        <li><a id="profileLink" ng-style="disabled" href="#/profile">My Profile</a></li>
         <li id="logoutBtn" class="btn btn-danger" role="button" ng-click="logout()" ng-hide="loggedIn">Logout</li>
       </ul>
     </div>
+    <button id="notificationsBtn" class="byn btn-info dropdown-toggle hidden-sm hidden-xs visible-md-block" data-toggle="dropdown" aria-haspopup="true" type="button">
+      Notifications <span class="badge">{{header.notifications.length}}</span>
+      <ul class="dropdown-menu">
+        <li ng-repeat="notification in header.notifications"></li>
+      </ul>
+    </button ng-disabled="hasNotifications" ng-hide="loggedIn">
   </div>
-  <button class="byn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" type="button">
-    Notifications <span class="badge">{{header.notifications.length}}</span>
-    <ul class="dropdown-menu">
-      <li ng-repeat="notification in header.notifications"></li>
-    </ul>
-  </button ng-disabled="hasNotifications" ng-hide="loggedIn">
 </nav>
