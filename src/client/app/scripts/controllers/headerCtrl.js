@@ -19,12 +19,11 @@ angular.module('clientApp')
     var header = this; // jshint ignore:line
     header.notifications = {};
     deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
-      console.log(data);
+      header.notifications = data.data.notifications;
     }, function error(err){
       console.log(err);
     });
     $scope.loggedIn = !authentication.isLoggedIn(); //true == hidden, false==visible
-    $scope.hasNotifications = false;
     if (authentication.isLoggedIn) {
       unbind();
     } else {
@@ -37,6 +36,12 @@ angular.module('clientApp')
       } else {
         bind();
       }
+      deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
+        header.notifications = [{name:""},{name:""},{name:""},{name:""}];//data.data.notifications;
+        header.notifications = 4;//data.data.length;
+      }, function error(err){
+        console.log(err);
+      });
     }, 5000);
     $scope.logout = function() {
       $scope.loggedIn = true; //true == hidden, false==visible

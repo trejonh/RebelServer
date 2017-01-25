@@ -17,7 +17,7 @@
         <li id="logoutBtn" class="btn btn-danger" role="button" ng-click="logout()" ng-hide="loggedIn">Logout</li>
       </ul>
     </div>
-    <button id="notificationsBtn" class="btn btn-info dropdown-toggle hidden-sm hidden-xs visible-md-block" data-toggle="dropdown" aria-haspopup="true" type="button" ng-disabled="hasNotifications" ng-hide="loggedIn">
+    <button id="notificationsBtn" class="btn btn-info dropdown-toggle hidden-sm hidden-xs visible-md-block" data-toggle="dropdown" aria-haspopup="true" type="button" ng-hide="loggedIn">
       Notifications <span class="badge">{{header.notifications.length}}</span>
       <ul class="dropdown-menu">
         <li ng-repeat="notification in header.notifications"></li>
