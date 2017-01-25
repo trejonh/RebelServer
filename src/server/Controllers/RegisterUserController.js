@@ -11,7 +11,7 @@ var sendJSONresponse = function(res, status, content) {
 module.exports.register = function(req, res) {
     var user = new User();
     user.name = req.body.name;
-    user.email = req.body.email;
+    user.phoneNumber = req.body.phoneNumber;
     user.username = req.body.username;
     user.profileImage = req.body.profileImage;
     user.setPassword(req.body.password);

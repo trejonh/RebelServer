@@ -40,6 +40,8 @@ module.exports.updateUser = function(req, res) {
                 user.setPassword(req.body.newPassword);
             if (req.body.newPic)
                 user.profileImage = req.body.newPic;
+            if (req.body.phoneNumber)
+                user.phoneNumber = req.body.phoneNumber;
             if (req.body.deviceID && user.devices.indexOf(req.body.deviceID) === -1) {
                 deviceCtrl.addDevice(req.body.deviceID, req.body.username);
                 user.devices.push(req.body.deviceID);

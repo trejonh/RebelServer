@@ -18,4 +18,10 @@
       </ul>
     </div>
   </div>
+  <button class="byn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" type="button">
+    Notifications <span class="badge">{{header.notifications.length}}</span>
+    <ul class="dropdown-menu">
+      <li ng-repeat="notification in header.notifications"></li>
+    </ul>
+  </button ng-disabled="hasNotifications" ng-hide="loggedIn">
 </nav>

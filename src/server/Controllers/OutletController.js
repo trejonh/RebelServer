@@ -1,11 +1,10 @@
-  /*
-                                                                                        Will be used only for submodule testing not for dev
-                                                                                        */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
+  var Users = mongoose.model("registeredUserModel");
   var Scheduler = require("node-cron");
   var particleRequest = require("request");
+  var sms = require('furious-monkey');
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -103,7 +102,7 @@
                       res.status(500).json(err);
                       return;
                   } else if (device) {
-                      updateOutletsInDevice(device, res,outlet);
+                      updateOutletsInDevice(device, res, outlet);
                   } else {
                       res.status(500).json({
                           err: "no device has been created to house this outlet, but data has been saved.",
@@ -174,34 +173,48 @@
                   outlet.elapsedTimeOn += (Date.now() - outlet.timeSinceLastUpdate);
                   outlet.timeSinceLastUpdate = Date.now();
               }
-              outlet.save(function(){
-              newOutlet = outlet;
-                Devices.findOne({
-                    $and: [{
-                        deviceID: req.body.deviceID
-                    }, {
-                        owner: req.body.owner
-                    }]
-                }, function(err, device) {
-                    if (err) {
-                        console.log(err);
-                        res.status(500).json({
-                            err: err
-                        });
-                        return;
-                    } else if (device) {
-                        updateOutletsInDevice(device, res,newOutlet);
-                    } else if (process.env["TestDB"]) { //jshint ignore:line
-                        res.status(200).json(newOutlet);
-                        return;
-                    }
-                });
+              outlet.save(function() {
+                  newOutlet = outlet;
+                  Devices.findOne({
+                      $and: [{
+                          deviceID: req.body.deviceID
+                      }, {
+                          owner: req.body.owner
+                      }]
+                  }, function(err, device) {
+                      if (err) {
+                          console.log(err);
+                          res.status(500).json({
+                              err: err
+                          });
+                          return;
+                      } else if (device) {
+                          updateOutletsInDevice(device, res, newOutlet);
+                      } else if (process.env["TestDB"]) { //jshint ignore:line
+                          res.status(200).json(newOutlet);
+                          return;
+                      }
+                  });
               });
           }
       });
 
   };
 
+  module.exports.getNotifications = function(req, res) {
+      Users.findOne({
+          username: req.query.username
+      }, function(err, user) {
+          if (err) {
+              console.log(err);
+              res.status(500).json({
+                  err: err
+              });
+              return;
+          }
+          res.status(200).json(user);
+      });
+  };
   module.exports.scheduleTask = function(req, res) {
       if (req.body.manualOn) {
           triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, res, "turnOn");
@@ -275,14 +288,14 @@
                           });
                           return;
                       }
-                      updateOutletsInDevice(device, res,doc);
+                      updateOutletsInDevice(device, res, doc);
                   });
               }
           });
       });
   }
 
-  function updateOutletsInDevice(device, res,newOutlet) {
+  function updateOutletsInDevice(device, res, newOutlet) {
       var deviceOutlets = device.outlets;
       for (var i = 0; i < deviceOutlets.length; i++) {
           if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
@@ -317,14 +330,60 @@
       }, function(err, response, body) {
           if (!err && response.statusCode === 200) {
               updateTasks(req, res);
+              notifyUser(deviceID, method, " successful");
           } else if (err) {
               if (res) {
                   res.status(response.statusCode).json({
                       err: err
                   });
               }
+              notifyUser(deviceID, method, " not successful due to following:\n" + err);
               console.log(err);
               return;
           }
+      });
+  }
+
+  function notifyUser(deviceID, method, passedOrFail) {
+      Devices.findOne({
+          deviceID: deviceID
+      }, function(err, device) {
+          if (err) {
+              console.log(err);
+              return;
+          }
+          var notification = {
+              timeExecuted: (new Date()).toLocaleString(),
+              device: device.deviceName | deviceID,
+              message: ""
+          };
+          notification.message = "On " + notification.timeExecuted + ", " + notification.device + " tried to " + method + " and was" + passedOrFail;
+          Users.findOne({
+              $and: [{
+                  deviceID: deviceID
+              }, {
+                  username: device.owner
+              }]
+          }, function(err, user) {
+              if (err) {
+                  console.log(err);
+                  return;
+              } else {
+                  user.notifications.push(notification);
+                  user.save(function() {
+                      if (user.phoneNumber) {
+                          sms.sendText(user.phoneNumber, notification.message, {
+                                  subject: "Rebel Kangaroo"
+                              },
+                              function(err, info) {
+                                  if (err) {
+                                      console.log(err);
+                                  }
+                              });
+                      }
+                  });
+              }
+          });
+
       });
   }

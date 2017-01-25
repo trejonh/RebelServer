@@ -40,12 +40,23 @@
       return $http.post('http://' + window.location.hostname + ':3000/scheduleTask', task);
     };
 
+
+
+    var getNotifications = function(username){
+      return $http.get('http://' + window.location.hostname + ':3000/notifications', {
+        params: {
+          username: username
+        }
+      });
+    };
+
     return {
       addDevice: addDevice,
       getDevices: getDevices,
       changeDeviceName: changeDeviceName,
       changeOutletNickname: changeOutletNickname,
-      scheduleTask: scheduleTask
+      scheduleTask: scheduleTask,
+      getNotifications:getNotifications
     };
   }
 

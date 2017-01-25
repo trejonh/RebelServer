@@ -18,6 +18,9 @@ router.get('/profile', auth, ctrlProfile.profileRead);
 router.delete('/profile', ctrlProfile.profileDelete);
 router.put('/profile', ctrlProfile.updateUser);
 
+//notifications;
+router.get('/notifications', ctrlOutlet.getNotifications);
+
 // user data
 router.post('/register', ctrlAuth.register);
 router.post('/login', ctrlAuth.login);

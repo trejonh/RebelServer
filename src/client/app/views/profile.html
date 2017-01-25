@@ -17,6 +17,7 @@
           <li><a id="openChangePassModal" data-toggle="modal" data-target="#changePassModal">Change Password</a></li>
           <li><a id="openChangePiclModal" data-toggle="modal" data-target="#changeProPicModal">Change Profile Picture</a></li>
           <li><a id="openAddDevModal" data-toggle="modal" data-target="#addDeviceModal">Add a Device</a></li>
+          <li><a id="openUpdatePhoneNumber" data-toggle="modal" data-target="#updatePhoneNumberModal">Update Phone Number</a></li>
           <li><a id="openDelModal" data-toggle="modal" data-target="#deleteAccountModal">Delete Account</a></li>
         </ul>
       </div>
@@ -175,6 +176,38 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
         <button id="addDeviceBtn" type="button" class="btn btn-success" data-dismiss="modal" ng-click="addDevice()">Yes</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- update phone number modal-->
+<!-- add device Modal-->
+<div id="updatePhoneNumberModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Update Phone Number</h4>
+      </div>
+      <div class="modal-body">
+        <h1>{{profile.user.name}}</h1>
+        <hr>
+        <br>
+        <p>
+          Current phone number on file: {{profile.user.phoneNumber}}
+        </p>
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number</label>
+          <input type="text" name="phoneNumber" class="form-control" id="phoneNumberInput" ng-model="profile.newNumber.phoneNumber">
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button id="updatePhoneNumberBtn" type="button" class="btn btn-success" data-dismiss="modal" ng-click="updatePhoneNumber()">Yes</button>
       </div>
     </div>
     <!-- /.modal-content -->

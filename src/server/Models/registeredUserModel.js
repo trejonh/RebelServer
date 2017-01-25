@@ -7,7 +7,7 @@ var RegisteredUserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  email: {
+  phoneNumber: {
     type: String,
     unique: false,
     required: false
@@ -24,6 +24,10 @@ var RegisteredUserSchema = new mongoose.Schema({
   profileImage:{
     type: String,
     required:false
+  },
+  notifications:{
+    type: [],
+    required: false
   },
   hash: String,
   salt: String

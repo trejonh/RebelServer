@@ -27,6 +27,11 @@ angular.module('clientApp')
       _id: "",
       username: ""
     };
+    profile.newNumber = {
+      phoneNumber: "",
+      _id: "",
+      username: ""
+    };
     meanData.getProfile()
       .then(function(data) {
         profile.user = data.data;
@@ -88,12 +93,22 @@ angular.module('clientApp')
         deviceService.getDevices(profile.user.username, null).then(function(data) {
           $scope.devices = data.data.devices;
           $scope.profileUpdate = false;
-          profile.updatedProfileMessage = "added the following device: "+profile.addDevice.deviceID;
+          profile.updatedProfileMessage = "added the following device: " + profile.addDevice.deviceID;
         }, function error(err) {
           if (err) {
             console.log(err);
           }
         });
+      });
+    };
+    $scope.updatePhoneNumber = function() {
+      $("#updatePhoneNumberModal").modal("hide"); // jshint ignore:line
+      $("#updatePhoneNumberModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
+        profile.newNumber.username = profile.user.username;
+        profile.newNumber._id = profile.user._id;
+        authentication.updatePhoneNumber(profile.newNumber);
+        $scope.profileUpdate = false;
+        profile.updatedProfileMessage = "updated phone number.";
       });
     };
   });

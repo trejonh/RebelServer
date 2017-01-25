@@ -15,7 +15,7 @@ angular.module('clientApp')
     registerUser.credentials = {
       name: "",
       username: "",
-      email: "",
+      phoneNumber: "",
       password: "",
       confirmPassword: "",
       profileImage: ""

@@ -15,9 +15,13 @@ function unbind() {
 }
 
 angular.module('clientApp')
-  .controller('HeaderCtrl', function($scope, $location, $interval, authentication) {
+  .controller('HeaderCtrl', function($scope, $location, $interval, authentication, deviceService) {
     var header = this; // jshint ignore:line
+    header.notifications = {};
+    var nots = deviceService.getNotifications(authentication.currentUser().username);
+    console.log(nots);
     $scope.loggedIn = !authentication.isLoggedIn(); //true == hidden, false==visible
+    $scope.hasNotifications = false;
     if (authentication.isLoggedIn) {
       unbind();
     } else {
