@@ -202,6 +202,7 @@
   };
 
   module.exports.getNotifications = function(req, res) {
+      console.log(req.query.username);
       Users.findOne({
           username: req.query.username
       }, function(err, user) {
@@ -212,6 +213,7 @@
               });
               return;
           }
+          console.log(user);
           res.status(200).json(user);
       });
   };
