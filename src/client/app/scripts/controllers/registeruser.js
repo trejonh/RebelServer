@@ -88,7 +88,7 @@ function completedFields(credentials) { //jshint ignore:line
       error: 'Please provide an username that is longer than 7 characters.'
     };
   }
-  if (parseInt($('p#strength').html()) < 3) { // jshint ignore:line
+  if (password.length <= 7 || parseInt($('p#strength').html()) < 3) { // jshint ignore:line
     return {
       valid: false,
       error: 'Your password is too weak, please work to increase it.'

@@ -1,5 +1,11 @@
 <div class="container-fluid">
   <div class="row">
+    <div id="updateProfileAlert" class="alert alert-success alert-dismissible" role="alert" ng-hide="profileUpdate">
+  <button id="closeProfileAlert" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <strong>Success!</strong> {{profile.updatedProfileMessage}}
+</div>
+  </div>
+  <div class="row">
     <div class="col-sm-3">
       <div class="btn-group">
         <button id="accountDropdown" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,7 +74,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="deleteAccount()">Yes</button>
+        <button id="deleteAccBtn" type="button" class="btn btn-danger" data-dismiss="modal" ng-click="deleteAccount()">Yes</button>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -105,8 +111,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="changePassword()">Yes</button>
+        <button id="cancelBtn" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button id="confirmNewPassword" type="button" class="btn btn-warning" data-dismiss="modal" ng-click="changePassword()">Yes</button>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -137,7 +143,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="changePropic()">Yes</button>
+        <button id="changeProPicBtn" type="button" class="btn btn-success" data-dismiss="modal" ng-click="changePropic()">Yes</button>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -168,7 +174,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="addDevice()">Yes</button>
+        <button id="addDeviceBtn" type="button" class="btn btn-success" data-dismiss="modal" ng-click="addDevice()">Yes</button>
       </div>
     </div>
     <!-- /.modal-content -->

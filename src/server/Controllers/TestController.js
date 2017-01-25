@@ -6,12 +6,8 @@ var Outlets = mongoose.model("outletDataModel");
 
 module.exports.delete = function(req, res) {
     if (process.env["TestDB"] && process.env["admin"]) { //jshint ignore:line
-        User.findOneAndRemove(function() {
-            Device.findOneAndRemove(function() {
-                Outlets.findOneAndRemove(function() {
-                    res.status(200).end();
-                });
-            });
+        User.remove({},function() {
+            res.status(200).end();
         });
     } else {
         res.status(401).json({

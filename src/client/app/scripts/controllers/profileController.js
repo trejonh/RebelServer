@@ -10,6 +10,7 @@
 angular.module('clientApp')
   .controller('ProfileCtrl', function($scope, $location, meanData, authentication, deviceService) {
     var profile = this;
+    $scope.profileUpdate = true;
     profile.user = {};
     $scope.devices = [];
     profile.password = {
@@ -55,7 +56,8 @@ angular.module('clientApp')
       $("#changePassModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
         profile.password._id = profile.user._id;
         authentication.changePassword(profile.password);
-        alert("Password has been changed"); //jshint ignore:line
+        $scope.profileUpdate = false;
+        profile.updatedProfileMessage = "password has been changed.";
       });
     };
     $scope.changePropic = function() {
@@ -69,6 +71,8 @@ angular.module('clientApp')
           profile.pic.newPic = reader.result;
           profile.pic._id = profile.user._id;
           authentication.changeProfilImg(profile.pic);
+          $scope.profileUpdate = false;
+          profile.updatedProfileMessage = "profile picture has been changed";
         };
         if (file !== undefined) {
           reader.readAsDataURL(file);
@@ -83,6 +87,8 @@ angular.module('clientApp')
         deviceService.addDevice(profile.addDevice);
         deviceService.getDevices(profile.user.username, null).then(function(data) {
           $scope.devices = data.data.devices;
+          $scope.profileUpdate = false;
+          profile.updatedProfileMessage = "added the following device: "+profile.addDevice.deviceID;
         }, function error(err) {
           if (err) {
             console.log(err);
