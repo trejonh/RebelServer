@@ -42,11 +42,10 @@
 
 
 
-    var getNotifications = function(user) {
-      console.log(user);
+    var getNotifications = function(id) {
       return $http.get('http://' + window.location.hostname + ':3000/notifications', {
         params: {
-          username: user
+          _id: id
         }
       });
     };

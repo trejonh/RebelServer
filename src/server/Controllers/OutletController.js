@@ -202,9 +202,8 @@
   };
 
   module.exports.getNotifications = function(req, res) {
-      console.log(req);
-      Users.findOne({
-          username: req.query.username
+      Users.findById({
+          _id: req.query._id
       }, function(err, user) {
           if (err) {
               console.log(err);

@@ -18,7 +18,7 @@ angular.module('clientApp')
   .controller('HeaderCtrl', function($scope, $location, $interval, authentication, deviceService) {
     var header = this; // jshint ignore:line
     header.notifications = {};
-    deviceService.getNotifications(authentication.currentUser().username).then(function(data) {
+    deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
       console.log(data);
     }, function error(err){
       console.log(err);
