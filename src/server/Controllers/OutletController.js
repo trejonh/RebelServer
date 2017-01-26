@@ -223,7 +223,7 @@
       } else {
           triggerPower(request.body.deviceID, request.body.outletNumber, request.body.access_token, request, "turnOff");
       }
-      updateTasks(request);
+    //  updateTasks(request);
       res.status(200).end();
   };
 
