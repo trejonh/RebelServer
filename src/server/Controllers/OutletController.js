@@ -219,12 +219,14 @@
       var request = {};
       request.body = req.body;
       if (req.body.isOn === 1) {
-          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOn");
+          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOn", function() {
+              res.status(200).end();
+          });
       } else {
-          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOff");
+          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOff", function() {
+              res.status(200).end();
+          });
       }
-      //  updateTasks(request);
-      //res.status(200).end();
   };
 
   function updateTasks(req) {
@@ -325,8 +327,7 @@
       });
   }
 
-  function triggerPower(deviceID, idOfDevice, outletNumber, access_token, method) {
-      console.log(method);
+  function triggerPower(deviceID, idOfDevice, outletNumber, access_token, method, callback) {
       var particleUrl = "https://api.particle.io/v1/devices/";
       particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
           form: {
@@ -338,10 +339,11 @@
                   updateTasks(req, null);
               }*/
               notifyUser(idOfDevice, method, " successful");
+              callback(null);
           } else if (err) {
               notifyUser(idOfDevice, method, " not successful due to following:\n" + err);
               console.log(err);
-              return;
+              callback(err);
           }
       });
   }
