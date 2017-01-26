@@ -219,12 +219,12 @@
       var request = {};
       request.body = req.body;
       if (req.body.manualOn) {
-          triggerPower(request.body.deviceID, request.body.outletNumber, request.body.access_token, request, "turnOn");
+          triggerPower(request.body.deviceID, request.body.outletNumber, request.body.access_token, "turnOn");
       } else {
-          triggerPower(request.body.deviceID, request.body.outletNumber, request.body.access_token, request, "turnOff");
+          triggerPower(request.body.deviceID, request.body.outletNumber, request.body.access_token, "turnOff");
       }
       //  updateTasks(request);
-      res.status(200).end();
+      //res.status(200).end();
   };
 
   function updateTasks(req) {
