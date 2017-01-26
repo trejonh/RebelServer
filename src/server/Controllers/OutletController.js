@@ -237,10 +237,11 @@
           onScheduler = Scheduler.schedule(timeOn, function() {
               triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
           });
+          console.log(onScheduler);
       } else {
           onScheduler = Scheduler.schedule(timeOn, function() {
               triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
-              this.cancel();
+            //  this.cancel();
           });
       }
       var offScheduler;
@@ -251,7 +252,7 @@
       } else {
           offScheduler = Scheduler.schedule(timeOff, function() {
               triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOff");
-              this.cancel();
+              //this.cancel();
           });
       }
       Outlets.findOne({
