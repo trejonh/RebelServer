@@ -18,16 +18,18 @@
     <input type="password" class="form-control" id="confirmPasswordInput" placeholder="password" ng-model="registerUser.credentials.confirmPassword">
   </div>
   <div class="form-group">
-    <label for="email">Email</label>
-    <input type="email" class="form-control" id="emailInput" placeholder="email" ng-model="registerUser.credentials.email">
+    <label for="phone">Phone Number</label>
+    <input type="text" class="form-control" id="phoneNumberInput" placeholder="123-123-1234" ng-model="registerUser.credentials.phoneNumber">
   </div>
   <div class="form-group">
     <label for="profileImage">Profile Image</label>
     <input type="file" accept="image/*" name="pic" class="form-control" id="imageUpload" file-model="profileImage" ng-model="registerUser.credentials.profileImage">
   </div>
-  <button type="submit" class="btn btn-success" ng-click="submit()">Register</button>
+  <div id="registerUserAlert" class="alert alert-danger" role="alert" ng-hide='alertHide'>{{registerUser.error}}</div>
+  <button id="registerFormBtn" type="submit" class="btn btn-success" ng-click="submit()">Register</button>
   <p><strong>*</strong>- Required field</p>
 </form>
+<p id="strength" style="display:none;"></p>
 <script>
   var strength = {
     0: "Worst",
@@ -39,6 +41,7 @@
   var password = document.getElementById('passwordInput');
   var meter = document.getElementById('password-strength-meter');
   var text = document.getElementById('password-strength-text');
+  var hiddenP = document.getElementById('strength');
 
   password.addEventListener('input', function() {
     var val = password.value;
@@ -50,8 +53,10 @@
     // Update the text indicator
     if (val !== "") {
       text.innerHTML = "Strength: " + strength[result.score];
+      hiddenP.innerHTML = result.score;
     } else {
       text.innerHTML = "";
+      hiddenP.innerHTML = "";
     }
   });
 </script>

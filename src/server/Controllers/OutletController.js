@@ -1,11 +1,10 @@
-  /*
-                                                                    Will be used only for submodule testing not for dev
-                                                                    */
   var mongoose = require("mongoose");
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
-  var Scheduler = require("node-schedule");
-  var Particle = require("particle-api-js");
+  var Users = mongoose.model("registeredUserModel");
+  var Scheduler = require("node-cron");
+  var particleRequest = require("request");
+  var sms = require('furious-monkey');
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -34,18 +33,6 @@
                   break;
           }
       }
-
-      Devices.find({
-          deviceID: outlet.deviceId
-      }, function(err, doc) {
-          if (err) {
-              console.log("this device hasn't been created yet in db");
-              return;
-          } else if (doc.length === 1) {
-              doc[0].lastSeenOnline = (new Date()).toTimeString();
-              doc[0].update();
-          }
-      });
       var outletObj = new Outlets();
       outletObj.deviceID = outlet.deviceID;
       outletObj.accessToken = outlet.accessToken;
@@ -66,14 +53,19 @@
               });
               return;
           }
-          res.status(200);
+          res.status(200).end(); //if not sending json or other data need to .end()
+          return;
       });
   };
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
       Outlets.findOne({
-          _id: data._id
+          $and: [{
+              deviceID: data.deviceID
+          }, {
+              outletNumber: data.outletNumber
+          }]
       }, function(err, outlet) {
           if (err) {
               console.log(err);
@@ -109,16 +101,14 @@
                   if (err) {
                       res.status(500).json(err);
                       return;
+                  } else if (device) {
+                      updateOutletsInDevice(device, res, outlet);
+                  } else {
+                      res.status(500).json({
+                          err: "no device has been created to house this outlet, but data has been saved.",
+                          outlet: outlet
+                      });
                   }
-                  for (var i = 0; i < device.outlets.length; i++) {
-                      if (device.outlets[i]._id.equals(outlet._id)) { //must use .equals() when comparing Objectids in mongoose
-                          device.outlets[i] = outlet;
-                          break;
-                      }
-                  }
-                  device.save(function(err, raw) { //jshint ignore:line
-                      res.status(200).json(device);
-                  });
               });
           });
       });
@@ -183,140 +173,8 @@
                   outlet.elapsedTimeOn += (Date.now() - outlet.timeSinceLastUpdate);
                   outlet.timeSinceLastUpdate = Date.now();
               }
-              outlet.save();
-              newOutlet = outlet;
-          }
-      });
-      var deviceOutlets = null;
-      Devices.findOne({
-          $and: [{
-              deviceID: req.body.deviceID
-          }, {
-              owner: req.body.owner
-          }]
-      }, function(err, device) {
-          if (err) {
-              console.log(err);
-              res.status(500).json({
-                  err: err
-              });
-              return;
-          }
-          deviceOutlets = device.outlets;
-          for (var i = 0; i < deviceOutlets.length; i++) {
-              if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
-                  deviceOutlets[i] = newOutlet;
-                  break;
-              }
-          }
-          Devices.findByIdAndUpdate(device._id, {
-              $set: {
-                  outlets: deviceOutlets
-              }
-          }, function(err, dev) {
-              if (err) {
-                  res.status(500).json({
-                      err: err
-                  });
-                  console.log(err);
-                  return;
-              } else {
-                  res.status(200).json(dev);
-                  return;
-              }
-          });
-      });
-
-  };
-
-  module.exports.scheduleTask = function(req, res) {
-    console.log(req.body);
-    if (req.body.isOn===1) {
-        Particle.callFunction({
-            deviceId: req.body.deviceID,
-            name: "turnOn",
-            argument: req.body.outletNumber,
-            auth: req.body.access_token
-        }).then(function(data) {
-            console.log(data);
-            updateTasks(req, res);
-        }, function(err) {
-            if (err) {
-                console.log(err);
-                res.status(500).json({
-                    err: err
-                });
-            }
-        });
-    } else if(req.body.isOn===0){
-        Particle.callFunction({
-            deviceId: req.body.deviceID,
-            name: "turnOff",
-            argument: req.body.outletNumber,
-            auth: req.body.access_token
-        }).then(function(data) {
-            console.log(data);
-            updateTasks(req, res);
-        }, function(err) {
-            if (err) {
-                console.log(err);
-                res.status(500).json({
-                    err: err
-                });
-            }
-        });
-    }else{
-      res.status(500).json({err:"something went wrong"});
-      console.log("need to fix");
-    }
-  };
-
-  function updateTasks(req, res) {
-
-      var timeOn = "* " + req.body.onTime[1] + " " + req.body.onTime[0] + " * * *";
-      var timeOff = "* " + req.body.offTime[1] + " " + req.body.offTime[0] + " * * *";
-      var onScheduler;
-      if (req.body.repeatOn) {
-          onScheduler = Scheduler.scheduleJob(timeOn, function() {});
-      } else {
-          onScheduler = Scheduler.scheduleJob(timeOn, function() {
-              this.cancel();
-          });
-      }
-      var offScheduler;
-      if (req.body.repeatOff) {
-          offScheduler = Scheduler.scheduleJob(timeOff, function() {});
-      } else {
-          offScheduler = Scheduler.scheduleJob(timeOff, function() {
-              this.cancel();
-          });
-      }
-      Outlets.findOne({
-          _id: req.body._id
-      }, function(err, outlet) {
-          if (err) {
-              console.log(err);
-              res.status(500).json({
-                  err: err
-              });
-              return;
-          }
-          outlet.onScheduler.cancel();
-          outlet.offScheduler.cancel();
-          Outlets.findByIdAndUpdate(req.body._id, {
-              $set: {
-                  onScheduler: onScheduler,
-                  offScheduler: offScheduler
-              }
-          }, function(err, doc) {
-              if (err) {
-                  console.log(err);
-                  res.status(500).json({
-                      err: err
-                  });
-                  return;
-              } else if (doc) {
-                  var deviceOutlets = null;
+              outlet.save(function() {
+                  newOutlet = outlet;
                   Devices.findOne({
                       $and: [{
                           deviceID: req.body.deviceID
@@ -330,32 +188,207 @@
                               err: err
                           });
                           return;
+                      } else if (device) {
+                          updateOutletsInDevice(device, res, newOutlet);
+                      } else if (process.env["TestDB"]) { //jshint ignore:line
+                          res.status(200).json(newOutlet);
+                          return;
                       }
-                      deviceOutlets = device.outlets;
-                      for (var i = 0; i < deviceOutlets.length; i++) {
-                          if (deviceOutlets[i].outletNumber === doc.outletNumber) {
-                              deviceOutlets[i] = doc;
-                              break;
-                          }
-                      }
-                      Devices.findByIdAndUpdate(device._id, {
-                          $set: {
-                              outlets: deviceOutlets
-                          }
-                      }, function(err, dev) {
+                  });
+              });
+          }
+      });
+
+  };
+
+  module.exports.getNotifications = function(req, res) {
+      Users.findById({
+          _id: req.query._id
+      }, '-hash -salt -_id -devices -profileImage -username -phoneNumber -name', function(err, user) {
+          if (err) {
+              console.log(err);
+              res.status(500).json({
+                  err: err
+              });
+              return;
+          }
+          res.status(200).json(user);
+      });
+  };
+  module.exports.scheduleTask = function(req, res) {
+      var request = {};
+      request.body = req.body;
+      if (req.body.isOn === 1) {
+          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOn", function() {
+              res.status(200).end();
+          });
+      } else {
+          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOff", function() {
+              res.status(200).end();
+          });
+      }
+  };
+
+  function updateTasks(req) {
+
+      var timeOn = "* " + req.body.timeSetOn[1] + " " + req.body.timeSetOn[0] + " * * *";
+      var timeOff = "* " + req.body.timeSetOff[1] + " " + req.body.timeSetOff[0] + " * * *";
+      var onScheduler;
+      if (req.body.repeatOn) {
+          onScheduler = Scheduler.schedule(timeOn, function() {
+              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOn");
+          });
+      } else {
+          onScheduler = Scheduler.schedule(timeOn, function() {
+              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOn", function() {
+                  this.destroy();
+              });
+          });
+      }
+      var offScheduler;
+      if (req.body.repeatOff) {
+          offScheduler = Scheduler.schedule(timeOff, function() {
+              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOff");
+          });
+      } else {
+          offScheduler = Scheduler.schedule(timeOff, function() {
+              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOff", function() {
+                  this.destroy();
+              });
+          });
+      }
+      Outlets.findOne({
+          _id: req.body.outletID
+      }, function(err, outlet) {
+          if (err) {
+              console.log(err);
+              return;
+          } else if (outlet) {
+              if (outlet.onScheduler) {
+                  outlet.onScheduler.destroy();
+              }
+              if (outlet.offScheduler) {
+                  outlet.onScheduler.destroy();
+              }
+              Outlets.findByIdAndUpdate(req.body.outletID, {
+                  $set: {
+                      onScheduler: onScheduler,
+                      offScheduler: offScheduler
+                  }
+              }, function(err, doc) {
+                  if (err) {
+                      console.log(err);
+                      return;
+                  } else if (doc) {
+                      Devices.findById(req.body._id, function(err, device) {
                           if (err) {
-                              res.status(500).json({
-                                  err: err
-                              });
                               console.log(err);
                               return;
-                          } else if (dev) {
-                              res.status(200).json(dev);
-                              return;
                           }
+                          updateOutletsInDevice(device, null, doc);
                       });
+                  }
+              });
+          }
+      });
+  }
+
+  function updateOutletsInDevice(device, res, newOutlet) {
+      var deviceOutlets = device.outlets;
+      for (var i = 0; i < deviceOutlets.length; i++) {
+          if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
+              deviceOutlets[i] = newOutlet;
+              break;
+          }
+      }
+      Devices.findByIdAndUpdate(device._id, {
+          $set: {
+              outlets: deviceOutlets
+          }
+      }, function(err, dev) {
+          if (err) {
+              if (res) {
+                  res.status(500).json({
+                      err: err
                   });
               }
-          });
+              console.log(err);
+              return;
+          } else if (dev) {
+              if (res) {
+                  res.status(200).json(dev);
+              }
+              return;
+          }
+      });
+  }
+
+  function triggerPower(deviceID, idOfDevice, outletNumber, access_token, method, callback) {
+      var particleUrl = "https://api.particle.io/v1/devices/";
+      particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
+          form: {
+              args: outletNumber
+          }
+      }, function(err, response, body) {
+          if (!err && response.statusCode === 200) {
+              /*if (req) {
+                  updateTasks(req, null);
+              }*/
+              notifyUser(idOfDevice, method, " successful");
+              if (callback)
+                  callback(null);
+          } else if (err) {
+              notifyUser(idOfDevice, method, " not successful due to following:\n" + err);
+              console.log(err);
+              if (callback)
+                  callback(err);
+          }
+      });
+  }
+
+  function notifyUser(deviceID, method, passedOrFail) {
+      Devices.findById(deviceID, function(err, device) {
+          if (err) {
+              console.log(err);
+              return;
+          } else if (device) {
+              var notification = {
+                  timeExecuted: (new Date()).toLocaleString(),
+                  device: device.deviceName,
+                  message: "",
+                  passedOrFail: passedOrFail
+              };
+              notification.message = "On " + notification.timeExecuted + ", " + notification.device + " tried to " + method + " and was" + passedOrFail;
+              Users.findOne({
+                  username: device.owner
+              }, function(err, user) {
+                  if (err) {
+                      console.log(err);
+                      return;
+                  } else if (user) {
+                      var userNotifications = user.notifications; //.push(notification);
+                      userNotifications.push(notification);
+                      Users.findByIdAndUpdate(user._id, {
+                          $set: {
+                              notifications: userNotifications
+                          }
+                      }, function(err) {
+                          if (err) {
+                              console.log(err);
+                          }
+                          if (user.phoneNumber) {
+                              sms.sendText(user.phoneNumber, notification.message, {
+                                      subject: "Rebel Kangaroo"
+                                  },
+                                  function(err, info) {
+                                      if (err) {
+                                          console.log(err);
+                                      }
+                                  });
+                          }
+                      });
+                  }
+              });
+          }
       });
   }

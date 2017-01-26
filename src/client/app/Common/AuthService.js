@@ -40,7 +40,7 @@
         payload = $window.atob(payload); //atob
         payload = JSON.parse(payload);
         return {
-          username: payload.username,
+          _id: payload._id,
           name: payload.name
         };
       }
@@ -95,6 +95,15 @@
       });
     };
 
+    var updatePhoneNumber = function(phoneNumber){
+      return $http.put('http://' + window.location.hostname + ':3000/profile',phoneNumber).success(function(data) {
+        console.log("password changed");
+      }).error(function(err) {
+        if(err)
+          console.log(err);
+      });
+    };
+
     return {
       currentUser: currentUser,
       saveToken: saveToken,
@@ -105,7 +114,8 @@
       changeProfilImg: changeProfilImg,
       logout: logout,
       deleteAccount: deleteAccount,
-      changePassword: changePassword
+      changePassword: changePassword,
+      updatePhoneNumber: updatePhoneNumber
     };
   };
 })();

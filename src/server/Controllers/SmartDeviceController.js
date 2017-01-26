@@ -8,14 +8,16 @@ module.exports.getDevices = function(req, res) {
     } : {
         deviceID: req.query.deviceID
     };
-    Device.find(searchQuery).lean().exec(function(err, devices) {
-        if (err) {
+    Device.find(searchQuery, function(err, devices) {
+        if (err || !devices) {
             console.log(err);
             res.status(500);
             res.json(err);
             return;
         }
-        res.status(200).json(devices);
+        if (devices) {
+            res.status(200).json(devices);
+        }
     });
 };
 module.exports.addDevice = function(deviceID, username) {
@@ -23,7 +25,7 @@ module.exports.addDevice = function(deviceID, username) {
     newDevice.lastSeenOnline = (new Date()).toTimeString();
     newDevice.deviceID = deviceID;
     newDevice.owner = username;
-    newDevice.deviceName = "Smart Power Strip" + (new Date()).toLocaleDateString();
+    newDevice.deviceName = "Smart Power Strip " + (new Date()).toLocaleDateString();
     ctrlOutlet.getOutlets(deviceID, function(err, outlets) {
         if (err) {
             console.log(err);
@@ -31,8 +33,11 @@ module.exports.addDevice = function(deviceID, username) {
         }
         newDevice.outlets = outlets;
         newDevice.save(function(err, dev, num) {
-            if (err)
+            if (err) {
                 console.log(err);
+            } else if (dev) {
+                return dev;
+            }
         });
     });
 };

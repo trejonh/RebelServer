@@ -19,12 +19,12 @@ module.exports = function(grunt) {
     cdnify: 'grunt-google-cdn'
   });
   grunt.loadNpmTasks('grunt-express-server');
+  grunt.loadNpmTasks('grunt-protractor-runner');
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
     dist: 'dist'
   };
-
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -51,9 +51,9 @@ module.exports = function(grunt) {
           livereload: '<%= connect.options.livereload %>'
         }
       },
-      jsTest: {
-        files: ['test/spec/{,*/}*.js'],
-        tasks: ['newer:jshint:test', 'newer:jscs:test', 'karma']
+      test: {
+        files: ['tests/{,*/}*.js','app/views/*.html','app/scripts/**/.js','app/Common/*.js'],
+        tasks: ['protractor']
       },
       styles: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
@@ -104,14 +104,19 @@ module.exports = function(grunt) {
       test: {
         options: {
           //dbURL:"mongodb://localhost/test",
+          open: true,
           port: 9001,
           middleware: function(connect) {
             return [
               connect.static('.tmp'),
-              connect.static('test'),
+              connect.static('tests/'),
               connect().use(
                 '/bower_components',
                 connect.static('./bower_components')
+              ),
+              connect().use(
+                '/app/styles',
+                connect.static('./app/styles')
               ),
               connect.static(appConfig.app)
             ];
@@ -144,9 +149,26 @@ module.exports = function(grunt) {
       },
       test: {
         options: {
-          //  script: 'path/to/test/server.js'
+          //script: './app/server.js'
         }
       }
+    },
+
+    protractor: {
+      options: {
+        configFile: "node_modules/protractor/example/conf.js", // Default config file
+        keepAlive: true, // If false, the grunt process stops when the test fails.
+        noColor: false, // If true, protractor will not use colors in its output.
+        args: {
+          // Arguments passed to the command
+        }
+      },
+      your_target: { // Grunt requires at least one target to run so you can simply put 'all: {}' here too.
+        options: {
+          configFile: "conf.js", // Target-specific config file
+          args: {} // Target-specific arguments
+        }
+      },
     },
 
     // Make sure there are no obvious mistakes
@@ -165,7 +187,7 @@ module.exports = function(grunt) {
         options: {
           jshintrc: 'test/.jshintrc'
         },
-        src: ['test/spec/{,*/}*.js']
+        src: ['tests/{,*/}*.js']
       }
     },
 
@@ -182,7 +204,7 @@ module.exports = function(grunt) {
         ]
       },
       test: {
-        src: ['test/spec/{,*/}*.js']
+        src: ['tests/{,*/}*.js']
       }
     },
 
@@ -236,23 +258,23 @@ module.exports = function(grunt) {
       app: {
         src: ['<%= yeoman.app %>/index.html'],
         ignorePath: /\.\.\//
-      },
-      test: {
-        devDependencies: true,
-        src: '<%= karma.unit.configFile %>',
-        ignorePath: /\.\.\//,
-        fileTypes: {
-          js: {
-            block: /(([\s\t]*)\/{2}\s*?bower:\s*?(\S*))(\n|\r|.)*?(\/{2}\s*endbower)/gi,
-            detect: {
-              js: /'(.*\.js)'/gi
-            },
-            replace: {
-              js: '\'{{filePath}}\','
+      }
+      /*  test: {
+          devDependencies: true,
+          src: '<%= karma.unit.configFile %>',
+          ignorePath: /\.\.\//,
+          fileTypes: {
+            js: {
+              block: /(([\s\t]*)\/{2}\s*?bower:\s*?(\S*))(\n|\r|.)*?(\/{2}\s*endbower)/gi,
+              detect: {
+                js: /'(.*\.js)'/gi
+              },
+              replace: {
+                js: '\'{{filePath}}\','
+              }
             }
           }
-        }
-      }
+        }*/
     },
 
     // Renames files for browser caching purposes
@@ -304,33 +326,6 @@ module.exports = function(grunt) {
         }
       }
     },
-
-    // The following *-min tasks will produce minified files in the dist folder
-    // By default, your `index.html`'s <!-- Usemin block --> will take care of
-    // minification. These next options are pre-configured if you do not wish
-    // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/styles/main.css': [
-    //         '.tmp/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '<%= yeoman.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
-
     imagemin: {
       dist: {
         files: [{
@@ -451,14 +446,6 @@ module.exports = function(grunt) {
         'svgmin'
       ]
     },
-
-    // Test settings
-    karma: {
-      unit: {
-        configFile: 'test/karma.conf.js',
-        singleRun: true
-      }
-    }
   });
 
 
@@ -488,8 +475,10 @@ module.exports = function(grunt) {
     'wiredep',
     'concurrent:test',
     'postcss',
+    'express:prod',
     'connect:test',
-    'karma'
+    'protractor',
+    'watch'
   ]);
 
   grunt.registerTask('build', [
@@ -513,7 +502,6 @@ module.exports = function(grunt) {
   grunt.registerTask('default', [
     'newer:jshint',
     'newer:jscs',
-    'test',
     'express:prod',
     'build'
   ]);

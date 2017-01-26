@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('StatsCtrl', function($scope, $route, deviceService, GraphService) {
+  .controller('StatsCtrl', function($scope, $route, deviceService, GraphService, authentication){
     var stats = this;
     var deviceId = $route.current.params.deviceID;
     $scope.clickedOutlet = true;
@@ -141,9 +141,14 @@ angular.module('clientApp')
       task.timeSetOn = onTime;
       task.deviceID = stats.device.deviceID;
       task.owner = stats.device.owner;
-      task._id = stats.outlet._id;
+      task._id = stats.device._id;
+      task.outletID = stats.outlet._id;
       task.outletNumber = stats.outlet.outletNumber;
       task.access_token = stats.outlet.accessToken;
+      task.userID = authentication.currentUser()._id;
+      if(onTime.indexOf(null) !== -1 || offTime.indexOf(null) !== -1){
+        return;
+      }
       deviceService.scheduleTask(task).success(function() {
 
       }).error(function(err) {

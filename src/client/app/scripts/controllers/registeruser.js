@@ -11,10 +11,11 @@ var defaultPic = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS
 angular.module('clientApp')
   .controller('RegisteruserCtrl', function($scope, $location, authentication) {
     var registerUser = this;
+    $scope.alertHide = true;
     registerUser.credentials = {
       name: "",
       username: "",
-      email: "",
+      phoneNumber: "",
       password: "",
       confirmPassword: "",
       profileImage: ""
@@ -27,32 +28,39 @@ angular.module('clientApp')
         var reader = new FileReader();
         reader.onload = function() {
           registerUser.credentials.profileImage = reader.result;
-
-          if (completedFields(registerUser.credentials)) {
+          var complete = completedFields(registerUser.credentials);
+          if (complete.valid) {
             authentication.register(registerUser.credentials).then(function() {
               $location.path("/profile");
             }, function errorCallback(err) {
-              console.log(err);
-              console.log("error saving to db");
+              registerUser.error = err.data.error;
+              $scope.alertHide = false;
             });
+          } else {
+            registerUser.error = complete.error;
+            $scope.alertHide = false;
           }
 
         };
         if (file !== undefined) {
           reader.readAsDataURL(file);
-        }else{
+        } else {
           noPic = true;
         }
       }
       if (noPic) {
         registerUser.credentials.profileImage = defaultPic;
-        if (completedFields(registerUser.credentials)) {
+        var complete = completedFields(registerUser.credentials);
+        if (complete.valid) {
           authentication.register(registerUser.credentials).then(function() {
             $location.path("/profile");
           }, function errorCallback(err) {
-            console.log(err);
-            console.log("error saving to db");
+            registerUser.error = err.data.error;
+            $scope.alertHide = false;
           });
+        } else {
+          registerUser.error = complete.error;
+          $scope.alertHide = false;
         }
       }
     };
@@ -68,7 +76,31 @@ function completedFields(credentials) { //jshint ignore:line
   uName = uName.trim();
   password = password.trim();
   confirmPass = confirmPass.trim();
-  if (!fName || fName.length === 0 || !uName || uName.length === 0 || password !== confirmPass)
-    return false; //jshint ignore:line
-  return true;
+  if (!fName || fName.length === 0) {
+    return {
+      valid: false,
+      error: 'Please provide your full name.'
+    };
+  }
+  if (!uName || uName.length <= 7) {
+    return {
+      valid: false,
+      error: 'Please provide an username that is longer than 7 characters.'
+    };
+  }
+  if (password.length <= 7 || parseInt($('p#strength').html()) < 3) { // jshint ignore:line
+    return {
+      valid: false,
+      error: 'Your password is too weak, please work to increase it.'
+    };
+  }
+  if(password !== confirmPass){
+    return {
+      valid: false,
+      error: 'Your passwords do not match.'
+    };
+  }
+  return {
+    valid: true
+  };
 }

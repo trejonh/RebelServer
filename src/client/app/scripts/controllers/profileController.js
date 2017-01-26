@@ -10,6 +10,7 @@
 angular.module('clientApp')
   .controller('ProfileCtrl', function($scope, $location, meanData, authentication, deviceService) {
     var profile = this;
+    $scope.profileUpdate = true;
     profile.user = {};
     $scope.devices = [];
     profile.password = {
@@ -26,18 +27,22 @@ angular.module('clientApp')
       _id: "",
       username: ""
     };
+    profile.newNumber = {
+      phoneNumber: "",
+      _id: "",
+      username: ""
+    };
     meanData.getProfile()
-      .success(function(data) {
-        profile.user = data;
-        deviceService.getDevices(profile.user.username,null).success(function(data) {
-          $scope.devices = data;
-        }).error(function(err) {
+      .then(function(data) {
+        profile.user = data.data;
+        deviceService.getDevices(profile.user.username, null).then(function(data) {
+          $scope.devices = data.data;
+        }, function error(err) {
           if (err) {
             console.log(err);
           }
         });
-      })
-      .error(function(e) {
+      }, function error(e) {
         console.log(e);
       });
     $scope.logout = function() {
@@ -56,7 +61,8 @@ angular.module('clientApp')
       $("#changePassModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
         profile.password._id = profile.user._id;
         authentication.changePassword(profile.password);
-        alert("Password has been changed"); //jshint ignore:line
+        $scope.profileUpdate = false;
+        profile.updatedProfileMessage = "password has been changed.";
       });
     };
     $scope.changePropic = function() {
@@ -69,7 +75,9 @@ angular.module('clientApp')
           profile.user.profileImage = reader.result;
           profile.pic.newPic = reader.result;
           profile.pic._id = profile.user._id;
-          authentication.changePassword(profile.pic);
+          authentication.changeProfilImg(profile.pic);
+          $scope.profileUpdate = false;
+          profile.updatedProfileMessage = "profile picture has been changed";
         };
         if (file !== undefined) {
           reader.readAsDataURL(file);
@@ -82,13 +90,25 @@ angular.module('clientApp')
         profile.addDevice.username = profile.user.username;
         profile.addDevice._id = profile.user._id;
         deviceService.addDevice(profile.addDevice);
-        deviceService.getDevices(profile.user.username,null).success(function(data) {
-          $scope.devices = data;
-        }).error(function(err) {
+        deviceService.getDevices(profile.user.username, null).then(function(data) {
+          $scope.devices = data.data.devices;
+          $scope.profileUpdate = false;
+          profile.updatedProfileMessage = "added the following device: " + profile.addDevice.deviceID;
+        }, function error(err) {
           if (err) {
             console.log(err);
           }
         });
+      });
+    };
+    $scope.updatePhoneNumber = function() {
+      $("#updatePhoneNumberModal").modal("hide"); // jshint ignore:line
+      $("#updatePhoneNumberModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
+        profile.newNumber.username = profile.user.username;
+        profile.newNumber._id = profile.user._id;
+        authentication.updatePhoneNumber(profile.newNumber);
+        $scope.profileUpdate = false;
+        profile.updatedProfileMessage = "updated phone number.";
       });
     };
   });

@@ -1,6 +1,4 @@
 //setup
-//var Resource = require("resourcejs");
-//var restful = require("node-restful");
 var passport = require('passport');
 var mongoose = require('mongoose');
 var User = mongoose.model('registeredUserModel');
@@ -13,17 +11,18 @@ var sendJSONresponse = function(res, status, content) {
 module.exports.register = function(req, res) {
     var user = new User();
     user.name = req.body.name;
-    user.email = req.body.email;
+    user.phoneNumber = req.body.phoneNumber;
     user.username = req.body.username;
     user.profileImage = req.body.profileImage;
     user.setPassword(req.body.password);
     user.save(function(err, doc) {
         if (err) {
-            console.log(err);
             res.status(500);
+            if(err.code === 11000){
             res.json({
-                "error": err
+                "error": "Username is already taken."
             });
+          }
             return;
         }
         var token;

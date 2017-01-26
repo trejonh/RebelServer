@@ -54,3 +54,19 @@ a#deviceLink:hover{
 img#profileImg{
   max-width: 75%;
 }
+i#addDeviceIcon{
+  cursor: pointer;
+  color: #2FE71B;
+}
+
+#notificationsBtn{
+  float: right;
+  margin-top: -4%;
+}
+
+#notificationList{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
