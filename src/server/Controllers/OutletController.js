@@ -221,14 +221,13 @@
       if (req.body.isOn === 1) {
           triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOn", function() {
               res.status(200).end();
-              updateTasks(request);
           });
       } else {
           triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOff", function() {
               res.status(200).end();
-              updateTasks(request);
           });
       }
+      updateTasks(request);
   };
 
   function updateTasks(req) {
