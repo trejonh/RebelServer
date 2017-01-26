@@ -326,6 +326,7 @@
   }
 
   function triggerPower(deviceID, outletNumber, access_token, method) {
+    console.log(deviceID, outletNumber, access_token, method);
       var particleUrl = "https://api.particle.io/v1/devices/";
       particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
           form: {
@@ -349,51 +350,52 @@
       Devices.findOne({
           deviceID: deviceID
       }, function(err, device) {
+          console.log(device);
           if (err) {
               console.log(err);
               return;
+          } else if (device) {
+              var notification = {
+                  timeExecuted: (new Date()).toLocaleString(),
+                  device: device.deviceName | deviceID,
+                  message: "",
+                  passedOrFail: passedOrFail
+              };
+              notification.message = "On " + notification.timeExecuted + ", " + notification.device + " tried to " + method + " and was" + passedOrFail;
+              Users.findOne({
+                  $and: [{
+                      deviceID: deviceID
+                  }, {
+                      username: device.owner
+                  }]
+              }, function(err, user) {
+                  if (err) {
+                      console.log(err);
+                      return;
+                  } else if (user) {
+                      var userNotifications = user.notifications; //.push(notification);
+                      userNotifications.push(notification);
+                      Users.findByIdAndUpdate(user._id, {
+                          $set: {
+                              notification: userNotifications
+                          }
+                      }, function(err) {
+                          if (err) {
+                              console.log(err);
+                          }
+                          if (user.phoneNumber) {
+                              sms.sendText(user.phoneNumber, notification.message, {
+                                      subject: "Rebel Kangaroo"
+                                  },
+                                  function(err, info) {
+                                      if (err) {
+                                          console.log(err);
+                                      }
+                                  });
+                          }
+                      });
+                  }
+              });
           }
-          var notification = {
-              timeExecuted: (new Date()).toLocaleString(),
-              device: device.deviceName | deviceID,
-              message: "",
-              passedOrFail: passedOrFail
-          };
-          notification.message = "On " + notification.timeExecuted + ", " + notification.device + " tried to " + method + " and was" + passedOrFail;
-          Users.findOne({
-              $and: [{
-                  deviceID: deviceID
-              }, {
-                  username: device.owner
-              }]
-          }, function(err, user) {
-              if (err) {
-                  console.log(err);
-                  return;
-              } else {
-                  var userNotifications = user.notifications; //.push(notification);
-                  userNotifications.push(notification);
-                  Users.findByIdAndUpdate(user._id, {
-                      $set: {
-                          notification: userNotifications
-                      }
-                  }, function(err) {
-                      if (err) {
-                          console.log(err);
-                      }
-                      if (user.phoneNumber) {
-                          sms.sendText(user.phoneNumber, notification.message, {
-                                  subject: "Rebel Kangaroo"
-                              },
-                              function(err, info) {
-                                  if (err) {
-                                      console.log(err);
-                                  }
-                              });
-                      }
-                  });
-              }
-          });
-
       });
   }
