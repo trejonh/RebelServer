@@ -212,12 +212,10 @@
               });
               return;
           }
-          console.log(user);
           res.status(200).json(user);
       });
   };
   module.exports.scheduleTask = function(req, res) {
-      console.log(req.body);
       var request = {};
       request.body = req.body;
       if (req.body.manualOn) {
@@ -241,7 +239,7 @@
       } else {
           onScheduler = Scheduler.schedule(timeOn, function() {
               triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
-            //  this.cancel();
+              this.destroy();
           });
       }
       var offScheduler;
@@ -252,7 +250,7 @@
       } else {
           offScheduler = Scheduler.schedule(timeOff, function() {
               triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOff");
-              //this.cancel();
+              this.destroy();
           });
       }
       Outlets.findOne({
@@ -262,8 +260,12 @@
               console.log(err);
               return;
           }
-          outlet.onScheduler.cancel();
-          outlet.offScheduler.cancel();
+          if (outlet.onScheduler) {
+              outlet.onScheduler.destroy();
+          }
+          if (outlet.offScheduler) {
+              outlet.onScheduler.destroy();
+          }
           Outlets.findByIdAndUpdate(req.body._id, {
               $set: {
                   onScheduler: onScheduler,
