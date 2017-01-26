@@ -142,6 +142,7 @@ angular.module('clientApp')
       task.deviceID = stats.device.deviceID;
       task.owner = stats.device.owner;
       task._id = stats.device._id;
+      task.outletID = stats.outlet._id;
       task.outletNumber = stats.outlet.outletNumber;
       task.access_token = stats.outlet.accessToken;
       task.userID = authentication.currentUser()._id;

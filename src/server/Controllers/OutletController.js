@@ -236,64 +236,60 @@
       var onScheduler;
       if (req.body.repeatOn) {
           onScheduler = Scheduler.schedule(timeOn, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, "turnOn");
+              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOn");
           });
-          console.log(onScheduler);
       } else {
           onScheduler = Scheduler.schedule(timeOn, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, "turnOn");
-              this.destroy();
+              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOn", function() {
+                  this.destroy();
+              });
           });
       }
       var offScheduler;
       if (req.body.repeatOff) {
           offScheduler = Scheduler.schedule(timeOff, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, "turnOff");
+              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOff");
           });
       } else {
           offScheduler = Scheduler.schedule(timeOff, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, "turnOff");
-              this.destroy();
+              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOff", function() {
+                  this.destroy();
+              });
           });
       }
       Outlets.findOne({
-          _id: req.body._id
+          _id: req.body.outletID
       }, function(err, outlet) {
           if (err) {
               console.log(err);
               return;
-          }
-          if (outlet.onScheduler) {
-              outlet.onScheduler.destroy();
-          }
-          if (outlet.offScheduler) {
-              outlet.onScheduler.destroy();
-          }
-          Outlets.findByIdAndUpdate(req.body._id, {
-              $set: {
-                  onScheduler: onScheduler,
-                  offScheduler: offScheduler
+          } else if (outlet) {
+              if (outlet.onScheduler) {
+                  outlet.onScheduler.destroy();
               }
-          }, function(err, doc) {
-              if (err) {
-                  console.log(err);
-                  return;
-              } else if (doc) {
-                  Devices.findOne({
-                      $and: [{
-                          deviceID: req.body.deviceID
-                      }, {
-                          owner: req.body.owner
-                      }]
-                  }, function(err, device) {
-                      if (err) {
-                          console.log(err);
-                          return;
-                      }
-                      updateOutletsInDevice(device, null, doc);
-                  });
+              if (outlet.offScheduler) {
+                  outlet.onScheduler.destroy();
               }
-          });
+              Outlets.findByIdAndUpdate(req.body.outletID, {
+                  $set: {
+                      onScheduler: onScheduler,
+                      offScheduler: offScheduler
+                  }
+              }, function(err, doc) {
+                  if (err) {
+                      console.log(err);
+                      return;
+                  } else if (doc) {
+                      Devices.findById(req.body._id, function(err, device) {
+                          if (err) {
+                              console.log(err);
+                              return;
+                          }
+                          updateOutletsInDevice(device, null, doc);
+                      });
+                  }
+              });
+          }
       });
   }
 
@@ -339,11 +335,13 @@
                   updateTasks(req, null);
               }*/
               notifyUser(idOfDevice, method, " successful");
-              callback(null);
+              if (callback)
+                  callback(null);
           } else if (err) {
               notifyUser(idOfDevice, method, " not successful due to following:\n" + err);
               console.log(err);
-              callback(err);
+              if (callback)
+                  callback(err);
           }
       });
   }
@@ -356,7 +354,7 @@
           } else if (device) {
               var notification = {
                   timeExecuted: (new Date()).toLocaleString(),
-                  device: device.deviceName | deviceID,
+                  device: device.deviceName,
                   message: "",
                   passedOrFail: passedOrFail
               };

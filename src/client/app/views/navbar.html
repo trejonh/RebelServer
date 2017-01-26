@@ -17,11 +17,13 @@
         <li id="logoutBtn" class="btn btn-danger" role="button" ng-click="logout()" ng-hide="loggedIn">Logout</li>
       </ul>
     </div>
-    <button id="notificationsBtn" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" type="button" ng-hide="loggedIn">
+    <div class="btn-group" id="notificationsBtn">
+      <button class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" type="button" ng-hide="loggedIn">
       Notifications&nbsp;&nbsp;&nbsp;<span class="badge">{{header.notifications}}</span>
+    </button>
       <ul class="dropdown-menu">
         <li ng-repeat="notification in notifications" ng-style="notifier(notification)">{{notification.device}}: {{notification.message}}</li>
       </ul>
-    </button>
+    </div>
   </div>
 </nav>
