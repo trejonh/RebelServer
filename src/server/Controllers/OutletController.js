@@ -356,7 +356,8 @@
           var notification = {
               timeExecuted: (new Date()).toLocaleString(),
               device: device.deviceName | deviceID,
-              message: ""
+              message: "",
+              passedOrFail: passedOrFail
           };
           notification.message = "On " + notification.timeExecuted + ", " + notification.device + " tried to " + method + " and was" + passedOrFail;
           Users.findOne({

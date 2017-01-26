@@ -20,9 +20,30 @@ angular.module('clientApp')
     $scope.notifications = [];
     deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
       header.notifications = data.data.notifications;
-    }, function error(err){
+    }, function error(err) {
       console.log(err);
     });
+    $scope.notifier = function(notification) {
+      if (notification.passedOrFail === "succes") {
+        return {
+          'white-space': 'nowrap;',
+          'overflow': 'hidden;',
+          'text-overflow': ' ellipsis;',
+          'max-width': '200px;',
+          'background-color':'#dff0d8;',
+          'color':'#3c763d'
+        };
+      }else{
+        return {
+          'white-space': 'nowrap;',
+          'overflow': 'hidden;',
+          'text-overflow': ' ellipsis;',
+          'max-width': '200px;',
+          'background-color':'#f2dede;',
+          'color':'#a94442'
+        };
+      }
+    };
     $scope.loggedIn = !authentication.isLoggedIn(); //true == hidden, false==visible
     if (authentication.isLoggedIn) {
       unbind();
@@ -37,9 +58,9 @@ angular.module('clientApp')
         bind();
       }
       deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
-      $scope.notifications = [{name:""},{name:""},{name:""},{name:""}];//data.data.notifications;
-        header.notifications = $scope.notifications.length;//data.data.length;
-      }, function error(err){
+        $scope.notifications = data.data.notifications;
+        header.notifications = $scope.notifications.length;
+      }, function error(err) {
         console.log(err);
       });
     }, 5000);
