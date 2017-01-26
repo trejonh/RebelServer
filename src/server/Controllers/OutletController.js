@@ -217,6 +217,7 @@
       });
   };
   module.exports.scheduleTask = function(req, res) {
+      console.log(req.body);
       var request = {};
       request.body = req.body;
       if (req.body.manualOn) {
