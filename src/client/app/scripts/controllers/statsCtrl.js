@@ -132,7 +132,6 @@ angular.module('clientApp')
       var task = {};
       task.deviceID = stats.outlet.deviceID;
       task.outletNumber = stats.outlet.outletNumber;
-      console.log(stats.taskScheduler.manualOn);
       if (stats.taskScheduler.manualOn) {
         task.isOn = 1;
       } else {

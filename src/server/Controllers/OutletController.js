@@ -218,7 +218,7 @@
   module.exports.scheduleTask = function(req, res) {
       var request = {};
       request.body = req.body;
-      if (req.body.manualOn) {
+      if (req.body.isOn === 1) {
           triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOn");
       } else {
           triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOff");
