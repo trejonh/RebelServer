@@ -325,7 +325,8 @@
       });
   }
 
-  function triggerPower(deviceID, _id, outletNumber, access_token, method) {
+  function triggerPower(deviceID, idOfDevice, outletNumber, access_token, method) {
+      console.log(method);
       var particleUrl = "https://api.particle.io/v1/devices/";
       particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
           form: {
@@ -336,9 +337,9 @@
               /*if (req) {
                   updateTasks(req, null);
               }*/
-              notifyUser(_id, method, " successful");
+              notifyUser(idOfDevice, method, " successful");
           } else if (err) {
-              notifyUser(_id, method, " not successful due to following:\n" + err);
+              notifyUser(idOfDevice, method, " not successful due to following:\n" + err);
               console.log(err);
               return;
           }
