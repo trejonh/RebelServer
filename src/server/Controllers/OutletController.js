@@ -227,7 +227,7 @@
               res.status(200).end();
           });
       }
-      updateTasks(request);
+    //  updateTasks(request);
   };
 
   function updateTasks(req) {
