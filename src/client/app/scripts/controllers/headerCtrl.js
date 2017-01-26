@@ -25,23 +25,15 @@ angular.module('clientApp')
       console.log(err);
     });
     $scope.notifier = function(notification) {
-      if (notification.passedOrFail === "succes") {
+      if (notification.passedOrFail.includes("success")) {
         return {
-          'white-space': 'nowrap;',
-          'overflow': 'hidden;',
-          'text-overflow': ' ellipsis;',
-          'max-width': '200px;',
-          'background-color':'#dff0d8;',
-          'color':'#3c763d'
+          'background-color': '#dff0d8;',
+          'color': '#3c763d'
         };
-      }else{
+      } else {
         return {
-          'white-space': 'nowrap;',
-          'overflow': 'hidden;',
-          'text-overflow': ' ellipsis;',
-          'max-width': '200px;',
-          'background-color':'#f2dede;',
-          'color':'#a94442'
+          'background-color': '#f2dede;',
+          'color': '#a94442'
         };
       }
     };

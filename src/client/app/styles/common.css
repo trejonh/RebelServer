@@ -59,7 +59,14 @@ i#addDeviceIcon{
   color: #2FE71B;
 }
 
-button#notificationsBtn{
+#notificationsBtn{
   float: right;
   margin-top: -4%;
+}
+
+#notificationList{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
 }

@@ -22,7 +22,7 @@
       Notifications&nbsp;&nbsp;&nbsp;<span class="badge">{{header.notifications}}</span>
     </button>
       <ul class="dropdown-menu">
-        <li ng-repeat="notification in notifications" ng-style="notifier(notification)">{{notification.device}}: {{notification.message}}</li>
+        <li id="notificationList" ng-repeat="notification in notifications" ng-style="notifier(notification)">{{notification.device}}: {{notification.message}}</li>
       </ul>
     </div>
   </div>
