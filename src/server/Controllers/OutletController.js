@@ -234,22 +234,22 @@
       var timeOff = "* " + req.body.timeSetOff[1] + " " + req.body.timeSetOff[0] + " * * *";
       var onScheduler;
       if (req.body.repeatOn) {
-          onScheduler = Scheduler.scheduleJob(timeOn, function() {
+          onScheduler = Scheduler.schedule(timeOn, function() {
               triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
           });
       } else {
-          onScheduler = Scheduler.scheduleJob(timeOn, function() {
+          onScheduler = Scheduler.schedule(timeOn, function() {
               triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
               this.cancel();
           });
       }
       var offScheduler;
       if (req.body.repeatOff) {
-          offScheduler = Scheduler.scheduleJob(timeOff, function() {
+          offScheduler = Scheduler.schedule(timeOff, function() {
               triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOff");
           });
       } else {
-          offScheduler = Scheduler.scheduleJob(timeOff, function() {
+          offScheduler = Scheduler.schedule(timeOff, function() {
               triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOff");
               this.cancel();
           });
