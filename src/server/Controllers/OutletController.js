@@ -219,9 +219,9 @@
       var request = {};
       request.body = req.body;
       if (req.body.manualOn) {
-          triggerPower(request.body.deviceID, request.body.outletNumber, request.body.access_token, "turnOn");
+          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOn");
       } else {
-          triggerPower(request.body.deviceID, request.body.outletNumber, request.body.access_token, "turnOff");
+          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOff");
       }
       //  updateTasks(request);
       //res.status(200).end();
@@ -325,8 +325,7 @@
       });
   }
 
-  function triggerPower(deviceID, outletNumber, access_token, method) {
-    console.log(deviceID, outletNumber, access_token, method);
+  function triggerPower(deviceID, _id, outletNumber, access_token, method) {
       var particleUrl = "https://api.particle.io/v1/devices/";
       particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
           form: {
@@ -337,9 +336,9 @@
               /*if (req) {
                   updateTasks(req, null);
               }*/
-              notifyUser(deviceID, method, " successful");
+              notifyUser(_id, method, " successful");
           } else if (err) {
-              notifyUser(deviceID, method, " not successful due to following:\n" + err);
+              notifyUser(_id, method, " not successful due to following:\n" + err);
               console.log(err);
               return;
           }
@@ -347,10 +346,7 @@
   }
 
   function notifyUser(deviceID, method, passedOrFail) {
-      Devices.findOne({
-          deviceID: deviceID
-      }, function(err, device) {
-          console.log(device);
+      Devices.findById(deviceID, function(err, device) {
           if (err) {
               console.log(err);
               return;
@@ -363,11 +359,7 @@
               };
               notification.message = "On " + notification.timeExecuted + ", " + notification.device + " tried to " + method + " and was" + passedOrFail;
               Users.findOne({
-                  $and: [{
-                      deviceID: deviceID
-                  }, {
-                      username: device.owner
-                  }]
+                  username: device.owner
               }, function(err, user) {
                   if (err) {
                       console.log(err);
