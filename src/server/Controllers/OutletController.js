@@ -230,8 +230,8 @@
 
   function updateTasks(req) {
 
-      var timeOn = "* " + req.body.onTime[1] + " " + req.body.onTime[0] + " * * *";
-      var timeOff = "* " + req.body.offTime[1] + " " + req.body.offTime[0] + " * * *";
+      var timeOn = "* " + req.body.timeSetOn[1] + " " + req.body.timeSetOn[0] + " * * *";
+      var timeOff = "* " + req.body.timeSetOff[1] + " " + req.body.timeSetOff[0] + " * * *";
       var onScheduler;
       if (req.body.repeatOn) {
           onScheduler = Scheduler.scheduleJob(timeOn, function() {
