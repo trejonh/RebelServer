@@ -223,7 +223,7 @@
       } else {
           triggerPower(request.body.deviceID, request.body.outletNumber, request.body.access_token, request, "turnOff");
       }
-    //  updateTasks(request);
+      //  updateTasks(request);
       res.status(200).end();
   };
 
@@ -371,8 +371,16 @@
                   console.log(err);
                   return;
               } else {
-                  user.notifications.push(notification);
-                  user.save(function() {
+                  var userNotifications = user.notifications; //.push(notification);
+                  userNotifications.push(notification);
+                  Users.findByIdAndUpdate(user._id, {
+                      $set: {
+                          notification: userNotifications
+                      }
+                  }, function(err) {
+                      if (err) {
+                          console.log(err);
+                      }
                       if (user.phoneNumber) {
                           sms.sendText(user.phoneNumber, notification.message, {
                                   subject: "Rebel Kangaroo"
