@@ -372,7 +372,7 @@
                       userNotifications.push(notification);
                       Users.findByIdAndUpdate(user._id, {
                           $set: {
-                              notification: userNotifications
+                              notifications: userNotifications
                           }
                       }, function(err) {
                           if (err) {
