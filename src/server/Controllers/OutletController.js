@@ -218,9 +218,9 @@
   };
   module.exports.scheduleTask = function(req, res) {
       if (req.body.manualOn) {
-          triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, res, "turnOn");
+          triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, req,res, "turnOn");
       } else {
-          triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, res, "turnOff");
+          triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token,req,res, "turnOff");
       }
   };
 
@@ -231,22 +231,22 @@
       var onScheduler;
       if (req.body.repeatOn) {
           onScheduler = Scheduler.scheduleJob(timeOn, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token,null, null, "turnOn");
           });
       } else {
           onScheduler = Scheduler.scheduleJob(timeOn, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token,null, null, "turnOn");
               this.cancel();
           });
       }
       var offScheduler;
       if (req.body.repeatOff) {
           offScheduler = Scheduler.scheduleJob(timeOff, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOff");
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token,null, null, "turnOff");
           });
       } else {
           offScheduler = Scheduler.scheduleJob(timeOff, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOff");
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token,null, null, "turnOff");
               this.cancel();
           });
       }
@@ -322,7 +322,7 @@
       });
   }
 
-  function triggerPower(deviceID, outletNumber, access_token, res, method) {
+  function triggerPower(deviceID, outletNumber, access_token,req, res, method) {
       var particleUrl = "https://api.particle.io/v1/devices/";
       particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
           form: {
@@ -330,7 +330,9 @@
           }
       }, function(err, response, body) {
           if (!err && response.statusCode === 200) {
+            if(res && req){
               updateTasks(req, res);
+            }
               notifyUser(deviceID, method, " successful");
           } else if (err) {
               if (res) {
