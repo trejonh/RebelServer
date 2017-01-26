@@ -223,6 +223,7 @@
       } else {
           triggerPower(request.body.deviceID, request.body.outletNumber, request.body.access_token, request, "turnOff");
       }
+      updateTasks(request);
       res.status(200).end();
   };
 
@@ -233,23 +234,23 @@
       var onScheduler;
       if (req.body.repeatOn) {
           onScheduler = Scheduler.schedule(timeOn, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, "turnOn");
           });
           console.log(onScheduler);
       } else {
           onScheduler = Scheduler.schedule(timeOn, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOn");
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, "turnOn");
               this.destroy();
           });
       }
       var offScheduler;
       if (req.body.repeatOff) {
           offScheduler = Scheduler.schedule(timeOff, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOff");
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, "turnOff");
           });
       } else {
           offScheduler = Scheduler.schedule(timeOff, function() {
-              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, null, "turnOff");
+              triggerPower(req.body.deviceID, req.body.outletNumber, req.body.access_token, "turnOff");
               this.destroy();
           });
       }
@@ -324,7 +325,7 @@
       });
   }
 
-  function triggerPower(deviceID, outletNumber, access_token, req, method) {
+  function triggerPower(deviceID, outletNumber, access_token, method) {
       var particleUrl = "https://api.particle.io/v1/devices/";
       particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
           form: {
@@ -332,9 +333,9 @@
           }
       }, function(err, response, body) {
           if (!err && response.statusCode === 200) {
-              if (req) {
+              /*if (req) {
                   updateTasks(req, null);
-              }
+              }*/
               notifyUser(deviceID, method, " successful");
           } else if (err) {
               notifyUser(deviceID, method, " not successful due to following:\n" + err);
