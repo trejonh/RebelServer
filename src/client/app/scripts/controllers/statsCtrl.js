@@ -11,13 +11,12 @@ angular.module('clientApp')
   .controller('StatsCtrl', function($scope, $route, deviceService) { //GraphService, authentication) {
     var stats = this;
     var deviceId = $route.current.params.deviceID;
-    $scope.clickedOutlet = true;
     $scope.selectedAnOutlet = true;
     stats.device = {};
     stats.outlet = {};
     stats.outlets = [];
     stats.selectedOutlet = {};
-    $scope.manualSwitchClass = "fa fa-toggle-on fa-5";
+    $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
     stats.taskScheduler = {
       manualOn: true,
       scheduleOn: "",
@@ -38,6 +37,10 @@ angular.module('clientApp')
         console.log(err);
       }
     });
+    //setSelectedOutet
+    $scope.setSelectedOutet = function(outlet){
+      stats.selectedOutlet = outlet;
+    };
     //isactive
     $scope.isActive = function() {
       var lastSeen = Date.parse(stats.device.lastSeenOnline);
@@ -61,9 +64,9 @@ angular.module('clientApp')
         return;
       }
       if (stats.selectedOutlet.isOn) {
-        $scope.manualSwitchClass = "fa fa-toggle-off fa-5";
+        $scope.manualSwitchClass = "fa fa-toggle-off fa-5x";
       } else {
-        $scope.manualSwitchClass = "fa fa-toggle-on fa-5";
+        $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
       }
       stats.selectedOutlet.username = stats.device.owner;
       console.log(stats.selectedOutlet);
@@ -100,8 +103,8 @@ angular.module('clientApp')
     //changeOutletName
     $scope.changeOutletName = function() {
       $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
-      stats.outlet.owner = stats.device.owner;
-      deviceService.changeOutletNickname(stats.outlet).then(function(data) {
+      stats.selectedOutlet.owner = stats.device.owner;
+      deviceService.changeOutletNickname(stats.selectedOutlet).then(function(data) {
         stats.device = data.data;
       }, function error(err) {
         console.log(err);

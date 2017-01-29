@@ -7,6 +7,9 @@
   <input type="number" class="form-control" id="costInput" placeholder="cost per kWh i.e. 0.58 = 58&cent;" ng-model="stats.costPerKWH">
 </div>
 <hr>
+<br>
+<br>
+<br>
 <div class="container">
   <div class="row">
     <div class="col-sm-9">
@@ -20,7 +23,7 @@
               <th>Power Drawn</th>
               <th>Total Time On</th>
             </tr>
-            <tr ng-repeat="outlet in outlets" id="outletStatRow">
+            <tr ng-repeat="outlet in outlets" id="outletStatRow" ng-click="setSelectedOutlet(outlet)">
               <td>{{outlet.outletNumber}}</td>
               <td><span><i id="editName" class="fa fa-pencil" alt="edit device name" aria-hidden="true" data-toggle="modal" data-target="#changeOutletNicknameModal"></i><span>&nbsp;&nbsp;&nbsp;{{outlet.nickname}}</td>
             <td>{{outlet.isOn}}</td>
@@ -48,10 +51,12 @@
       <div class="alert alert-danger" role="alert" ng-hide="selectedAnOutlet">Please select a device first</div>
       <!--TODO: implement 3 forms 1 for manual , 1 for auto on, 1 for auto off  -->
       <select class="form-control" ng-model="stats.selectedOulet">
-        <option selected="true" disabled="disabled">please select an outlet to schedule a task</option>
-        <option ng-repeat="outlet in outlets">{{outlet.outletNumber}}: {{outlet.nickname}}</option>
+        <option selected="true">please select an outlet to schedule a task</option>
+        <option ng-repeat="outlet in outlets" ng-click="setSelectedOutet(outlet)">{{outlet.outletNumber}}: {{outlet.nickname}}</option>
       </select>
+      <hr>
       <!-- Manual switch form -->
+      <label>On/Off</label>
       <form id="manualSwitchForm">
         <span id="manualSwitch" ng-click="manualSwitchClick()"><i ng-class="manualSwitchClass" aria-hidden="true"></i></span>
                 </form>
@@ -127,7 +132,7 @@
         </h1>
             <div class="form-group">
               <label for="deviceId">Outlet name</label>
-              <input type="text" name="outletname" class="form-control" id="outlet" placeholder="{{stats.outlet.nickname}}" ng-model="stats.outlet.nickname">
+              <input type="text" name="outletname" class="form-control" id="outlet" placeholder="{{stats.selectedOutlet.nickname}}" ng-model="stats.selectedOutlet.nickname">
             </div>
             </form>
           </div>
