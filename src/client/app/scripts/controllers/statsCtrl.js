@@ -13,7 +13,7 @@ angular.module('clientApp')
     var deviceId = $route.current.params.deviceID;
     $scope.selectedAnOutlet = true;
     stats.device = {};
-    stats.outlet = {};
+    stats.outlet = undefined;
     stats.outlets = [];
     $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
     stats.taskScheduler = {
@@ -38,7 +38,6 @@ angular.module('clientApp')
     });
     //setSelectedOutet
     $scope.setSelectedOutlet = function(outlet){
-      console.log(outlet);
       stats.outlet = outlet;
     };
     //isactive
@@ -65,6 +64,7 @@ angular.module('clientApp')
       }
       if (stats.outlet.isOn === 1) {
         $scope.manualSwitchClass = "fa fa-toggle-off fa-5x";
+        stats.outlet.isOn = 0;
       } else {
         $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
       }
