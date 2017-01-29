@@ -39,6 +39,7 @@ angular.module('clientApp')
     });
     //setSelectedOutet
     $scope.setSelectedOutet = function(outlet){
+      console.log(outlet);
       stats.selectedOutlet = outlet;
     };
     //isactive
@@ -63,7 +64,7 @@ angular.module('clientApp')
         $scope.selectedAnOutlet = false;
         return;
       }
-      if (stats.selectedOutlet.isOn) {
+      if (stats.selectedOutlet.isOn === 1) {
         $scope.manualSwitchClass = "fa fa-toggle-off fa-5x";
       } else {
         $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
