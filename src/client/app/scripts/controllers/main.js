@@ -15,7 +15,9 @@ angular.module('clientApp')
       password: ""
     };
     $scope.submit = function() {
-      authentication.login(main.credentials).then(function() {
+      authentication.login(main.credentials).then(function(data) {
+        console.log(data);
+        authentication.saveToken(data.token);
         $location.path("/profile");
       }, function errorCallback() {
         $("#loginFailure").show();// jshint ignore:line

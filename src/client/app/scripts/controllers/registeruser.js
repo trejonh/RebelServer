@@ -30,7 +30,8 @@ angular.module('clientApp')
           registerUser.credentials.profileImage = reader.result;
           var complete = completedFields(registerUser.credentials);
           if (complete.valid) {
-            authentication.register(registerUser.credentials).then(function() {
+            authentication.register(registerUser.credentials).then(function(data) {
+              authentication.saveToken(data.token);
               $location.path("/profile");
             }, function errorCallback(err) {
               registerUser.error = err.data.error;
@@ -52,7 +53,8 @@ angular.module('clientApp')
         registerUser.credentials.profileImage = defaultPic;
         var complete = completedFields(registerUser.credentials);
         if (complete.valid) {
-          authentication.register(registerUser.credentials).then(function() {
+          authentication.register(registerUser.credentials).then(function(data) {
+            authentication.saveToken(data.token);
             $location.path("/profile");
           }, function errorCallback(err) {
             registerUser.error = err.data.error;

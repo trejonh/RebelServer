@@ -52,12 +52,14 @@ angular.module('clientApp')
       } else {
         bind();
       }
-      deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
-        $scope.notifications = data.data.notifications;
-        header.notifications = $scope.notifications.length;
-      }, function error(err) {
-        console.log(err);
-      });
+      if (authentication.isLoggedIn()) {
+        deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
+          $scope.notifications = data.data.notifications;
+          header.notifications = $scope.notifications.length;
+        }, function error(err) {
+          console.log(err);
+        });
+      }
     }, 5000);
     $scope.logout = function() {
       $scope.loggedIn = true; //true == hidden, false==visible
