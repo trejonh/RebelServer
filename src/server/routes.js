@@ -33,6 +33,7 @@ router.post('/createOutlet', ctrlOutlet.createOutlet);
 router.put('/updateOutletData', ctrlOutlet.updateOutletData);
 router.post('/updateOutletNickname',ctrlOutlet.changeOutletName);
 router.post('/scheduleTask',ctrlOutlet.scheduleTask);
+router.post('/manualSwitch',ctrlOutlet.manualSwitch);
 router.post('/changeDeviceName',ctrlDevice.changeDeviceName);
 //for testing purpose only
 router.delete('/testing',ctrlTest.delete);

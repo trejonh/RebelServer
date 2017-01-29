@@ -40,7 +40,9 @@
       return $http.post('http://' + window.location.hostname + ':3000/scheduleTask', task);
     };
 
-
+    var manualSwitch = function(outlet) {
+      return $http.post('http://' + window.location.hostname + ':3000/manualSwitch', outlet);
+    };
 
     var getNotifications = function(id) {
       return $http.get('http://' + window.location.hostname + ':3000/notifications', {
@@ -56,6 +58,7 @@
       changeDeviceName: changeDeviceName,
       changeOutletNickname: changeOutletNickname,
       scheduleTask: scheduleTask,
+      manualSwitch: manualSwitch,
       getNotifications: getNotifications
     };
   }

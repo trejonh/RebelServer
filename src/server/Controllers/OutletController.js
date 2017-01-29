@@ -229,6 +229,73 @@
       }
   };
 
+  module.exports.manualSwitch = function(req, res) {
+      Outlets.findById(req.body._id, function(err, outlet) {
+          if (err) {
+              console.log(err);
+              res.status(500).json({
+                  err: err
+              });
+              return;
+          } else if (outlet) {
+              switchPower(outlet, function(err) {
+                  if (err) {
+                      console.log(err);
+                      res.status(500).json({
+                          err: err
+                      });
+                      return;
+                  }
+                  if (outlet.isOn) {
+                      outlet.isOn = 0;
+                  } else {
+                      outlet.isOn = 1;
+                  }
+                  outlet.save(function() {
+                      Devices.findOne({
+                          $and: [{
+                              owner: req.body.username
+                          }, {
+                              deviceID: outlet.deviceID
+                          }]
+                      }, function(err, device) {
+                          if (device) {
+                              updateOutletsInDevice(device, res, outlet);
+                          }
+                      });
+                  });
+
+              });
+          }
+      });
+  };
+
+  function switchPower(outlet, callback) {
+      var method = "turnOn";
+      if (outlet.isOn)
+          method = "turnOff";
+      var particleUrl = "https://api.particle.io/v1/devices/";
+      particleRequest.post(particleUrl + outlet.deviceID + "/" + method + "?access_token=" + outlet.accessToken, {
+          form: {
+              args: outlet.outletNumber
+          }
+      }, function(err, response, body) {
+          if (!err && response.statusCode === 200) {
+              /*if (req) {
+                  updateTasks(req, null);
+              }*/
+              //notifyUser(idOfDevice, method, " successful");
+              if (callback)
+                  callback(null);
+          } else if (err) {
+              //notifyUser(idOfDevice, method, " not successful due to following:\n" + err);
+              console.log(err);
+              if (callback)
+                  callback(err);
+          }
+      });
+  }
+
   function updateTasks(req) {
 
       var timeOn = "* " + req.body.timeSetOn[1] + " " + req.body.timeSetOn[0] + " * * *";
