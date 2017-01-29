@@ -11,12 +11,7 @@
   function deviceService($http) {
 
     var addDevice = function(device) {
-      return $http.put('http://' + window.location.hostname + ':3000/profile', device).success(function(data) {
-        console.log(data);
-      }).error(function(err) {
-        if (err)
-          console.log(err);
-      });
+      return $http.put('http://' + window.location.hostname + ':3000/profile', device);
     };
 
     var getDevices = function(username, deviceID) {

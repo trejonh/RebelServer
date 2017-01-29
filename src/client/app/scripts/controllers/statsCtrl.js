@@ -30,10 +30,10 @@ angular.module('clientApp')
 
     stats.costPerKWH = 0.5;
 
-    deviceService.getDevices(null, deviceId).success(function(data) {
-      stats.device = data[0];
-      $scope.outlets = data[0].outlets;
-    }).error(function(err) {
+    deviceService.getDevices(null, deviceId).then(function(data) {
+      stats.device = data.data[0];
+      $scope.outlets = data.data[0].outlets;
+    }, function error(err) {
       if (err) {
         console.log(err);
       }
@@ -89,9 +89,9 @@ angular.module('clientApp')
     //changeDeviceName
     $scope.changeDeviceName = function() {
       $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
-        deviceService.changeDeviceName(stats.device).success(function(data) {
-          stats.device = data;
-        }).error(function(err) {
+        deviceService.changeDeviceName(stats.device).then(function(data) {
+          stats.device = data.data;
+        }, function error(err) {
           console.log(err);
         });
       });
@@ -101,9 +101,9 @@ angular.module('clientApp')
     $scope.changeOutletName = function() {
       $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
       stats.outlet.owner = stats.device.owner;
-      deviceService.changeOutletNickname(stats.outlet).success(function(data) {
-        stats.device = data;
-      }).error(function(err) {
+      deviceService.changeOutletNickname(stats.outlet).then(function(data) {
+        stats.device = data.data;
+      }, function error(err) {
         console.log(err);
       });
     };
