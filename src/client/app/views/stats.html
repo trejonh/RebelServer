@@ -52,7 +52,7 @@
       <!--TODO: implement 3 forms 1 for manual , 1 for auto on, 1 for auto off  -->
       <select class="form-control">
         <option selected disabled>please select an outlet to schedule a task</option>
-        <option ng-repeat="outlet in outlets" ng-click="setSelectedOutlet(outlet)">{{outlet.outletNumber}}: {{outlet.nickname}}</option>
+        <option ng-repeat="outlet in outlets" ng-model="stats.outlet">{{outlet.outletNumber}}: {{outlet.nickname}}</option>
       </select>
       <hr>
       <!-- Manual switch form -->

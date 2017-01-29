@@ -39,6 +39,11 @@ angular.module('clientApp')
     //setSelectedOutet
     $scope.setSelectedOutlet = function(outlet){
       stats.outlet = outlet;
+      if (stats.outlet.isOn === 0) {
+        $scope.manualSwitchClass = "fa fa-toggle-off fa-5x";
+      } else {
+        $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
+      }
     };
     //isactive
     $scope.isActive = function() {
@@ -67,10 +72,16 @@ angular.module('clientApp')
         stats.outlet.isOn = 0;
       } else {
         $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
+        stats.outlet.isOn = 1;
       }
       stats.outlet.username = stats.device.owner;
-      console.log(stats.outlet);
-      deviceService.manualSwitch(stats.outlet);
+      deviceService.manualSwitch(stats.outlet).then(function(data){
+        stats.device = data.data;
+      },function err(err){
+        if(err){
+          console.log(err);
+        }
+      });
       $scope.selectedAnOutlet = true;
     };
     //scheduleOn
