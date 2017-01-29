@@ -15,7 +15,6 @@ angular.module('clientApp')
     stats.device = {};
     stats.outlet = {};
     stats.outlets = [];
-    stats.selectedOutlet = {};
     $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
     stats.taskScheduler = {
       manualOn: true,
@@ -40,7 +39,7 @@ angular.module('clientApp')
     //setSelectedOutet
     $scope.setSelectedOutet = function(outlet){
       console.log(outlet);
-      stats.selectedOutlet = outlet;
+      stats.outlet = outlet;
     };
     //isactive
     $scope.isActive = function() {
@@ -60,23 +59,23 @@ angular.module('clientApp')
     };
     //manual switch
     $scope.manualSwitchClick = function() {
-      if (!stats.selectedOutlet) {
+      if (!stats.outlet) {
         $scope.selectedAnOutlet = false;
         return;
       }
-      if (stats.selectedOutlet.isOn === 1) {
+      if (stats.outlet.isOn === 1) {
         $scope.manualSwitchClass = "fa fa-toggle-off fa-5x";
       } else {
         $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
       }
-      stats.selectedOutlet.username = stats.device.owner;
-      console.log(stats.selectedOutlet);
-      deviceService.manualSwitch(stats.selectedOutlet);
+      stats.outlet.username = stats.device.owner;
+      console.log(stats.outlet);
+      deviceService.manualSwitch(stats.outlet);
       $scope.selectedAnOutlet = true;
     };
     //scheduleOn
     $scope.scheduleOn = function() {
-      if (!stats.selectedOutlet) {
+      if (!stats.outlet) {
         $scope.selectedAnOutlet = false;
         return;
       }
@@ -84,7 +83,7 @@ angular.module('clientApp')
     };
     //scheduleOff
     $scope.scheduleOff = function() {
-      if (!stats.selectedOutlet) {
+      if (!stats.outlet) {
         $scope.selectedAnOutlet = false;
         return;
       }
@@ -104,8 +103,8 @@ angular.module('clientApp')
     //changeOutletName
     $scope.changeOutletName = function() {
       $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
-      stats.selectedOutlet.owner = stats.device.owner;
-      deviceService.changeOutletNickname(stats.selectedOutlet).then(function(data) {
+      stats.outlet.owner = stats.device.owner;
+      deviceService.changeOutletNickname(stats.outlet).then(function(data) {
         stats.device = data.data;
       }, function error(err) {
         console.log(err);
