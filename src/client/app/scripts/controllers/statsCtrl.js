@@ -37,7 +37,7 @@ angular.module('clientApp')
       }
     });
     //setSelectedOutet
-    $scope.setSelectedOutet = function(outlet){
+    $scope.setSelectedOutlet = function(outlet){
       console.log(outlet);
       stats.outlet = outlet;
     };
