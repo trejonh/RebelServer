@@ -86,6 +86,7 @@ angular.module('clientApp')
       });
       $scope.selectedAnOutlet = true;
     };
+    //gotta account for timezones
     //scheduleOff
     $scope.scheduleOff = function() {
       if (!stats.outlet) {
@@ -109,7 +110,7 @@ angular.module('clientApp')
       if (offTime.indexOf(null) !== -1) {
         return;
       }
-
+      var timeZone = (new Date()).getHours();
       offTask.time = offTime;
       offTask.deviceID = stats.device.deviceID;
       offTask.deviceObjID = stats.device._id;
@@ -118,6 +119,7 @@ angular.module('clientApp')
       offTask.outletNumber = stats.outlet.outletNumber;
       offTask.acces_token = stats.outlet.accessToken;
       offTask.method = "turnOff";
+      offTask.timeZone = timeZone;
       deviceService.scheduleTask(offTask).then(function(data) {
         stats.device = data.data;
       }, function error(err) {
@@ -149,6 +151,7 @@ angular.module('clientApp')
         return;
       }
 
+      var timeZone = (new Date()).getHours();
       onTask.time = onTime;
       onTask.deviceID = stats.device.deviceID;
       onTask.deviceObjID = stats.device._id;
@@ -157,6 +160,7 @@ angular.module('clientApp')
       onTask.outletNumber = stats.outlet.outletNumber;
       onTask.acces_token = stats.outlet.accessToken;
       onTask.method = "turnOn";
+      onTask.timeZone = timeZone/100;
       deviceService.scheduleTask(onTask).then(function(data) {
         stats.device = data.data;
       }, function error(err) {

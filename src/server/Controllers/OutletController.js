@@ -5,6 +5,7 @@
   var Scheduler = require("node-cron");
   var particleRequest = require("request");
   var sms = require('furious-monkey');
+  var serverTimeZone = (new Date()).getTimezoneOffset/60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -216,7 +217,15 @@
       });
   };
   module.exports.scheduleTask = function(req, res) {
-      var schedule = Scheduler.schedule('* '+req.body.time[1]+' '+req.body.time[0]+' * *', togglePowerState(req.body.deviceID, req.body.outletNumber, req.body.access_token, req.body.method, function(err) {
+    var exeTime = req.body.time[0];
+    var clientTime = req.body.timeZone;
+    var differenceInTime = clientTime - serverTimeZone;
+    if(differenceInTime<0 && clientTime > 0){//server is behind client
+      exeTime += differenceInTime;
+    } else if(differenceInTime>0 && clientTime > 0){//server is front
+        exeTime -= differenceInTime;
+      }
+      var schedule = Scheduler.schedule('* '+req.body.time[1]+' '+exeTime+' * *', togglePowerState(req.body.deviceID, req.body.outletNumber, req.body.access_token, req.body.method, function(err) {
           console.log("init task", req.body.method);
           if (err) {
               console.log(err);
@@ -241,6 +250,7 @@
             outlet.offSchedule = schedule;
           }
           outlet.save(function(){
+            console.log("saving outlet");
             Devices.findById(req.body.deviceObjID,function(device){
               updateOutletsInDevice(device,res,outlet);
             });
