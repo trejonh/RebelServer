@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('StatsCtrl', function($scope, $route, deviceService, GraphService, authentication) {
+  .controller('StatsCtrl', function($scope, $route, deviceService) { //GraphService, authentication) {
     var stats = this;
     var deviceId = $route.current.params.deviceID;
     $scope.clickedOutlet = true;
