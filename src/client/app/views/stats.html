@@ -67,9 +67,6 @@
                     <label for="autoOn">When would like to schedule to the outlet to turn on?</label>
                     <input type="time" class="form-control" id="scheduleOn" ng-model="stats.scheduleOn.time">
                     <em>*if using Firefox, please enter time in a 24-hour day format i.e. 15:35 -> 3:35pm</em>
-                    <br>
-                    <label for="autoOn">Would you like to turn on this outlet at this time each day?</label>
-                    <input type="checkbox" class="form-control" id="scheduleOnCheck" ng-model="stats.scheduleOn.repeatOn">
                   </div>
                   <button class="btn btn-success" type="submit" ng-click="scheduleOn()">Schedule To Turn On</button>
                 </form>
@@ -80,9 +77,6 @@
                     <label for="autoFF">When would like to schedule to the outlet to turn off?</label>
                     <input type="time" class="form-control" id="scheduleOff" ng-model="stats.scheduleOff.timee">
                     <em>*if using Firefox, please enter time in a 24-hour day format i.e. 15:35 -> 3:35pm</em>
-                    <br>
-                    <label for="autoFF">Would you like to turn off this outlet at this time each day?</label>
-                    <input type="checkbox" class="form-control" id="scheduleOffCheck" ng-model="stats.scheduleOff.repeatOff">
                   </div>
                   <button class="btn btn-success" type="submit" ng-click="scheduleOff()">Schedule To Turn Off</button>
                 </form>

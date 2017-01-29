@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('StatsCtrl', function($scope, $route, deviceService) { //GraphService, authentication) {
+  .controller('StatsCtrl', function($scope, $route, deviceService,GraphService, authentication) {
     var stats = this;
     var deviceId = $route.current.params.deviceID;
     $scope.selectedAnOutlet = true;
@@ -37,8 +37,9 @@ angular.module('clientApp')
       }
     });
     //setSelectedOutet
-    $scope.setSelectedOutlet = function(outlet){
+    $scope.setSelectedOutlet = function(outlet) {
       stats.outlet = outlet;
+      $scope.outlet = outlet;
       if (stats.outlet.isOn === 0) {
         $scope.manualSwitchClass = "fa fa-toggle-off fa-5x";
       } else {
@@ -63,9 +64,12 @@ angular.module('clientApp')
     };
     //manual switch
     $scope.manualSwitchClick = function() {
-      if (!stats.outlet) {
+      if (!stats.outlet || !$scope.oulet) {
         $scope.selectedAnOutlet = false;
         return;
+      }
+      if ($scope.outlet) {
+        stats.outlet = $scope.outlet;
       }
       if (stats.outlet.isOn === 1) {
         $scope.manualSwitchClass = "fa fa-toggle-off fa-5x";
@@ -75,10 +79,10 @@ angular.module('clientApp')
         stats.outlet.isOn = 1;
       }
       stats.outlet.username = stats.device.owner;
-      deviceService.manualSwitch(stats.outlet).then(function(data){
+      deviceService.manualSwitch(stats.outlet).then(function(data) {
         stats.device = data.data;
-      },function err(err){
-        if(err){
+      }, function err(err) {
+        if (err) {
           console.log(err);
         }
       });
@@ -99,6 +103,37 @@ angular.module('clientApp')
         return;
       }
       $scope.selectedAnOutlet = true;
+      var onTask = {};
+      var onTime = [(new Date(stats.taskScheduler.scheduleOn)).getHours(), (new Date(stats.taskScheduler.scheduleOn)).getMinutes()];
+      if ((stats.taskScheduler.scheduleOn || stats.taskScheduler.scheduleOn === undefined) && $("#scheduleOn")[0].type === "text") { //jshint ignore:line
+        var timeSetOn = $("#scheduleOn").val(); //jshint ignore:line
+        timeSetOn = timeSetOn.trim().split(":");
+        if ((timeSetOn[0] < 0 || timeSetOn[0] > 24) || (timeSetOn[1] < 0 || timeSetOn[1] > 59)) {
+          alert("Please enter a proper date"); //jshint ignore:line
+          return;
+        } else {
+          onTime = timeSetOn;
+        }
+      }
+      if(onTime.indexOf(null) !== -1 ){
+        return;
+      }
+
+      onTask.time = onTime;
+      onTask.deviceID = stats.device.deviceID;
+      onTask.deviceObjID = stats.device._id;
+      onTask.userID = authentication.currentUser()._id;
+      onTask.outletID = stats.outlet._id;
+      onTask.outletNumber = stats.outlet.outletNumber;
+      onTask.acces_token = stats.outlet.accessToken;
+      onTask.method = "turnOn";
+      deviceService.scheduleTask(onTask).then(function(data){
+        stats.device = data.data;
+      },function error(err){
+        if(err){
+          console.log(err);
+        }
+      });
     };
     //changeDeviceName
     $scope.changeDeviceName = function() {

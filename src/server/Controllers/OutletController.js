@@ -216,17 +216,36 @@
       });
   };
   module.exports.scheduleTask = function(req, res) {
-      var request = {};
-      request.body = req.body;
-      if (req.body.isOn === 1) {
-          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOn", function() {
-              res.status(200).end();
+      var schedule = Scheduler.schedule('* '+req.body.time[1]+' '+req.body.time[0]+' * *', togglePowerState(req.body.deviceID, req.body.outletNumber, req.body.access_token, req.body.method, function(err) {
+          if (err) {
+              console.log(err);
+              notifyUser(req.body.deviceObjID, req.body.method, "failed due to " + err);
+              return;
+          }
+          notifyUser(req.body.deviceObjID, req.body.method, "successful");
+      }));
+      Outlets.findById(req.body.outletID,function(err,outlet){
+        if(err){
+          console.log(err);
+          res.status(500).json({err:err});
+          return;
+        }else if(outlet){
+          if(req.body.method === 'turnOn'){
+            if(outlet.onSchedule)
+              outlet.onSchedule.destroy();
+            outlet.onSchedule = schedule;
+          }else{
+            if(outlet.offSchedule)
+              outlet.offSchedule.destroy();
+            outlet.offSchedule = schedule;
+          }
+          outlet.save(function(){
+            Devices.findById(req.body.deviceObjID,function(device){
+              updateOutletsInDevice(device,res,outlet);
+            });
           });
-      } else {
-          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOff", function() {
-              res.status(200).end();
-          });
-      }
+        }
+      });
   };
 
   module.exports.manualSwitch = function(req, res) {
@@ -260,7 +279,7 @@
                           }]
                       }, function(err, device) {
                           if (device) {
-                              updateOutletsInDevice(device, res, outlet);
+                              updateOutletsInDevice(device, null, outlet);
                           }
                       });
                   });
@@ -296,69 +315,6 @@
       });
   }
 
-  function updateTasks(req) {
-
-      var timeOn = "* " + req.body.timeSetOn[1] + " " + req.body.timeSetOn[0] + " * * *";
-      var timeOff = "* " + req.body.timeSetOff[1] + " " + req.body.timeSetOff[0] + " * * *";
-      var onScheduler;
-      if (req.body.repeatOn) {
-          onScheduler = Scheduler.schedule(timeOn, function() {
-              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOn");
-          });
-      } else {
-          onScheduler = Scheduler.schedule(timeOn, function() {
-              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOn", function() {
-                  this.destroy();
-              });
-          });
-      }
-      var offScheduler;
-      if (req.body.repeatOff) {
-          offScheduler = Scheduler.schedule(timeOff, function() {
-              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOff");
-          });
-      } else {
-          offScheduler = Scheduler.schedule(timeOff, function() {
-              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOff", function() {
-                  this.destroy();
-              });
-          });
-      }
-      Outlets.findOne({
-          _id: req.body.outletID
-      }, function(err, outlet) {
-          if (err) {
-              console.log(err);
-              return;
-          } else if (outlet) {
-              if (outlet.onScheduler) {
-                  outlet.onScheduler.destroy();
-              }
-              if (outlet.offScheduler) {
-                  outlet.onScheduler.destroy();
-              }
-              Outlets.findByIdAndUpdate(req.body.outletID, {
-                  $set: {
-                      onScheduler: onScheduler,
-                      offScheduler: offScheduler
-                  }
-              }, function(err, doc) {
-                  if (err) {
-                      console.log(err);
-                      return;
-                  } else if (doc) {
-                      Devices.findById(req.body._id, function(err, device) {
-                          if (err) {
-                              console.log(err);
-                              return;
-                          }
-                          updateOutletsInDevice(device, null, doc);
-                      });
-                  }
-              });
-          }
-      });
-  }
 
   function updateOutletsInDevice(device, res, newOutlet) {
       var deviceOutlets = device.outlets;
@@ -390,7 +346,7 @@
       });
   }
 
-  function triggerPower(deviceID, idOfDevice, outletNumber, access_token, method, callback) {
+  function togglePowerState(deviceID, outletNumber, access_token, method, callback) {
       var particleUrl = "https://api.particle.io/v1/devices/";
       particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
           form: {
@@ -398,14 +354,9 @@
           }
       }, function(err, response, body) {
           if (!err && response.statusCode === 200) {
-              /*if (req) {
-                  updateTasks(req, null);
-              }*/
-              notifyUser(idOfDevice, method, " successful");
               if (callback)
                   callback(null);
           } else if (err) {
-              notifyUser(idOfDevice, method, " not successful due to following:\n" + err);
               console.log(err);
               if (callback)
                   callback(err);
