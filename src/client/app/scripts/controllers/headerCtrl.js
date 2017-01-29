@@ -19,11 +19,13 @@ angular.module('clientApp')
     var header = this; // jshint ignore:line
     $scope.notifications = [];
     header.notifications = 0;
-    deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
-      header.notifications = data.data.notifications;
-    }, function error(err) {
-      console.log(err);
-    });
+    if (authentication.isLoggedIn()) {
+      deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
+        header.notifications = data.data.notifications;
+      }, function error(err) {
+        console.log(err);
+      });
+    }
     $scope.notifier = function(notification) {
       if (notification.passedOrFail.includes("success")) {
         return {
