@@ -8,11 +8,12 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('StatsCtrl', function($scope, $route, deviceService,GraphService, authentication) {
+  .controller('StatsCtrl', function($scope, $route, deviceService, GraphService, authentication) {
     var stats = this;
     var deviceId = $route.current.params.deviceID;
     $scope.selectedAnOutlet = true;
     stats.device = {};
+    stats.helper = "Please select an outlet listed to the left.";
     stats.outlet = undefined;
     stats.outlets = [];
     $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
@@ -39,7 +40,7 @@ angular.module('clientApp')
     //setSelectedOutet
     $scope.setSelectedOutlet = function(outlet) {
       stats.outlet = outlet;
-      $scope.outlet = outlet;
+      stats.helper = outlet.nickname;
       if (stats.outlet.isOn === 0) {
         $scope.manualSwitchClass = "fa fa-toggle-off fa-5x";
       } else {
@@ -64,14 +65,9 @@ angular.module('clientApp')
     };
     //manual switch
     $scope.manualSwitchClick = function() {
-      console.log(stats.outlet);
-      console.log($scope.outlet);
-      if (!stats.outlet || !$scope.outlet) {
+      if (!stats.outlet) {
         $scope.selectedAnOutlet = false;
         return;
-      }
-      if ($scope.outlet) {
-        stats.outlet = $scope.outlet;
       }
       if (stats.outlet.isOn === 1) {
         $scope.manualSwitchClass = "fa fa-toggle-off fa-5x";
@@ -117,7 +113,7 @@ angular.module('clientApp')
           onTime = timeSetOn;
         }
       }
-      if(onTime.indexOf(null) !== -1 ){
+      if (onTime.indexOf(null) !== -1) {
         return;
       }
 
@@ -129,10 +125,10 @@ angular.module('clientApp')
       onTask.outletNumber = stats.outlet.outletNumber;
       onTask.acces_token = stats.outlet.accessToken;
       onTask.method = "turnOn";
-      deviceService.scheduleTask(onTask).then(function(data){
+      deviceService.scheduleTask(onTask).then(function(data) {
         stats.device = data.data;
-      },function error(err){
-        if(err){
+      }, function error(err) {
+        if (err) {
           console.log(err);
         }
       });

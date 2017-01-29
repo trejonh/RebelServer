@@ -50,10 +50,7 @@
     <div class="col-sm-3">
       <div class="alert alert-danger" role="alert" ng-hide="selectedAnOutlet">Please select a device first</div>
       <!--TODO: implement 3 forms 1 for manual , 1 for auto on, 1 for auto off  -->
-      <select class="form-control">
-        <option selected disabled>please select an outlet to schedule a task</option>
-        <option ng-repeat="outlet in outlets" ng-model="stats.outlet">{{outlet.outletNumber}}: {{outlet.nickname}}</option>
-      </select>
+      <h3>{{stats.helper}}</h3>
       <hr>
       <!-- Manual switch form -->
       <label>On/Off</label>
