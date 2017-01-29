@@ -93,6 +93,38 @@ angular.module('clientApp')
         return;
       }
       $scope.selectedAnOutlet = true;
+      var offTask = {};
+      var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(), (new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
+      if ((stats.taskScheduler.scheduleOff || stats.taskScheduler.scheduleOff === undefined) && $("#scheduleOff")[0].type === "text") { //jshint ignore:line
+        var timeSetOff = $("#scheduleOff").val(); //jshint ignore:line
+        timeSetOff = timeSetOff.trim().split(":");
+        console.log(timeSetOff);
+        if ((timeSetOff[0] < 0 || timeSetOff[0] > 24) || (timeSetOff[1] < 0 || timeSetOff[1] > 59)) {
+          alert("Please enter a proper date"); //jshint ignore:line
+          return;
+        } else {
+          offTime = timeSetOff;
+        }
+      }
+      if (offTime.indexOf(null) !== -1) {
+        return;
+      }
+
+      offTask.time = offTime;
+      offTask.deviceID = stats.device.deviceID;
+      offTask.deviceObjID = stats.device._id;
+      offTask.userID = authentication.currentUser()._id;
+      offTask.outletID = stats.outlet._id;
+      offTask.outletNumber = stats.outlet.outletNumber;
+      offTask.acces_token = stats.outlet.accessToken;
+      offTask.method = "turnOff";
+      deviceService.scheduleTask(offTask).then(function(data) {
+        stats.device = data.data;
+      }, function error(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
     };
     //scheduleOn
     $scope.scheduleOn = function() {

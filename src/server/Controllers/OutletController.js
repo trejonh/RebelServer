@@ -217,6 +217,7 @@
   };
   module.exports.scheduleTask = function(req, res) {
       var schedule = Scheduler.schedule('* '+req.body.time[1]+' '+req.body.time[0]+' * *', togglePowerState(req.body.deviceID, req.body.outletNumber, req.body.access_token, req.body.method, function(err) {
+          console.log("init task", req.body.method);
           if (err) {
               console.log(err);
               notifyUser(req.body.deviceObjID, req.body.method, "failed due to " + err);
@@ -279,7 +280,7 @@
                           }]
                       }, function(err, device) {
                           if (device) {
-                              updateOutletsInDevice(device, null, outlet);
+                              updateOutletsInDevice(device, res, outlet);
                           }
                       });
                   });
