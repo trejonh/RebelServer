@@ -17,7 +17,7 @@ angular.module('clientApp')
     $scope.submit = function() {
       authentication.login(main.credentials).then(function(data) {
         console.log(data);
-        authentication.saveToken(data.token);
+        authentication.saveToken(data.data.token);
         $location.path("/profile");
       }, function errorCallback() {
         $("#loginFailure").show();// jshint ignore:line

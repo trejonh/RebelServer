@@ -31,7 +31,7 @@ angular.module('clientApp')
           var complete = completedFields(registerUser.credentials);
           if (complete.valid) {
             authentication.register(registerUser.credentials).then(function(data) {
-              authentication.saveToken(data.token);
+              authentication.saveToken(data.data.token);
               $location.path("/profile");
             }, function errorCallback(err) {
               registerUser.error = err.data.error;
@@ -54,7 +54,7 @@ angular.module('clientApp')
         var complete = completedFields(registerUser.credentials);
         if (complete.valid) {
           authentication.register(registerUser.credentials).then(function(data) {
-            authentication.saveToken(data.token);
+            authentication.saveToken(data.data.token);
             $location.path("/profile");
           }, function errorCallback(err) {
             registerUser.error = err.data.error;
