@@ -64,7 +64,9 @@ angular.module('clientApp')
     };
     //manual switch
     $scope.manualSwitchClick = function() {
-      if (!stats.outlet || !$scope.oulet) {
+      console.log(stats.outlet);
+      console.log($scope.outlet);
+      if (!stats.outlet || !$scope.outlet) {
         $scope.selectedAnOutlet = false;
         return;
       }
@@ -88,16 +90,16 @@ angular.module('clientApp')
       });
       $scope.selectedAnOutlet = true;
     };
-    //scheduleOn
-    $scope.scheduleOn = function() {
+    //scheduleOff
+    $scope.scheduleOff = function() {
       if (!stats.outlet) {
         $scope.selectedAnOutlet = false;
         return;
       }
       $scope.selectedAnOutlet = true;
     };
-    //scheduleOff
-    $scope.scheduleOff = function() {
+    //scheduleOn
+    $scope.scheduleOn = function() {
       if (!stats.outlet) {
         $scope.selectedAnOutlet = false;
         return;
