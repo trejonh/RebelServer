@@ -96,7 +96,7 @@ angular.module('clientApp')
       }
       $scope.selectedAnOutlet = true;
       var date = moment().format("YYYY-MM-DD");
-      var theTime;
+      var theTime = stats.taskScheduler.scheduleOff;
       var offTask = {};
       var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(), (new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
       if ((stats.taskScheduler.scheduleOff || stats.taskScheduler.scheduleOff === undefined) && $("#scheduleOff")[0].type === "text") { //jshint ignore:line
