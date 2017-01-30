@@ -217,15 +217,7 @@
       });
   };
   module.exports.scheduleTask = function(req, res) {
-    var exeTime = req.body.time[0];
-    var clientTime = req.body.timeZone;
-    var differenceInTime = clientTime - serverTimeZone;
-    if(differenceInTime<0 && clientTime > 0){//server is behind client
-      exeTime += differenceInTime;
-    } else if(differenceInTime>0 && clientTime > 0){//server is front
-        exeTime -= differenceInTime;
-      }
-      var schedule = Scheduler.schedule('* '+req.body.time[1]+' '+exeTime+' * *', togglePowerState(req.body.deviceID, req.body.outletNumber, req.body.access_token, req.body.method, function(err) {
+      var schedule = Scheduler.schedule('* '+req.body.time[1]+' '+req.body.time[0]+' * *', togglePowerState(req.body.deviceID, req.body.outletNumber, req.body.access_token, req.body.method, function(err) {
           console.log("init task", req.body.method);
           if (err) {
               console.log(err);
