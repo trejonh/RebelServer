@@ -117,7 +117,7 @@ angular.module('clientApp')
       offTask.outletNumber = stats.outlet.outletNumber;
       offTask.acces_token = stats.outlet.accessToken;
       offTask.method = "turnOff";
-      offTask.timeZone = new Date().getTimezoneOffSet()/60;
+      offTask.timeZone = new Date().getTimezoneOffset()/60;
       deviceService.scheduleTask(offTask).then(function(data) {
         stats.device = data.data;
       }, function error(err) {
@@ -156,7 +156,7 @@ angular.module('clientApp')
       onTask.outletNumber = stats.outlet.outletNumber;
       onTask.acces_token = stats.outlet.accessToken;
       onTask.method = "turnOn";
-      onTask.timeZone = new Date().getTimezoneOffSet()/60;
+      onTask.timeZone = new Date().getTimezoneOffset()/60;
       deviceService.scheduleTask(onTask).then(function(data) {
         stats.device = data.data;
       }, function error(err) {

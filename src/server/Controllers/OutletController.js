@@ -6,7 +6,7 @@
   var particleRequest = require("request");
   var sms = require('furious-monkey');
   var moment = require('moment');
-  var serverTimeZone = (new Date()).getTimezoneOffset/60;
+  var serverTimeZone = (new Date()).getTimezoneOffset()/60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
