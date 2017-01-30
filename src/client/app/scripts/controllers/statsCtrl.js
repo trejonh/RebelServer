@@ -1,5 +1,4 @@
 'use strict';
-/* globals moment */
 
 /**
  * @ngdoc function
@@ -9,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('StatsCtrl', function($scope, $route, deviceService, GraphService, authentication,timeService) {
+  .controller('StatsCtrl', function($scope, $route, deviceService, GraphService, authentication) {
     var stats = this;
     var deviceId = $route.current.params.deviceID;
     $scope.selectedAnOutlet = true;
@@ -95,13 +94,10 @@ angular.module('clientApp')
         return;
       }
       $scope.selectedAnOutlet = true;
-      var date = moment().format("YYYY-MM-DD");
-      var theTime = stats.taskScheduler.scheduleOff;
       var offTask = {};
       var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(), (new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
       if ((stats.taskScheduler.scheduleOff || stats.taskScheduler.scheduleOff === undefined) && $("#scheduleOff")[0].type === "text") { //jshint ignore:line
         var timeSetOff = $("#scheduleOff").val(); //jshint ignore:line
-        theTime = timeSetOff;
         timeSetOff = timeSetOff.trim().split(":");
         if ((timeSetOff[0] < 0 || timeSetOff[0] > 24) || (timeSetOff[1] < 0 || timeSetOff[1] > 59)) {
           alert("Please enter a proper date"); //jshint ignore:line
@@ -113,13 +109,6 @@ angular.module('clientApp')
       if (offTime.indexOf(null) !== -1) {
         return;
       }
-      console.log(theTime);
-      var stamp = date + "T" + theTime + "Z";
-      var momentTime = moment(stamp);
-      console.log(momentTime);
-      var tzTime = momentTime.tz(timeService.currentTimeZone());
-      var formattedTime = tzTime.format('h:mm A');
-      console.log(formattedTime);
       offTask.time = offTime;
       offTask.deviceID = stats.device.deviceID;
       offTask.deviceObjID = stats.device._id;
@@ -128,13 +117,14 @@ angular.module('clientApp')
       offTask.outletNumber = stats.outlet.outletNumber;
       offTask.acces_token = stats.outlet.accessToken;
       offTask.method = "turnOff";
-      /*deviceService.scheduleTask(offTask).then(function(data) {
+      offTask.timeZone = new Date().getTimezoneOffSet()/60;
+      deviceService.scheduleTask(offTask).then(function(data) {
         stats.device = data.data;
       }, function error(err) {
         if (err) {
           console.log(err);
         }
-      });*/
+      });
     };
     //scheduleOn
     $scope.scheduleOn = function() {
@@ -158,8 +148,6 @@ angular.module('clientApp')
       if (onTime.indexOf(null) !== -1) {
         return;
       }
-
-      var timeZone = (new Date()).getHours();
       onTask.time = onTime;
       onTask.deviceID = stats.device.deviceID;
       onTask.deviceObjID = stats.device._id;
@@ -168,7 +156,7 @@ angular.module('clientApp')
       onTask.outletNumber = stats.outlet.outletNumber;
       onTask.acces_token = stats.outlet.accessToken;
       onTask.method = "turnOn";
-      onTask.timeZone = timeZone/100;
+      onTask.timeZone = new Date().getTimezoneOffSet()/60;
       deviceService.scheduleTask(onTask).then(function(data) {
         stats.device = data.data;
       }, function error(err) {

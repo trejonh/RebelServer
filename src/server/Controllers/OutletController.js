@@ -5,6 +5,7 @@
   var Scheduler = require("node-cron");
   var particleRequest = require("request");
   var sms = require('furious-monkey');
+  var moment = require('moment');
   var serverTimeZone = (new Date()).getTimezoneOffset/60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
@@ -217,7 +218,10 @@
       });
   };
   module.exports.scheduleTask = function(req, res) {
-      var schedule = Scheduler.schedule('* '+req.body.time[1]+' '+req.body.time[0]+' * *', togglePowerState(req.body.deviceID, req.body.outletNumber, req.body.access_token, req.body.method, function(err) {
+      var differenceInTz = req.body.timeZone - serverTimeZone;
+      var time = moment({hour:req.body.time[0],minute:req.body.time[1]}).add(differenceInTz, 'hours');
+      var hours = new Date(time._d).getHours();
+      var schedule = Scheduler.schedule('* '+req.body.time[1]+' '+hours+' * *', togglePowerState(req.body.deviceID, req.body.outletNumber, req.body.access_token, req.body.method, function(err) {
           console.log("init task", req.body.method);
           if (err) {
               console.log(err);
