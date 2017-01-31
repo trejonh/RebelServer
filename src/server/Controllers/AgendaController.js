@@ -7,19 +7,22 @@ var AGENDA = new Agenda({
 });
 var particleRequest = require("request");
 AGENDA.start();
-module.exports.defineJob = function(functionName, args) {
-    return AGENDA.define(functionName, args, function(job, done) {
+module.exports.defineJob = function(functionName) {
+  console.log('in define job');
+    return AGENDA.define(functionName, function(job, done) {
         var data = job.attrs.data;
         console.log(data);
         switchPower(data,done);
     });
 };
 
-module.exports.scheduleJob = function(functionName,timeHours,timeMin) {
-    return AGENDA.every("day at "+timeHours+":"+timeMin,functionName);
+module.exports.scheduleJob = function(functionName,timeHours,timeMin,data) {
+  console.log('scheduline');
+    return AGENDA.every("day at "+timeHours+":"+timeMin,functionName,data);
 };
 
 module.exports.cancel = function(names){
+  console.log('cancelled');
   AGENDA.cancel(names,function(err, numRemoved){
     if(err){
       console.log(err);
