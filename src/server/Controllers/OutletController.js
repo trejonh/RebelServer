@@ -219,7 +219,9 @@
   };
   module.exports.scheduleTask = function(req, res) {
       var differenceInTz = req.body.timeZone - serverTimeZone;
-      console.log(req.body.time);
+      console.log(differenceInTz);
+      console.log(req.body.timeZone);
+      console.log(serverTimeZone);
       var time = moment({
           hour: req.body.time[0],
           minute: req.body.time[1]
