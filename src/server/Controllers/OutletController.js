@@ -6,7 +6,7 @@
   var sms = require('furious-monkey');
   var moment = require('moment');
   var agenda = require('./AgendaController');
-  var serverTimeZone = 8;
+  var serverTimeZone = new Date().getTimezoneOffset()/60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -219,7 +219,6 @@
   };
   module.exports.scheduleTask = function(req, res) {
       var differenceInTz = req.body.timeZone - serverTimeZone;
-      console.log((new Date()).getTimezoneOffset());
       var time = moment({
           hour: req.body.time[0],
           minute: req.body.time[1]
@@ -227,10 +226,11 @@
       console.log(time._d);
       var hours = new Date(time._d).getHours();
       console.log(hours);
+      console.log(req.body);
       agenda.cancel(req.body.outletID+' is scheduled to '+req.body.method);
       var job = agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
       console.log(job);
-      console.log("///////////////////////////////////////////////////////////////////////////////////");
+      console.log("//////////////////////////////////////////////////////////////////");
       console.log(agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.outletNumber,hours,req.body.time[1],req.body));
   };
 
