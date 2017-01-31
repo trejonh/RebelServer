@@ -3,7 +3,6 @@
   var Devices = mongoose.model("smartDeviceModel");
   var Users = mongoose.model("registeredUserModel");
   var particleRequest = require("request");
-  var sms = require('furious-monkey');
   var moment = require('moment');
   var agenda = require('./AgendaController');
   var serverTimeZone = new Date().getTimezoneOffset()/60;
@@ -227,12 +226,6 @@
       agenda.cancel(req.body.outletID+' is scheduled to '+req.body.method);
       agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
       var job = agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.method,hours,req.body.time[1],req.body);
-      /*job.run(function(err,job){
-        if(err){
-          console.log(err);
-        }
-        job.save();
-      });*/
       res.status(200).json(job);
   };
 
@@ -325,53 +318,6 @@
                   res.status(200).json(dev);
               }
               return;
-          }
-      });
-  }
-
-  function notifyUser(deviceID, method, passedOrFail) {
-      Devices.findById(deviceID, function(err, device) {
-          if (err) {
-              console.log(err);
-              return;
-          } else if (device) {
-              var notification = {
-                  timeExecuted: (new Date()).toLocaleString(),
-                  device: device.deviceName,
-                  message: "",
-                  passedOrFail: passedOrFail
-              };
-              notification.message = "On " + notification.timeExecuted + ", " + notification.device + " tried to " + method + " and was" + passedOrFail;
-              Users.findOne({
-                  username: device.owner
-              }, function(err, user) {
-                  if (err) {
-                      console.log(err);
-                      return;
-                  } else if (user) {
-                      var userNotifications = user.notifications; //.push(notification);
-                      userNotifications.push(notification);
-                      Users.findByIdAndUpdate(user._id, {
-                          $set: {
-                              notifications: userNotifications
-                          }
-                      }, function(err) {
-                          if (err) {
-                              console.log(err);
-                          }
-                          if (user.phoneNumber) {
-                              sms.sendText(user.phoneNumber, notification.message, {
-                                      subject: "Rebel Kangaroo"
-                                  },
-                                  function(err, info) {
-                                      if (err) {
-                                          console.log(err);
-                                      }
-                                  });
-                          }
-                      });
-                  }
-              });
           }
       });
   }

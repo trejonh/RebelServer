@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require("method-override"); // simulate DELETE and PUT (express4)
 // [SH] Require Passport
 var passport = require('passport');
-var agenda = require('./Controllers/AgendaController');
+var agenda = require('./Controllers/AgendaController').agenda;
 var agendaUI = require('agenda-ui');
 
 // [SH] Bring in the data model
