@@ -2,11 +2,11 @@
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
   var Users = mongoose.model("registeredUserModel");
-  var Scheduler = require("node-cron");
   var particleRequest = require("request");
   var sms = require('furious-monkey');
   var moment = require('moment');
-  var serverTimeZone = (new Date()).getTimezoneOffset()/60;
+  var agenda = require('AgendaController');
+  var serverTimeZone = (new Date()).getTimezoneOffset() / 60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -219,40 +219,15 @@
   };
   module.exports.scheduleTask = function(req, res) {
       var differenceInTz = req.body.timeZone - serverTimeZone;
-      var time = moment({hour:req.body.time[0],minute:req.body.time[1]}).add(differenceInTz, 'hours');
+      var time = moment({
+          hour: req.body.time[0],
+          minute: req.body.time[1]
+      }).add(differenceInTz, 'hours');
       var hours = new Date(time._d).getHours();
-      var schedule = Scheduler.schedule('* '+req.body.time[1]+' '+hours+' * *', togglePowerState(req.body.deviceID, req.body.outletNumber, req.body.access_token, req.body.method, function(err) {
-          console.log("init task", req.body.method);
-          if (err) {
-              console.log(err);
-              notifyUser(req.body.deviceObjID, req.body.method, "failed due to " + err);
-              return;
-          }
-          notifyUser(req.body.deviceObjID, req.body.method, "successful");
-      }));
-      Outlets.findById(req.body.outletID,function(err,outlet){
-        if(err){
-          console.log(err);
-          res.status(500).json({err:err});
-          return;
-        }else if(outlet){
-          if(req.body.method === 'turnOn'){
-            if(outlet.onSchedule)
-              outlet.onSchedule.destroy();
-            outlet.onSchedule = schedule;
-          }else{
-            if(outlet.offSchedule)
-              outlet.offSchedule.destroy();
-            outlet.offSchedule = schedule;
-          }
-          outlet.save(function(){
-            console.log("saving outlet");
-            Devices.findById(req.body.deviceObjID,function(device){
-              updateOutletsInDevice(device,res,outlet);
-            });
-          });
-        }
-      });
+      agenda.cancel(req.body.outletID+' is scheduled to '+req.body.outletNumber);
+      var job = agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.outletNumber,req.body);
+      console.log(job);
+      agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.outletNumber,hours,req.body.time[1]);
   };
 
   module.exports.manualSwitch = function(req, res) {
@@ -307,14 +282,9 @@
           }
       }, function(err, response, body) {
           if (!err && response.statusCode === 200) {
-              /*if (req) {
-                  updateTasks(req, null);
-              }*/
-              //notifyUser(idOfDevice, method, " successful");
               if (callback)
                   callback(null);
           } else if (err) {
-              //notifyUser(idOfDevice, method, " not successful due to following:\n" + err);
               console.log(err);
               if (callback)
                   callback(err);
@@ -349,24 +319,6 @@
                   res.status(200).json(dev);
               }
               return;
-          }
-      });
-  }
-
-  function togglePowerState(deviceID, outletNumber, access_token, method, callback) {
-      var particleUrl = "https://api.particle.io/v1/devices/";
-      particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
-          form: {
-              args: outletNumber
-          }
-      }, function(err, response, body) {
-          if (!err && response.statusCode === 200) {
-              if (callback)
-                  callback(null);
-          } else if (err) {
-              console.log(err);
-              if (callback)
-                  callback(err);
           }
       });
   }
