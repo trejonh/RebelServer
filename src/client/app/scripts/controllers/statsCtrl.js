@@ -95,8 +95,8 @@ angular.module('clientApp')
       }
       $scope.selectedAnOutlet = true;
       var offTask = {};
-      var offTime = [(new Date(stats.taskScheduler.scheduleOff)).getHours(), (new Date(stats.taskScheduler.scheduleOff)).getMinutes()];
-      if ((stats.taskScheduler.scheduleOff || stats.taskScheduler.scheduleOff === undefined) && $("#scheduleOff")[0].type === "text") { //jshint ignore:line
+      var offTime = [(new Date(stats.scheduleOff.time)).getHours(), (new Date(stats.scheduleOff.time)).getMinutes()];
+      if ((stats.scheduleOff.time || stats.scheduleOff.time === undefined) && $("#scheduleOff")[0].type === "text") { //jshint ignore:line
         var timeSetOff = $("#scheduleOff").val(); //jshint ignore:line
         timeSetOff = timeSetOff.trim().split(":");
         if ((timeSetOff[0] < 0 || timeSetOff[0] > 24) || (timeSetOff[1] < 0 || timeSetOff[1] > 59)) {
@@ -135,8 +135,8 @@ angular.module('clientApp')
       }
       $scope.selectedAnOutlet = true;
       var onTask = {};
-      var onTime = [(new Date(stats.taskScheduler.scheduleOn)).getHours(), (new Date(stats.taskScheduler.scheduleOn)).getMinutes()];
-      if ((stats.taskScheduler.scheduleOn || stats.taskScheduler.scheduleOn === undefined) && $("#scheduleOn")[0].type === "text") { //jshint ignore:line
+      var onTime = [(new Date(stats.scheduleOn.time)).getHours(), (new Date(stats.scheduleOn.time)).getMinutes()];
+      if ((stats.scheduleOn.time || stats.scheduleOn.time === undefined) && $("#scheduleOn")[0].type === "text") { //jshint ignore:line
         var timeSetOn = $("#scheduleOn").val(); //jshint ignore:line
         timeSetOn = timeSetOn.trim().split(":");
         if ((timeSetOn[0] < 0 || timeSetOn[0] > 24) || (timeSetOn[1] < 0 || timeSetOn[1] > 59)) {

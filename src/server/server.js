@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var methodOverride = require("method-override"); // simulate DELETE and PUT (express4)
 // [SH] Require Passport
 var passport = require('passport');
+var agenda = require('./Controllers/AgendaController');
+var agendaUI = require('agenda-ui');
 
 // [SH] Bring in the data model
 require('./Models/mongooseConnection');
@@ -37,6 +39,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use('/agenda-ui', agendaUI(agenda, {poll: 1000}));
 // [SH] Use the API routes when path starts with /api
 app.use('/', routesApi);
 

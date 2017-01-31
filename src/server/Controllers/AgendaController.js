@@ -28,13 +28,13 @@ module.exports.scheduleJob = function(functionName,timeHours,timeMin,data) {
 
 module.exports.cancel = function(names){
   console.log('cancelled');
-  AGENDA.cancel(names,function(err, numRemoved){
+  AGENDA.cancel({name:names},function(err, numRemoved){
     if(err){
       console.log(err);
     }
   });
 };
-
+module.exports.agenda = AGENDA;
 function switchPower(outlet, done) {
     var method = "turnOn";
     if (outlet.isOn)
