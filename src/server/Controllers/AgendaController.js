@@ -6,7 +6,11 @@ var AGENDA = new Agenda({
     }
 });
 var particleRequest = require("request");
-AGENDA.start();
+
+AGENDA.on('ready', function() {
+
+  AGENDA.start();
+});
 module.exports.defineJob = function(functionName) {
   console.log('in define job');
     return AGENDA.define(functionName, function(job, done) {
