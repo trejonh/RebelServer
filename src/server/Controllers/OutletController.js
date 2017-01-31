@@ -219,7 +219,7 @@
   };
   module.exports.scheduleTask = function(req, res) {
       var differenceInTz = req.body.timeZone - serverTimeZone;
-      console.log(new Date());
+      console.log((new Date()).getTimezoneOffset());
       var time = moment({
           hour: req.body.time[0],
           minute: req.body.time[1]
@@ -227,7 +227,6 @@
       console.log(time._d);
       var hours = new Date(time._d).getHours();
       console.log(hours);
-      console.log(req.body.time[1]);
       agenda.cancel(req.body.outletID+' is scheduled to '+req.body.method);
       var job = agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
       console.log(job);
