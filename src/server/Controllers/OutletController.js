@@ -225,8 +225,8 @@
       }).add(differenceInTz, 'hours');
       var hours = new Date(time._d).getHours();
       agenda.cancel(req.body.outletID+' is scheduled to '+req.body.method);
-      var job = agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
-      console.log(job);
+      agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
+      var job = agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.method,hours,req.body.time[1],req.body);
       res.status(200).json(job);
   };
 
