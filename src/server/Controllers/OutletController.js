@@ -227,6 +227,12 @@
       agenda.cancel(req.body.outletID+' is scheduled to '+req.body.method);
       agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
       var job = agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.method,hours,req.body.time[1],req.body);
+      job.run(function(err,job){
+        if(err){
+          console.log(err);
+        }
+        job.save();
+      });
       res.status(200).json(job);
   };
 
