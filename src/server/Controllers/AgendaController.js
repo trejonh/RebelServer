@@ -36,7 +36,7 @@ function switchPower(outlet, done) {
   console.log("in switchPower");
   console.log(outlet);
     var particleUrl = "https://api.particle.io/v1/devices/";
-    particleRequest.post(particleUrl + outlet.deviceID + "/" + outlet.method + "?access_token=" + outlet.access_Token, {
+    particleRequest.post(particleUrl + outlet.deviceID + "/" + outlet.method + "?access_token=" + outlet.access_token, {
         form: {
             args: outlet.outletNumber
         }
