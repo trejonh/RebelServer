@@ -224,6 +224,8 @@
           minute: req.body.time[1]
       }).add(differenceInTz, 'hours');
       var hours = new Date(time._d).getHours();
+      console.log(hours);
+      console.log(req.body.time[1]);
       //agenda.cancel(req.body.outletID+' is scheduled to '+req.body.outletNumber);
       var job = agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.outletNumber);
       console.log(job);
