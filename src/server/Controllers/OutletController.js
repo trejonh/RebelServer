@@ -219,16 +219,19 @@
   };
   module.exports.scheduleTask = function(req, res) {
       var differenceInTz = req.body.timeZone - serverTimeZone;
+      console.log(req.body.time);
       var time = moment({
           hour: req.body.time[0],
           minute: req.body.time[1]
       }).add(differenceInTz, 'hours');
+      console.log(time._d);
       var hours = new Date(time._d).getHours();
       console.log(hours);
       console.log(req.body.time[1]);
       //agenda.cancel(req.body.outletID+' is scheduled to '+req.body.outletNumber);
       var job = agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.outletNumber);
       console.log(job);
+      console.log("///////////////////////////////////////////////////////////////////////////////////");
       console.log(agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.outletNumber,hours,req.body.time[1],req.body));
   };
 
