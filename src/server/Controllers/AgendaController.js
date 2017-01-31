@@ -20,7 +20,7 @@ module.exports.defineJob = function(functionName) {
 };
 
 module.exports.scheduleJob = function(functionName,timeHours,timeMin,data) {
-    return AGENDA.every("* "+timeMin+" "+timeHours+" * *",functionName,data);
+    return AGENDA.every(timeMin+" "+timeHours+" * * *",functionName,data);
 };
 
 module.exports.cancel = function(names){
