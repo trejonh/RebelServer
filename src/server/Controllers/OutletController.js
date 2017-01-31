@@ -229,9 +229,7 @@
       console.log(req.body);
       agenda.cancel(req.body.outletID+' is scheduled to '+req.body.method);
       var job = agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
-      console.log(job);
-      console.log("//////////////////////////////////////////////////////////////////");
-      console.log(agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.outletNumber,hours,req.body.time[1],req.body));
+      res.status(200).json(job);
   };
 
   module.exports.manualSwitch = function(req, res) {

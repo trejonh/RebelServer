@@ -36,11 +36,8 @@ module.exports.cancel = function(names){
 };
 module.exports.agenda = AGENDA;
 function switchPower(outlet, done) {
-    var method = "turnOn";
-    if (outlet.isOn)
-        method = "turnOff";
     var particleUrl = "https://api.particle.io/v1/devices/";
-    particleRequest.post(particleUrl + outlet.deviceID + "/" + method + "?access_token=" + outlet.accessToken, {
+    particleRequest.post(particleUrl + outlet.deviceID + "/" + outlet.method + "?access_token=" + outlet.accessToken, {
         form: {
             args: outlet.outletNumber
         }
