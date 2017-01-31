@@ -14,6 +14,7 @@ AGENDA.on('ready', function() {
 module.exports.defineJob = function(functionName) {
   console.log('in define job');
     return AGENDA.define(functionName, function(job, done) {
+      console.log("in define");
         var data = job.attrs.data;
         console.log(data);
         switchPower(data,done);

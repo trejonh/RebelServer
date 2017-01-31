@@ -224,10 +224,10 @@
           minute: req.body.time[1]
       }).add(differenceInTz, 'hours');
       var hours = new Date(time._d).getHours();
-      agenda.cancel(req.body.outletID+' is scheduled to '+req.body.outletNumber);
+      //agenda.cancel(req.body.outletID+' is scheduled to '+req.body.outletNumber);
       var job = agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.outletNumber);
       console.log(job);
-      agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.outletNumber,hours,req.body.time[1],req.body);
+      console.log(agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.outletNumber,hours,req.body.time[1],req.body));
   };
 
   module.exports.manualSwitch = function(req, res) {
