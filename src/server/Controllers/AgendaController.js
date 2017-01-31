@@ -1,5 +1,6 @@
 var mongoConnectionString = process.env["TestDB"] ? "mongodb://localhost/tests" : "mongodb://localhost/smartHomeDevices"; //jshint ignore:line
 var Agenda = require('agenda');
+var particleRequest = require("request");
 var AGENDA = new Agenda({
     db: {
         address: mongoConnectionString
@@ -14,20 +15,16 @@ AGENDA.on('ready', function() {
 module.exports.defineJob = function(functionName) {
   console.log('in define job');
     return AGENDA.define(functionName, function(job, done) {
-      console.log("in define");
         var data = job.attrs.data;
-        console.log(data);
         switchPower(data,done);
     });
 };
 
 module.exports.scheduleJob = function(functionName,timeHours,timeMin,data) {
-  console.log('scheduline');
     return AGENDA.every("* "+timeMin+" "+timeHours+" * *",functionName,data);
 };
 
 module.exports.cancel = function(names){
-  console.log('cancelled');
   AGENDA.cancel({name:names},function(err, numRemoved){
     if(err){
       console.log(err);
@@ -36,12 +33,15 @@ module.exports.cancel = function(names){
 };
 module.exports.agenda = AGENDA;
 function switchPower(outlet, done) {
+  console.log(outlet);
     var particleUrl = "https://api.particle.io/v1/devices/";
     particleRequest.post(particleUrl + outlet.deviceID + "/" + outlet.method + "?access_token=" + outlet.accessToken, {
         form: {
             args: outlet.outletNumber
         }
     }, function(err, response, body) {
+        console.log(body);
+        console.log(err);
         if (err) {
             console.log(err);
         }

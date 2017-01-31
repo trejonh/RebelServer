@@ -118,9 +118,10 @@ angular.module('clientApp')
       offTask.outletNumber = stats.outlet.outletNumber;
       offTask.acces_token = stats.outlet.accessToken;
       offTask.method = "turnOff";
-      offTask.timeZone = new Date().getTimezoneOffset()/60;
+      offTask.timeZone = new Date().getTimezoneOffset() / 60;
       deviceService.scheduleTask(offTask).then(function(data) {
-        stats.device = data.data;
+        console.log(data);
+        //stats.device = data.data;
       }, function error(err) {
         if (err) {
           console.log(err);
@@ -158,7 +159,7 @@ angular.module('clientApp')
       onTask.outletNumber = stats.outlet.outletNumber;
       onTask.acces_token = stats.outlet.accessToken;
       onTask.method = "turnOn";
-      onTask.timeZone = new Date().getTimezoneOffset()/60;
+      onTask.timeZone = new Date().getTimezoneOffset() / 60;
       deviceService.scheduleTask(onTask).then(function(data) {
         stats.device = data.data;
       }, function error(err) {
@@ -171,7 +172,8 @@ angular.module('clientApp')
     $scope.changeDeviceName = function() {
       $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
         deviceService.changeDeviceName(stats.device).then(function(data) {
-          stats.device = data.data;
+          console.log(data);
+          //stats.device = data.data;
         }, function error(err) {
           console.log(err);
         });
