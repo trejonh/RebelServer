@@ -9,11 +9,10 @@ var AGENDA = new Agenda({
 var particleRequest = require("request");
 
 AGENDA.on('ready', function() {
-
+  console.log('ready!');
   AGENDA.start();
 });
 module.exports.defineJob = function(functionName) {
-  console.log('in define job');
     return AGENDA.define(functionName, function(job, done) {
         var data = job.attrs.data;
         switchPower(data,done);
@@ -32,7 +31,9 @@ module.exports.cancel = function(names){
   });
 };
 module.exports.agenda = AGENDA;
+
 function switchPower(outlet, done) {
+  console.log("in switchPower");
   console.log(outlet);
     var particleUrl = "https://api.particle.io/v1/devices/";
     particleRequest.post(particleUrl + outlet.deviceID + "/" + outlet.method + "?access_token=" + outlet.accessToken, {

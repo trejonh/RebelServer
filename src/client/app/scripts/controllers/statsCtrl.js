@@ -110,7 +110,6 @@ angular.module('clientApp')
         return;
       }
       offTask.time = offTime;
-      console.log(offTime);
       offTask.deviceID = stats.device.deviceID;
       offTask.deviceObjID = stats.device._id;
       offTask.userID = authentication.currentUser()._id;
@@ -151,7 +150,6 @@ angular.module('clientApp')
         return;
       }
       onTask.time = onTime;
-      console.log(onTime);
       onTask.deviceID = stats.device.deviceID;
       onTask.deviceObjID = stats.device._id;
       onTask.userID = authentication.currentUser()._id;
@@ -161,7 +159,8 @@ angular.module('clientApp')
       onTask.method = "turnOn";
       onTask.timeZone = new Date().getTimezoneOffset() / 60;
       deviceService.scheduleTask(onTask).then(function(data) {
-        stats.device = data.data;
+        //  stats.device = data.data;
+        console.log(data);
       }, function error(err) {
         if (err) {
           console.log(err);

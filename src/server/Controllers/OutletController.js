@@ -223,12 +223,10 @@
           hour: req.body.time[0],
           minute: req.body.time[1]
       }).add(differenceInTz, 'hours');
-      console.log(time._d);
       var hours = new Date(time._d).getHours();
-      console.log(hours);
-      console.log(req.body);
       agenda.cancel(req.body.outletID+' is scheduled to '+req.body.method);
       var job = agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
+      console.log(job);
       res.status(200).json(job);
   };
 
