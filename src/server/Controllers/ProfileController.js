@@ -40,11 +40,8 @@ module.exports.removeNote = function(req, res) {
         } else if (user) {
             var notifications = user.notifications;
             var newArray = [];
-            console.log(notifications);
-            for (notification in notifications) { //jshint ignore:line
-                if (notification.message !== req.query.message) {
-                  console.log('////////checking');
-                    console.log(notification.message,req.query.message);
+            for (var i = 0; i <notifications.length; i++) { //jshint ignore:line
+                if (notifications[i].message !== req.query.message) {
                     newArray.push(notification);
                 }
             }
