@@ -17,6 +17,7 @@ var ctrlTest = require('./Controllers/TestController');
 router.get('/profile', auth, ctrlProfile.profileRead);
 router.delete('/profile', ctrlProfile.profileDelete);
 router.put('/profile', ctrlProfile.updateUser);
+router.delete('/note',ctrlProfile.removeNote);
 
 //notifications;
 router.get('/notifications', ctrlOutlet.getNotifications);

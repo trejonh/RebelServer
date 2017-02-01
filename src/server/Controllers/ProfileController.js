@@ -29,6 +29,33 @@ module.exports.profileDelete = function(req, res) {
     });
 };
 
+module.exports.removeNote = function(req, res) {
+    console.log(req.query);
+    User.findById(req.query.note._id, function(err, user) {
+        if (err) {
+            console.log(err);
+            res.status(500).json({
+                err: err
+            });
+            return;
+        }
+        var notifications = user.notifications;
+        var newArray = [];
+        for (notification in notifications) { //jshint ignore:line
+            if (notification.message !== req.query.note.message) {
+                newArray.push(notification);
+            }
+        }
+        User.findByIdAndUpdate(req.query.note._id, {
+            $set: {
+                notifications: newArray
+            }
+        }, function(err, doc) {
+            res.status(200).end();
+        });
+    });
+};
+
 module.exports.updateUser = function(req, res) {
     User.findById(req.body._id, '-hash -salt', function(err, user) {
         if (err) {

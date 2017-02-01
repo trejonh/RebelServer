@@ -74,6 +74,10 @@
       return $http.put('http://' + window.location.hostname + ':3000/profile',phoneNumber);
     };
 
+    var removeNote = function(noteToRemove){
+      return $http.delete('http://' + window.location.hostname + ':3000/note',{params:{note:noteToRemove}});
+    };
+
     return {
       currentUser: currentUser,
       saveToken: saveToken,
@@ -85,7 +89,8 @@
       logout: logout,
       deleteAccount: deleteAccount,
       changePassword: changePassword,
-      updatePhoneNumber: updatePhoneNumber
+      updatePhoneNumber: updatePhoneNumber,
+      removeNote: removeNote
     };
   };
 })();

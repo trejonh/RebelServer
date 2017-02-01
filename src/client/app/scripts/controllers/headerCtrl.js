@@ -17,6 +17,11 @@ function unbind() {
 angular.module('clientApp')
   .controller('HeaderCtrl', function($scope, $location, $interval, authentication, deviceService) {
     var header = this; // jshint ignore:line
+    var notificationsTimer;
+    var myNote;
+    $scope.saveNotification = function(note) {
+      myNote = note;
+    };
     $scope.notifications = [];
     header.notifications = 0;
     if (authentication.isLoggedIn()) {
@@ -52,6 +57,8 @@ angular.module('clientApp')
       } else {
         bind();
       }
+    }, 5000);
+    notificationsTimer = $interval(function() {
       if (authentication.isLoggedIn()) {
         deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
           $scope.notifications = data.data.notifications;
@@ -60,11 +67,36 @@ angular.module('clientApp')
           console.log(err);
         });
       }
-    }, 5000);
+    }, 60000);
     $scope.logout = function() {
       $scope.loggedIn = true; //true == hidden, false==visible
       authentication.logout();
       bind();
       $location.path("/");
     };
+    $('#notificationPopover').on('hidden.bs.popover', function() { //jshint ignore:line
+      if (!myNote) {
+        return;
+      }
+      if (notificationsTimer) {
+        $interval.cancel(notificationsTimer);
+      }
+      myNote._id = authentication.currentUser()._id;
+      authentication.removeNote(myNote).then(function() {
+        notificationsTimer = $interval(function() {
+          if (authentication.isLoggedIn()) {
+            deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
+              $scope.notifications = data.data.notifications;
+              header.notifications = $scope.notifications.length;
+            }, function error(err) {
+              console.log(err);
+            });
+          }
+        }, 60000);
+      }, function error(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
   });
