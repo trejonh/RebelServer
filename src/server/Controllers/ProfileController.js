@@ -30,7 +30,6 @@ module.exports.profileDelete = function(req, res) {
 };
 
 module.exports.removeNote = function(req, res) {
-    console.log(req.query._id);
     User.findById(req.query._id, function(err, user) {
         if (err || !user) {
             console.log(err);
@@ -41,11 +40,16 @@ module.exports.removeNote = function(req, res) {
         } else if (user) {
             var notifications = user.notifications;
             var newArray = [];
+            console.log(notifications);
             for (notification in notifications) { //jshint ignore:line
                 if (notification.message !== req.query.message) {
+                  console.log('////////checking');
+                    console.log(notification.message,req.query.message);
                     newArray.push(notification);
                 }
             }
+            console.log('////////');
+            console.log(newArray);
             User.findByIdAndUpdate(req.query._id, {
                 $set: {
                     notifications: newArray
