@@ -81,6 +81,8 @@ function notifyUser(deviceID, method, passedOrFail, done) {
                     return;
                 } else if (user) {
                     var userNotifications = user.notifications; //.push(notification);
+                    if(!userNotifications)
+                      userNotifications = [];
                     userNotifications.push(notification);
                     Users.findByIdAndUpdate(user._id, {
                         $set: {
