@@ -21,6 +21,7 @@ angular.module('clientApp')
     var myNote;
     $scope.saveNotification = function(note) {
       myNote = note;
+      console.log(note);
     };
     $scope.notifications = [];
     header.notifications = 0;
