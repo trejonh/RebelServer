@@ -30,7 +30,7 @@ module.exports.profileDelete = function(req, res) {
 };
 
 module.exports.removeNote = function(req, res) {
-    console.log(req.query);
+    console.log(req.query.note);
     User.findById(req.query.note._id, function(err, user) {
         if (err) {
             console.log(err);
@@ -38,21 +38,22 @@ module.exports.removeNote = function(req, res) {
                 err: err
             });
             return;
-        }
-        var notifications = user.notifications;
-        var newArray = [];
-        for (notification in notifications) { //jshint ignore:line
-            if (notification.message !== req.query.note.message) {
-                newArray.push(notification);
+        } else if (user) {
+            var notifications = user.notifications;
+            var newArray = [];
+            for (notification in notifications) { //jshint ignore:line
+                if (notification.message !== req.query.note.message) {
+                    newArray.push(notification);
+                }
             }
+            User.findByIdAndUpdate(req.query.note._id, {
+                $set: {
+                    notifications: newArray
+                }
+            }, function(err, doc) {
+                res.status(200).end();
+            });
         }
-        User.findByIdAndUpdate(req.query.note._id, {
-            $set: {
-                notifications: newArray
-            }
-        }, function(err, doc) {
-            res.status(200).end();
-        });
     });
 };
 

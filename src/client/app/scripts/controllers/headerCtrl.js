@@ -21,12 +21,14 @@ angular.module('clientApp')
     header.myNote = {};
     $scope.saveNotification = function(note) {
       header.myNote = note;
+      console.log(header.myNote);
     };
     $scope.notifications = [];
     header.notifications = 0;
     if (authentication.isLoggedIn()) {
       deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
-        header.notifications = data.data.notifications;
+        $scope.notifications = data.data.notifications;
+        header.notifications = $scope.notifications.length;
       }, function error(err) {
         console.log(err);
       });
@@ -77,6 +79,7 @@ angular.module('clientApp')
       $location.path("/");
     };
     $('#notificationModal').on('hidden.bs.modal', function() { //jshint ignore:line
+      console.log(header.myNote);
       if (!header.myNote) {
         return;
       }
