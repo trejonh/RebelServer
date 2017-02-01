@@ -18,10 +18,9 @@ angular.module('clientApp')
   .controller('HeaderCtrl', function($scope, $location, $interval, authentication, deviceService) {
     var header = this; // jshint ignore:line
     var notificationsTimer;
-    var myNote;
+    header.myNote = {};
     $scope.saveNotification = function(note) {
-      myNote = note;
-      console.log(note);
+      header.myNote = note;
     };
     $scope.notifications = [];
     header.notifications = 0;
@@ -36,12 +35,14 @@ angular.module('clientApp')
       if (notification.passedOrFail.includes("success")) {
         return {
           'background-color': '#dff0d8;',
-          'color': '#3c763d'
+          'color': '#3c763d;',
+          'cursor': 'pointer;'
         };
       } else {
         return {
           'background-color': '#f2dede;',
-          'color': '#a94442'
+          'color': '#a94442;',
+          'cursor': 'pointer;'
         };
       }
     };
@@ -75,15 +76,15 @@ angular.module('clientApp')
       bind();
       $location.path("/");
     };
-    $('#notificationPopover').on('hidden.bs.popover', function() { //jshint ignore:line
-      if (!myNote) {
+    $('#notificationModal').on('hidden.bs.modal', function() { //jshint ignore:line
+      if (!header.myNote) {
         return;
       }
       if (notificationsTimer) {
         $interval.cancel(notificationsTimer);
       }
-      myNote._id = authentication.currentUser()._id;
-      authentication.removeNote(myNote).then(function() {
+      header.myNote._id = authentication.currentUser()._id;
+      authentication.removeNote(header.myNote).then(function() {
         notificationsTimer = $interval(function() {
           if (authentication.isLoggedIn()) {
             deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
