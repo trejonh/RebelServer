@@ -21,7 +21,6 @@ angular.module('clientApp')
     header.myNote = {};
     $scope.saveNotification = function(note) {
       header.myNote = note;
-      console.log(header.myNote);
     };
     $scope.notifications = [];
     header.notifications = 0;
@@ -79,7 +78,6 @@ angular.module('clientApp')
       $location.path("/");
     };
     $('#notificationModal').on('hidden.bs.modal', function() { //jshint ignore:line
-      console.log(header.myNote);
       if (!header.myNote) {
         return;
       }
