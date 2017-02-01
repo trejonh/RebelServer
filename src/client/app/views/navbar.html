@@ -23,7 +23,7 @@
       Notifications&nbsp;&nbsp;&nbsp;<span class="badge">{{header.notifications}}</span>
     </button>
       <ul class="dropdown-menu">
-        <li ng-repeat="notification in notifications" id="notificationPopover" ng-click="saveNotification(notification)" data-toggle="modal" data-target="#notificationModal" ng-style="notifier(notification)" ><marquee>{{notification.device}}: {{notification.message}}</marquee></li>
+        <li ng-repeat="notification in notifications" id="notificationPopover" ng-click="saveNotification(notification)" data-toggle="modal" data-target="#notificationModal" style="cursor:pointer;"><marquee ng-style="notifier(notification)" >{{notification.device}}: {{notification.message}}</marquee></li>
       </ul>
     </div>
   </div>

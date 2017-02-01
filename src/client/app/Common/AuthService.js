@@ -75,7 +75,7 @@
     };
 
     var removeNote = function(noteToRemove){
-      return $http.delete('http://' + window.location.hostname + ':3000/note',{params:{note:noteToRemove}});
+      return $http.delete('http://' + window.location.hostname + ':3000/note',{params:{_id:noteToRemove._id,message:noteToRemove.message}});
     };
 
     return {

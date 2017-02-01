@@ -30,8 +30,8 @@ module.exports.profileDelete = function(req, res) {
 };
 
 module.exports.removeNote = function(req, res) {
-    console.log(req.query.note['_id']);
-    User.findById(req.query.note._id, function(err, user) {
+    console.log(req.query._id);
+    User.findById(req.query._id, function(err, user) {
         if (err || !user) {
             console.log(err);
             res.status(500).json({
@@ -42,11 +42,11 @@ module.exports.removeNote = function(req, res) {
             var notifications = user.notifications;
             var newArray = [];
             for (notification in notifications) { //jshint ignore:line
-                if (notification.message !== req.query.note.message) {
+                if (notification.message !== req.query.message) {
                     newArray.push(notification);
                 }
             }
-            User.findByIdAndUpdate(req.query.note._id, {
+            User.findByIdAndUpdate(req.query._id, {
                 $set: {
                     notifications: newArray
                 }
