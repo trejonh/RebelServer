@@ -30,7 +30,7 @@ module.exports.profileDelete = function(req, res) {
 };
 
 module.exports.removeNote = function(req, res) {
-    console.log(req.query.note._id);
+    console.log(req.query.note['_id']);
     User.findById(req.query.note._id, function(err, user) {
         if (err || !user) {
             console.log(err);
