@@ -45,8 +45,6 @@ module.exports.removeNote = function(req, res) {
                     newArray.push(notification);
                 }
             }
-            console.log('////////');
-            console.log(newArray);
             User.findByIdAndUpdate(req.query._id, {
                 $set: {
                     notifications: newArray

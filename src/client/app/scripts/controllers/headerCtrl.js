@@ -26,6 +26,9 @@ angular.module('clientApp')
     header.notifications = 0;
     if (authentication.isLoggedIn()) {
       deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
+        if(!data.data.notifications){
+          return;
+        }
         $scope.notifications = data.data.notifications;
         header.notifications = $scope.notifications.length;
       }, function error(err) {
@@ -64,6 +67,9 @@ angular.module('clientApp')
     notificationsTimer = $interval(function() {
       if (authentication.isLoggedIn()) {
         deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
+          if(!data.data.notifications){
+            return;
+          }
           $scope.notifications = data.data.notifications;
           header.notifications = $scope.notifications.length;
         }, function error(err) {
@@ -89,6 +95,9 @@ angular.module('clientApp')
         notificationsTimer = $interval(function() {
           if (authentication.isLoggedIn()) {
             deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
+              if(!data.data.notifications){
+                return;
+              }
               $scope.notifications = data.data.notifications;
               header.notifications = $scope.notifications.length;
             }, function error(err) {
