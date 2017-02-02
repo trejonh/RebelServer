@@ -94,7 +94,8 @@ function notifyUser(deviceID, method, passedOrFail, done) {
                             sms.sendText({
                                     subject: "Rebel Kangaroo",
                                     phoneNumber:user.phoneNumber,
-                                    message: notification.message
+                                    message: notification.message,
+                                    region: 'us'
                                 },
                                 function(info) {
                                     console.log(info);
