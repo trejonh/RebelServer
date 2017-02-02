@@ -18,7 +18,7 @@ var agendaUI = require('agenda-ui');
 var routesApi = require('./routes');
 
 var app = express();
-
+console.log(process.env['host'],process.env['password'],process.env['username']);
 // view engine setup
 
 // uncomment after placing your favicon in /public
