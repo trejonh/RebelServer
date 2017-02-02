@@ -41,8 +41,6 @@ module.exports.cancel = function(names) {
 module.exports.agenda = AGENDA;
 
 function switchPower(outlet, done) {
-    console.log("in switchPower");
-    console.log(outlet);
     var particleUrl = "https://api.particle.io/v1/devices/";
     particleRequest.post(particleUrl + outlet.deviceID + "/" + outlet.method + "?access_token=" + outlet.access_token, {
         form: {
@@ -93,13 +91,13 @@ function notifyUser(deviceID, method, passedOrFail, done) {
                             console.log(err);
                         }
                         if (user.phoneNumber) {
-                            sms.sendText(user.phoneNumber, notification.message, {
-                                    subject: "Rebel Kangaroo"
+                            sms.sendText({
+                                    subject: "Rebel Kangaroo",
+                                    phoneNumber:user.phoneNumber,
+                                    message: notification.message
                                 },
-                                function(err, info) {
-                                    if (err) {
-                                        console.log(err);
-                                    }
+                                function(info) {
+                                    console.log(info);
                                     done();
                                 });
                         }
