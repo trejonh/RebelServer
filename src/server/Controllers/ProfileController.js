@@ -42,7 +42,7 @@ module.exports.removeNote = function(req, res) {
             var newArray = [];
             for (var i = 0; i <notifications.length; i++) { //jshint ignore:line
                 if (notifications[i].message !== req.query.message) {
-                    newArray.push(notification);
+                    newArray.push(notifications[i]);
                 }
             }
             User.findByIdAndUpdate(req.query._id, {
