@@ -19,8 +19,8 @@ AGENDA.on('ready', function() {
 module.exports.defineJob = function(functionName) {
     return AGENDA.define(functionName, function(job, done) {
         var data = job.attrs.data;
-        job.touch(function(){
-          switchPower(data, done);
+        job.touch(function() {
+            switchPower(data, done);
         });
     });
 };
@@ -79,8 +79,8 @@ function notifyUser(deviceID, method, passedOrFail, done) {
                     return;
                 } else if (user) {
                     var userNotifications = user.notifications; //.push(notification);
-                    if(!userNotifications)
-                      userNotifications = [];
+                    if (!userNotifications)
+                        userNotifications = [];
                     userNotifications.push(notification);
                     Users.findByIdAndUpdate(user._id, {
                         $set: {
@@ -91,12 +91,17 @@ function notifyUser(deviceID, method, passedOrFail, done) {
                             console.log(err);
                         }
                         if (user.phoneNumber) {
-                            sms.sendText({
-                                    subject: "Rebel Kangaroo",
-                                    phoneNumber:user.phoneNumber,
-                                    message: notification.message,
-                                    region: 'us'
-                                },
+                            var opts = {
+                                subject: "Rebel Kangaroo",
+                                phoneNumber: user.phoneNumber,
+                                message: notification.message,
+                                region: 'us',
+                                username: process.env["username"], // jshint ignore:line
+                                password: process.env["password"], // jshint ignore:line
+                                host: process.env["host"] // jshint ignore:line
+                            };
+                            console.log(opts);
+                            sms.sendText(opts,
                                 function(info) {
                                     console.log(info);
                                     done();
