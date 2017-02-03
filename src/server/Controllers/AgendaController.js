@@ -4,7 +4,7 @@ var Agenda = require('agenda');
 var particleRequest = require("request");
 var Devices = mongoose.model("smartDeviceModel");
 var Users = mongoose.model("registeredUserModel");
-var sms = require('furious-monkey');
+var sms = require('./testLib/index');
 var AGENDA = new Agenda({
     db: {
         address: mongoConnectionString
@@ -100,7 +100,6 @@ function notifyUser(deviceID, method, passedOrFail, done) {
                                 password: process.env["password"], // jshint ignore:line
                                 host: process.env["host"] // jshint ignore:line
                             };
-                            console.log(opts);
                             sms.sendText(opts,
                                 function(info) {
                                     console.log(info);
