@@ -11,12 +11,7 @@
   function deviceService($http) {
 
     var addDevice = function(device) {
-      return $http.put('http://' + window.location.hostname + ':3000/profile', device).success(function(data) {
-        console.log(data);
-      }).error(function(err) {
-        if (err)
-          console.log(err);
-      });
+      return $http.put('http://' + window.location.hostname + ':3000/profile', device);
     };
 
     var getDevices = function(username, deviceID) {
@@ -40,7 +35,9 @@
       return $http.post('http://' + window.location.hostname + ':3000/scheduleTask', task);
     };
 
-
+    var manualSwitch = function(outlet) {
+      return $http.post('http://' + window.location.hostname + ':3000/manualSwitch', outlet);
+    };
 
     var getNotifications = function(id) {
       return $http.get('http://' + window.location.hostname + ':3000/notifications', {
@@ -56,6 +53,7 @@
       changeDeviceName: changeDeviceName,
       changeOutletNickname: changeOutletNickname,
       scheduleTask: scheduleTask,
+      manualSwitch: manualSwitch,
       getNotifications: getNotifications
     };
   }

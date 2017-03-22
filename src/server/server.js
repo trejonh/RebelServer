@@ -11,12 +11,13 @@ require('./Models/mongooseConnection');
 // [SH] Bring in the Passport config after model is defined
 require('./config/passport');
 
+var agenda = require('./Controllers/AgendaController').agenda;
+var agendaUI = require('agenda-ui');
 
 // [SH] Bring in the routes for the API (delete the default routes)
 var routesApi = require('./routes');
 
 var app = express();
-
 // view engine setup
 
 // uncomment after placing your favicon in /public
@@ -37,6 +38,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use('/agenda-ui', agendaUI(agenda, {poll: 1000}));
 // [SH] Use the API routes when path starts with /api
 app.use('/', routesApi);
 

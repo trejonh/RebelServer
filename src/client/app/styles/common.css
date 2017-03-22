@@ -70,3 +70,11 @@ i#addDeviceIcon{
     text-overflow: ellipsis;
     max-width: 200px;
 }
+
+.fa-toggle-on{
+  color: green;
+}
+
+.fa-toggle-off{
+  color:red;
+}

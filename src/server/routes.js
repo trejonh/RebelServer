@@ -17,6 +17,7 @@ var ctrlTest = require('./Controllers/TestController');
 router.get('/profile', auth, ctrlProfile.profileRead);
 router.delete('/profile', ctrlProfile.profileDelete);
 router.put('/profile', ctrlProfile.updateUser);
+router.delete('/note',ctrlProfile.removeNote);
 
 //notifications;
 router.get('/notifications', ctrlOutlet.getNotifications);
@@ -33,6 +34,7 @@ router.post('/createOutlet', ctrlOutlet.createOutlet);
 router.put('/updateOutletData', ctrlOutlet.updateOutletData);
 router.post('/updateOutletNickname',ctrlOutlet.changeOutletName);
 router.post('/scheduleTask',ctrlOutlet.scheduleTask);
+router.post('/manualSwitch',ctrlOutlet.manualSwitch);
 router.post('/changeDeviceName',ctrlDevice.changeDeviceName);
 //for testing purpose only
 router.delete('/testing',ctrlTest.delete);

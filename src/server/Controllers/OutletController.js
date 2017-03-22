@@ -2,9 +2,10 @@
   var Outlets = mongoose.model("outletDataModel");
   var Devices = mongoose.model("smartDeviceModel");
   var Users = mongoose.model("registeredUserModel");
-  var Scheduler = require("node-cron");
   var particleRequest = require("request");
-  var sms = require('furious-monkey');
+  var moment = require('moment');
+  var agenda = require('./AgendaController');
+  var serverTimeZone = new Date().getTimezoneOffset()/60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -216,82 +217,80 @@
       });
   };
   module.exports.scheduleTask = function(req, res) {
-      var request = {};
-      request.body = req.body;
-      if (req.body.isOn === 1) {
-          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOn", function() {
-              res.status(200).end();
-          });
-      } else {
-          triggerPower(request.body.deviceID, request.body._id, request.body.outletNumber, request.body.access_token, "turnOff", function() {
-              res.status(200).end();
-          });
-      }
+      var differenceInTz = req.body.timeZone - serverTimeZone;
+      var time = moment({
+          hour: req.body.time[0],
+          minute: req.body.time[1]
+      }).add(differenceInTz, 'hours');
+      var hours = new Date(time._d).getHours();
+      agenda.cancel(req.body.outletID+' is scheduled to '+req.body.method);
+      agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
+      var job = agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.method,hours,req.body.time[1],req.body);
+      res.status(200).json(job);
   };
 
-  function updateTasks(req) {
-
-      var timeOn = "* " + req.body.timeSetOn[1] + " " + req.body.timeSetOn[0] + " * * *";
-      var timeOff = "* " + req.body.timeSetOff[1] + " " + req.body.timeSetOff[0] + " * * *";
-      var onScheduler;
-      if (req.body.repeatOn) {
-          onScheduler = Scheduler.schedule(timeOn, function() {
-              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOn");
-          });
-      } else {
-          onScheduler = Scheduler.schedule(timeOn, function() {
-              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOn", function() {
-                  this.destroy();
-              });
-          });
-      }
-      var offScheduler;
-      if (req.body.repeatOff) {
-          offScheduler = Scheduler.schedule(timeOff, function() {
-              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOff");
-          });
-      } else {
-          offScheduler = Scheduler.schedule(timeOff, function() {
-              triggerPower(req.body.deviceID, req.body._id, req.body.outletNumber, req.body.access_token, "turnOff", function() {
-                  this.destroy();
-              });
-          });
-      }
-      Outlets.findOne({
-          _id: req.body.outletID
-      }, function(err, outlet) {
+  module.exports.manualSwitch = function(req, res) {
+      Outlets.findById(req.body._id, function(err, outlet) {
           if (err) {
               console.log(err);
+              res.status(500).json({
+                  err: err
+              });
               return;
           } else if (outlet) {
-              if (outlet.onScheduler) {
-                  outlet.onScheduler.destroy();
-              }
-              if (outlet.offScheduler) {
-                  outlet.onScheduler.destroy();
-              }
-              Outlets.findByIdAndUpdate(req.body.outletID, {
-                  $set: {
-                      onScheduler: onScheduler,
-                      offScheduler: offScheduler
-                  }
-              }, function(err, doc) {
+              switchPower(outlet, function(err) {
                   if (err) {
                       console.log(err);
-                      return;
-                  } else if (doc) {
-                      Devices.findById(req.body._id, function(err, device) {
-                          if (err) {
-                              console.log(err);
-                              return;
-                          }
-                          updateOutletsInDevice(device, null, doc);
+                      res.status(500).json({
+                          err: err
                       });
+                      return;
                   }
+                  if (outlet.isOn) {
+                      outlet.isOn = 0;
+                  } else {
+                      outlet.isOn = 1;
+                  }
+                  outlet.save(function() {
+                      Devices.findOne({
+                          $and: [{
+                              owner: req.body.username
+                          }, {
+                              deviceID: outlet.deviceID
+                          }]
+                      }, function(err, device) {
+                          if (device) {
+                              updateOutletsInDevice(device, res, outlet);
+                          }
+                      });
+                  });
+
               });
           }
       });
+  };
+
+  function switchPower(outlet, callback) {
+      var method = "turnOn";
+      if (outlet.isOn)
+          method = "turnOff";
+      var particleUrl = "https://api.particle.io/v1/devices/";
+      particleRequest.post(particleUrl + outlet.deviceID + "/" + method + "?access_token=" + outlet.accessToken, {
+          form: {
+              args: outlet.outletNumber
+          }
+      }, function(err, response, body) {
+          if (!err && response.statusCode === 200) {
+              if (callback)
+                  callback(null);
+          } else if (err) {
+              console.log(err);
+              if (callback)
+                  callback(err);
+          }
+      });
   }
+
 
   function updateOutletsInDevice(device, res, newOutlet) {
       var deviceOutlets = device.outlets;
@@ -319,76 +318,6 @@
                   res.status(200).json(dev);
               }
               return;
-          }
-      });
-  }
-
-  function triggerPower(deviceID, idOfDevice, outletNumber, access_token, method, callback) {
-      var particleUrl = "https://api.particle.io/v1/devices/";
-      particleRequest.post(particleUrl + deviceID + "/" + method + "?access_token=" + access_token, {
-          form: {
-              args: outletNumber
-          }
-      }, function(err, response, body) {
-          if (!err && response.statusCode === 200) {
-              /*if (req) {
-                  updateTasks(req, null);
-              }*/
-              notifyUser(idOfDevice, method, " successful");
-              if (callback)
-                  callback(null);
-          } else if (err) {
-              notifyUser(idOfDevice, method, " not successful due to following:\n" + err);
-              console.log(err);
-              if (callback)
-                  callback(err);
-          }
-      });
-  }
-
-  function notifyUser(deviceID, method, passedOrFail) {
-      Devices.findById(deviceID, function(err, device) {
-          if (err) {
-              console.log(err);
-              return;
-          } else if (device) {
-              var notification = {
-                  timeExecuted: (new Date()).toLocaleString(),
-                  device: device.deviceName,
-                  message: "",
-                  passedOrFail: passedOrFail
-              };
-              notification.message = "On " + notification.timeExecuted + ", " + notification.device + " tried to " + method + " and was" + passedOrFail;
-              Users.findOne({
-                  username: device.owner
-              }, function(err, user) {
-                  if (err) {
-                      console.log(err);
-                      return;
-                  } else if (user) {
-                      var userNotifications = user.notifications; //.push(notification);
-                      userNotifications.push(notification);
-                      Users.findByIdAndUpdate(user._id, {
-                          $set: {
-                              notifications: userNotifications
-                          }
-                      }, function(err) {
-                          if (err) {
-                              console.log(err);
-                          }
-                          if (user.phoneNumber) {
-                              sms.sendText(user.phoneNumber, notification.message, {
-                                      subject: "Rebel Kangaroo"
-                                  },
-                                  function(err, info) {
-                                      if (err) {
-                                          console.log(err);
-                                      }
-                                  });
-                          }
-                      });
-                  }
-              });
           }
       });
   }

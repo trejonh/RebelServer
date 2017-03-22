@@ -47,30 +47,15 @@
     };
 
     var register = function(user) {
-      return $http.post('http://' + window.location.hostname + ':3000/register', user).success(function(data) {
-        saveToken(data.token);
-      }).error(function(err) {
-        console.log(err);
-
-      });
+      return $http.post('http://' + window.location.hostname + ':3000/register', user);
     };
 
     var login = function(user) {
-      return $http.post('http://' + window.location.hostname + ':3000/login', user).success(function(data) {
-        saveToken(data.token);
-      }).error(function(err) {
-        console.log(err);
-      });
+      return $http.post('http://' + window.location.hostname + ':3000/login', user);
     };
 
     var changeProfilImg = function(file) {
-      $http.put('http://' + window.location.hostname + ':3000/profile',file)
-      .success(function(data){
-        console.log(data);
-      }).error(function(err){
-        if(err)
-          console.log(err);
-      });
+      $http.put('http://' + window.location.hostname + ':3000/profile',file);
     };
 
     var logout = function() {
@@ -78,30 +63,19 @@
     };
 
     var deleteAccount = function(userData) {
-      return $http.delete('http://' + window.location.hostname + ':3000/profile',{params: {_id:userData}}).success(function(data) {
-        console.log("account deleted");
-      }).error(function(err) {
-        if(err)
-          console.log(err);
-      });
+      return $http.delete('http://' + window.location.hostname + ':3000/profile',{params: {_id:userData}});
     };
 
     var changePassword = function(passwords){
-      return $http.put('http://' + window.location.hostname + ':3000/profile',passwords).success(function(data) {
-        console.log("password changed");
-      }).error(function(err) {
-        if(err)
-          console.log(err);
-      });
+      return $http.put('http://' + window.location.hostname + ':3000/profile',passwords);
     };
 
     var updatePhoneNumber = function(phoneNumber){
-      return $http.put('http://' + window.location.hostname + ':3000/profile',phoneNumber).success(function(data) {
-        console.log("password changed");
-      }).error(function(err) {
-        if(err)
-          console.log(err);
-      });
+      return $http.put('http://' + window.location.hostname + ':3000/profile',phoneNumber);
+    };
+
+    var removeNote = function(noteToRemove){
+      return $http.delete('http://' + window.location.hostname + ':3000/note',{params:{_id:noteToRemove._id,message:noteToRemove.message}});
     };
 
     return {
@@ -115,7 +89,8 @@
       logout: logout,
       deleteAccount: deleteAccount,
       changePassword: changePassword,
-      updatePhoneNumber: updatePhoneNumber
+      updatePhoneNumber: updatePhoneNumber,
+      removeNote: removeNote
     };
   };
 })();

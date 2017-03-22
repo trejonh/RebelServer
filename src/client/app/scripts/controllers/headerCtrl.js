@@ -17,23 +17,36 @@ function unbind() {
 angular.module('clientApp')
   .controller('HeaderCtrl', function($scope, $location, $interval, authentication, deviceService) {
     var header = this; // jshint ignore:line
+    var notificationsTimer;
+    header.myNote = {};
+    $scope.saveNotification = function(note) {
+      header.myNote = note;
+    };
     $scope.notifications = [];
     header.notifications = 0;
-    deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
-      header.notifications = data.data.notifications;
-    }, function error(err) {
-      console.log(err);
-    });
+    if (authentication.isLoggedIn()) {
+      deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
+        if(!data.data.notifications){
+          return;
+        }
+        $scope.notifications = data.data.notifications;
+        header.notifications = $scope.notifications.length;
+      }, function error(err) {
+        console.log(err);
+      });
+    }
     $scope.notifier = function(notification) {
       if (notification.passedOrFail.includes("success")) {
         return {
           'background-color': '#dff0d8;',
-          'color': '#3c763d'
+          'color': '#3c763d;',
+          'cursor': 'pointer;'
         };
       } else {
         return {
           'background-color': '#f2dede;',
-          'color': '#a94442'
+          'color': '#a94442;',
+          'cursor': 'pointer;'
         };
       }
     };
@@ -50,17 +63,52 @@ angular.module('clientApp')
       } else {
         bind();
       }
-      deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
-        $scope.notifications = data.data.notifications;
-        header.notifications = $scope.notifications.length;
-      }, function error(err) {
-        console.log(err);
-      });
     }, 5000);
+    notificationsTimer = $interval(function() {
+      if (authentication.isLoggedIn()) {
+        deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
+          if(!data.data.notifications){
+            return;
+          }
+          $scope.notifications = data.data.notifications;
+          header.notifications = $scope.notifications.length;
+        }, function error(err) {
+          console.log(err);
+        });
+      }
+    }, 60000);
     $scope.logout = function() {
       $scope.loggedIn = true; //true == hidden, false==visible
       authentication.logout();
       bind();
       $location.path("/");
     };
+    $('#notificationModal').on('hidden.bs.modal', function() { //jshint ignore:line
+      if (!header.myNote) {
+        return;
+      }
+      if (notificationsTimer) {
+        $interval.cancel(notificationsTimer);
+      }
+      header.myNote._id = authentication.currentUser()._id;
+      authentication.removeNote(header.myNote).then(function() {
+        notificationsTimer = $interval(function() {
+          if (authentication.isLoggedIn()) {
+            deviceService.getNotifications(authentication.currentUser()._id).then(function(data) {
+              if(!data.data.notifications){
+                return;
+              }
+              $scope.notifications = data.data.notifications;
+              header.notifications = $scope.notifications.length;
+            }, function error(err) {
+              console.log(err);
+            });
+          }
+        }, 60000);
+      }, function error(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
   });
