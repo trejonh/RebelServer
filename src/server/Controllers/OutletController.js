@@ -8,6 +8,10 @@
   var serverTimeZone = new Date().getTimezoneOffset()/60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
+      console.log(data);
+      console.log("===============================")
+      console.log(req.body);
+      return;
       var outlet = {}; //= new Outlets();
       data = data.split(",");
       for (var i = 0; i < data.length; i++) {
@@ -61,6 +65,11 @@
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
+      var data = req.body.data;
+      console.log(data);
+      console.log("===============================")
+      console.log(req.body);
+      return;
       Outlets.findOne({
           $and: [{
               deviceID: data.deviceID
@@ -271,15 +280,18 @@
   };
 
   function switchPower(outlet, callback) {
-      var method = "turnOn";
+      var method = "PowerOn";
       if (outlet.isOn)
-          method = "turnOff";
+          method = "PowerOff";
       var particleUrl = "https://api.particle.io/v1/devices/";
       particleRequest.post(particleUrl + outlet.deviceID + "/" + method + "?access_token=" + outlet.accessToken, {
           form: {
               args: outlet.outletNumber
           }
       }, function(err, response, body) {
+        console.log(err);
+        console.log(response);
+        console.log(body);
           if (!err && response.statusCode === 200) {
               if (callback)
                   callback(null);

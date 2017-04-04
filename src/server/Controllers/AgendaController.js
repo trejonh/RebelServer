@@ -4,7 +4,6 @@ var Agenda = require('agenda');
 var particleRequest = require("request");
 var Devices = mongoose.model("smartDeviceModel");
 var Users = mongoose.model("registeredUserModel");
-var sms = require('./testLib/index');
 var AGENDA = new Agenda({
     db: {
         address: mongoConnectionString
@@ -49,6 +48,7 @@ function switchPower(outlet, done) {
     }, function(err, response, body) {
         console.log(body);
         console.log(err);
+        console.log(response)
         if (err) {
             console.log(err);
             notifyUser(outlet.deviceObjID, outlet.method, "a failure due to: " + err.error_description, done);
@@ -89,22 +89,6 @@ function notifyUser(deviceID, method, passedOrFail, done) {
                     }, function(err) {
                         if (err) {
                             console.log(err);
-                        }
-                        if (user.phoneNumber) {
-                            var opts = {
-                                subject: "Rebel Kangaroo",
-                                phoneNumber: user.phoneNumber,
-                                message: notification.message,
-                                region: 'us',
-                                username: process.env["username"], // jshint ignore:line
-                                password: process.env["password"], // jshint ignore:line
-                                host: process.env["host"] // jshint ignore:line
-                            };
-                            sms.sendText(opts,
-                                function(info) {
-                                    console.log(info);
-                                    done();
-                                });
                         }
                     });
                 }
