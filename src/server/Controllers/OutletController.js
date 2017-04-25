@@ -8,10 +8,6 @@
   var serverTimeZone = new Date().getTimezoneOffset()/60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
-      console.log(data);
-      console.log("===============================")
-      console.log(req.body);
-      res.status(200).json({body:"good"}).end();
       return;
       var outlet = {}; //= new Outlets();
       data = data.split(",");
@@ -39,6 +35,7 @@
                   break;
           }
       }
+      console.log(outlet);
       var outletObj = new Outlets();
       outletObj.deviceID = outlet.deviceID;
       outletObj.accessToken = outlet.accessToken;
@@ -46,9 +43,9 @@
       outletObj.nickname = "I am outlet " + outlet.outletNumber;
       outletObj.isOn = outlet.isOn;
       outletObj.wattage = outlet.wattage;
-      outletObj.elapsedTimeOn = 0;
+      /*outletObj.elapsedTimeOn = 0;
       outletObj.lastKnownPowerStatus = true;
-      outletObj.timeSinceLastUpdate = Date.now();
+      outletObj.timeSinceLastUpdate = Date.now();*/
 
       outletObj.save(function(err, doc) {
           if (err) {
@@ -59,19 +56,13 @@
               });
               return;
           }
-          res.status(200).end(); //if not sending json or other data need to .end()
+          res.status(200).json({body:"good"}).end(); //if not sending json or other data need to .end()
           return;
       });
   };
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
-      var data = req.body.data;
-      console.log(data);
-      console.log("===============================")
-      console.log(req.body);
-      res.status(200).json({body:"good"}).end();
-      return;
       Outlets.findOne({
           $and: [{
               deviceID: data.deviceID
@@ -94,10 +85,10 @@
           }
           outlet.wattage = data.wattage;
           //TODO: verify time
-          if (outlet.lastKnownPowerStatus) {
+          /*if (outlet.lastKnownPowerStatus) {
               outlet.elapsedTimeOn = Date.now() - outlet.timeSinceLastUpdate;
               outlet.timeSinceLastUpdate = Date.now();
-          }
+          }*/
           outlet.save(function(err, raw) {
               if (err) {
                   console.log(err);
