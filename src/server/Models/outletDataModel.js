@@ -34,7 +34,7 @@ var OutletDataSchema = new mongoose.Schema({
     },
     elapsedTimeOn: {
         type: Number,
-        required: true
+        required: false
     },
     timeSinceLastUpdate:{
       type: Number,
