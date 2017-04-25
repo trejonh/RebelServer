@@ -8,7 +8,6 @@
   var serverTimeZone = new Date().getTimezoneOffset()/60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
-      return;
       var outlet = {}; //= new Outlets();
       data = data.split(",");
       console.log(data);
