@@ -11,6 +11,8 @@
       return;
       var outlet = {}; //= new Outlets();
       data = data.split(",");
+      console.log(data);
+      console.log("====================");
       for (var i = 0; i < data.length; i++) {
           var outletData = data[i].split(":");
           /*
