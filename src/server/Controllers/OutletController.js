@@ -11,6 +11,7 @@
       console.log(data);
       console.log("===============================")
       console.log(req.body);
+      res.status(200).end();
       return;
       var outlet = {}; //= new Outlets();
       data = data.split(",");
@@ -69,6 +70,7 @@
       console.log(data);
       console.log("===============================")
       console.log(req.body);
+      res.status(200).end();
       return;
       Outlets.findOne({
           $and: [{

@@ -29,6 +29,7 @@ module.exports.scheduleJob = function(functionName, timeHours, timeMin, data) {
 };
 
 module.exports.cancel = function(names) {
+    console.log(names);
     AGENDA.cancel({
         name: names
     }, function(err, numRemoved) {
