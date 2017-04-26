@@ -10,8 +10,6 @@
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
       data = data.split(",");
-      console.log(data);
-      console.log("====================");
       for (var i = 0; i < data.length; i++) {
           var outletData = data[i].split(":");
           /*
@@ -36,7 +34,6 @@
                   break;
           }
       }
-      console.log(outlet);
       var outletObj = new Outlets();
       outletObj.deviceID = outlet.deviceID;
       outletObj.accessToken = outlet.accessToken;
@@ -64,6 +61,7 @@
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
+      console.log("in update");
       console.log(data);
       Outlets.findOne({
           $and: [{
