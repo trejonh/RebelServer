@@ -64,6 +64,7 @@
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
+      console.log(data);
       Outlets.findOne({
           $and: [{
               deviceID: data.deviceID
