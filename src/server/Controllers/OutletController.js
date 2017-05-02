@@ -319,6 +319,7 @@
 
 
   function updateOutletsInDevice(device, res, newOutlet) {
+      console.log("trying to update outlets in device");
       var deviceOutlets = device.outlets;
       for (var i = 0; i < deviceOutlets.length; i++) {
           if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
@@ -342,6 +343,7 @@
               return;
           } else if (dev) {
               if (res) {
+                  console.log("done updating");
                   res.status(200).json(dev).end();
               }
               return;
