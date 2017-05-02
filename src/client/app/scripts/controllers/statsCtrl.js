@@ -27,6 +27,8 @@ angular.module('clientApp')
       setOffTime: []
     };
 
+    var hourlyGraph = null;
+    var dailyGraph = null;
     stats.costPerKWH = 0.5;
 
     deviceService.getDevices(null, deviceId).then(function(data) {
@@ -38,9 +40,14 @@ angular.module('clientApp')
       }
     });
 
-    $scope.$watch("outlets",function(){
-      GraphService.initHourlyGraph({container:"#hourlyGraph",outlets:$scope.outlets});
-      GraphService.initDailyGraph({container:"#dailyGraph",outlets:$scope.outlets});
+    $scope.$watch("outlets",function(){ 
+      if(hourlyGraph && dailyGraph){
+        hourlyGraph.update();
+        dailyGraph.update();
+        return;
+      }
+      hourlyGraph = GraphService.initHourlyGraph({container:"#hourlyGraph",outlets:$scope.outlets});
+      dailyGraph = GraphService.initDailyGraph({container:"#dailyGraph",outlets:$scope.outlets});
     });
     //setSelectedOutet
     $scope.setSelectedOutlet = function(outlet) {
