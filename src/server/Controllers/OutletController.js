@@ -43,7 +43,7 @@
           }]
       },function(err,outlet){
         if(!outlet)
-          break;
+          return;
         updateOutletData(req,res);
         return;
       });
