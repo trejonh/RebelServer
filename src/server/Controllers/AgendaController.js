@@ -139,6 +139,7 @@ function notifyUser(deviceID, method, passedOrFail, done) {
                         if (err) {
                             console.log(err);
                         }
+						done();
                     });
                 }
             });
