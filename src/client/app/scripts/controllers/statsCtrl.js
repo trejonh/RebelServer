@@ -39,8 +39,8 @@ angular.module('clientApp')
     });
 
     $scope.$watch("outlets",function(){
-      GraphService.initHourlyGraph({container:"#hourlyGraph",outlets:$sccope.outlets});
-      GraphService.initDailyGraph({container:"#dailyGraph",outlets:$sccope.outlets});
+      GraphService.initHourlyGraph({container:"#hourlyGraph",outlets:$scope.outlets});
+      GraphService.initDailyGraph({container:"#dailyGraph",outlets:$scope.outlets});
     });
     //setSelectedOutet
     $scope.setSelectedOutlet = function(outlet) {
