@@ -41,8 +41,8 @@
           }, {
               outletNumber: data.outletNumber
           }]
-      }, function(err, outlet) {
-          if (outlet)
+      }, function(err, foundOutlet) {
+          if (foundOutlet)
               updateOutletData(req, res);
           else {
               var outletObj = new Outlets();
