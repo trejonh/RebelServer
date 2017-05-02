@@ -20,6 +20,8 @@ AGENDA.define('hourlyWattage', function(job, done) {
     for (var outlet in allOutlets) {
         var currWattage = outlet.currentWattage;
         outlet.currentWattage = 0;
+        if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
+            outlet.hourlyWattage = [];
         outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
         updateOutletsInDevice(outlet)
     }
@@ -34,6 +36,8 @@ AGENDA.define('dailyWattage', function(job, done) {
         for (var wattage in outlet.hourlyWattage)
             dailyWattage += wattage;
         outlet.hourlyWattage = [];
+        if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
+            outlet.dailyWattage = [];
         outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
         updateOutletsInDevice(outlet);
     }
