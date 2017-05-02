@@ -16,32 +16,46 @@ var particleRequest = require("request");
 
 
 AGENDA.define('hourlyWattage', function(job, done) {
-    var allOutlets = Outlets.find({});
-    for (var outlet in allOutlets) {
-        var currWattage = outlet.currentWattage;
-        outlet.currentWattage = 0;
-        if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
-            outlet.hourlyWattage = [];
-        outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
-        updateOutletsInDevice(outlet)
-    }
-    done();
+	Outlets.find({}, function(err, allOutlets){
+		if(err){
+			console.log("error in calculating hourlyWattage");
+			console.log(err);
+			done();
+			return;
+		}
+		for (var outlet in allOutlets) {
+			var currWattage = outlet.currentWattage;
+			outlet.currentWattage = 0;
+			if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
+				outlet.hourlyWattage = [];
+			outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
+			updateOutletsInDevice(outlet)
+		}
+		done();
+	});
 });
 
 
 AGENDA.define('dailyWattage', function(job, done) {
-    var allOutlets = Outlets.find({});
-    for (var outlet in allOutlets) {
-        var dailyWattage = 0;
-        for (var wattage in outlet.hourlyWattage)
-            dailyWattage += wattage;
-        outlet.hourlyWattage = [];
-        if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
-            outlet.dailyWattage = [];
-        outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
-        updateOutletsInDevice(outlet);
-    }
-    done();
+    Outlets.find({},function(err,allOutlets){
+		if(err){
+			console.log("error in calculating dailyWattage");
+			console.log(err);
+			done();
+			return;
+		}
+		for (var outlet in allOutlets) {
+			var dailyWattage = 0;
+			for (var wattage in outlet.hourlyWattage)
+				dailyWattage += wattage;
+			outlet.hourlyWattage = [];
+			if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
+				outlet.dailyWattage = [];
+			outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
+			updateOutletsInDevice(outlet);
+		}
+		done();
+	});
 });
 
 module.exports.defineJob = function(functionName) {
