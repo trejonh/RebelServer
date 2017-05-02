@@ -52,6 +52,8 @@
               outletObj.nickname = "I am outlet " + outlet.outletNumber;
               outletObj.isOn = outlet.isOn;
               outletObj.currentWattage = outlet.currentWattage;
+              outletObj.hourlyWattage = [];
+              outletObj.dailyWattage = [];
               outletObj.save(function(err, doc) {
                   if (err) {
                       console.log(err);
