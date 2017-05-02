@@ -8,6 +8,7 @@ module.exports.getDevices = function(req, res) {
     } : {
         deviceID: req.query.deviceID
     };
+    console.log(searchQuery);
     Device.find(searchQuery, function(err, devices) {
         if (err || !devices) {
             console.log(err);
