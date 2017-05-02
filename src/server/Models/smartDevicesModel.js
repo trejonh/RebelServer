@@ -16,6 +16,10 @@ var SmartDeviceSchema = new mongoose.Schema({
     outlets: {
         type: [],
         required: false
+    },
+    lastSeenOnline:{
+        type: Object,
+        required: false
     }
 });
 

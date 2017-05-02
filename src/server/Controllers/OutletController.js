@@ -328,7 +328,8 @@
       }
       Devices.findByIdAndUpdate(device._id, {
           $set: {
-              outlets: deviceOutlets
+              outlets: deviceOutlets,
+              lastSeenOnline: (new Date()).toTimeString()
           }
       }, function(err, dev) {
           if (err) {

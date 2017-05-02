@@ -37,6 +37,11 @@ angular.module('clientApp')
         console.log(err);
       }
     });
+
+    $scope.$watch("outlets",function(){
+      GraphService.initHourlyGraph({container:"#hourlyGraph",outlets:$sccope.outlets});
+      GraphService.initDailyGraph({container:"#dailyGraph",outlets:$sccope.outlets});
+    });
     //setSelectedOutet
     $scope.setSelectedOutlet = function(outlet) {
       stats.outlet = outlet;
@@ -172,7 +177,7 @@ angular.module('clientApp')
       $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
         deviceService.changeDeviceName(stats.device).then(function(data) {
           console.log(data);
-          //stats.device = data.data;
+          stats.device = data.data;
         }, function error(err) {
           console.log(err);
         });
