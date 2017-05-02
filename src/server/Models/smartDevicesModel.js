@@ -16,18 +16,6 @@ var SmartDeviceSchema = new mongoose.Schema({
     outlets: {
         type: [],
         required: false
-    },
-    lastSeenOnline:{
-      type: String,
-      required: false
-    },
-    dailyWattage:{
-      type: Number,
-      required: false
-    },
-    dailyTimeUsed:{
-      type: Number,
-      required: false
     }
 });
 

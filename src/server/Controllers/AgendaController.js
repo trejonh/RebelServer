@@ -4,6 +4,10 @@ var Agenda = require('agenda');
 var particleRequest = require("request");
 var Devices = mongoose.model("smartDeviceModel");
 var Users = mongoose.model("registeredUserModel");
+var Outlets = mongoose.model("outletDataModel");
+const
+var SECONDS_IN_DAY = 86400;
+var serverTimeZone = new Date().getTimezoneOffset() / 60;
 var AGENDA = new Agenda({
     db: {
         address: mongoConnectionString
@@ -11,10 +15,32 @@ var AGENDA = new Agenda({
 });
 var particleRequest = require("request");
 
-AGENDA.on('ready', function() {
-    console.log('ready!');
-    AGENDA.start();
+
+AGENDA.define('hourlyWattage', function(job, done) {
+    var allOutlets = Outlets.find({});
+    for (var outlet in allOutlets) {
+        var currWattage = outlet.currWattage;
+        outlet.currWattage = 0;
+        outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
+        updateOutletsInDevice(outlet)
+    }
+    done();
 });
+
+
+AGENDA.define('dailyWattage', function(job, done) {
+    var allOutlets = Outlets.find({});
+    for (var outlet in allOutlets) {
+        var dailyWattage = 0;
+        for (var wattage in outlet.hourlyWattage)
+            dailyWattage += wattage;
+        outlet.hourlyWattage = [];
+        outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
+        updateOutletsInDevice(outlet);
+    }
+    done();
+});
+
 module.exports.defineJob = function(functionName) {
     return AGENDA.define(functionName, function(job, done) {
         var data = job.attrs.data;
@@ -38,6 +64,14 @@ module.exports.cancel = function(names) {
         }
     });
 };
+
+AGENDA.on('ready', function() {
+    console.log('ready!');
+    AGENDA.every("60 minutes", "hourlyWattage");
+    AGENDA.every("24 hours", "dailyWattage");
+    AGENDA.start();
+});
+
 module.exports.agenda = AGENDA;
 
 function switchPower(outlet, done) {
@@ -47,9 +81,6 @@ function switchPower(outlet, done) {
             args: outlet.outletNumber
         }
     }, function(err, response, body) {
-        console.log(body);
-        console.log(err);
-        console.log(response)
         if (err) {
             console.log(err);
             notifyUser(outlet.deviceObjID, outlet.method, "a failure due to: " + err.error_description, done);
@@ -94,6 +125,30 @@ function notifyUser(deviceID, method, passedOrFail, done) {
                     });
                 }
             });
+        }
+    });
+}
+
+function updateOutletsInDevice(outlet) {
+    var currDevice;
+    Devices.findOne({
+        deviceID: outlet.deviceID
+    }, function(err, device) {
+        if (device) {
+            var deviceOutlets = device.outlets;
+            for (var i = 0; i < deviceOutlets.length; i++) {
+                if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
+                    deviceOutlets[i] = newOutlet;
+                    break;
+                }
+            }
+            Devices.findByIdAndUpdate(device._id, { $set: { outlets: deviceOutlets } },
+                function(err, dev) {
+                    if (err || !dev) {
+                        console.log("error in updating outlets");
+                        console.log(err);
+                    }
+                });
         }
     });
 }
