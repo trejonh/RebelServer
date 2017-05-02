@@ -5,8 +5,7 @@ var particleRequest = require("request");
 var Devices = mongoose.model("smartDeviceModel");
 var Users = mongoose.model("registeredUserModel");
 var Outlets = mongoose.model("outletDataModel");
-const
-var SECONDS_IN_DAY = 86400;
+const SECONDS_IN_DAY = 86400;
 var serverTimeZone = new Date().getTimezoneOffset() / 60;
 var AGENDA = new Agenda({
     db: {
