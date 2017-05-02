@@ -30,12 +30,13 @@ module.exports.addDevice = function(deviceID, username) {
     ctrlOutlet.getOutlets(deviceID, function(err, outlets) {
         if (err) {
             console.log(err);
-            return;
+            return null;
         }
         newDevice.outlets = outlets;
         newDevice.save(function(err, dev, num) {
             if (err) {
                 console.log(err);
+                return null
             } else if (dev) {
                 return dev;
             }
