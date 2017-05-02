@@ -18,8 +18,8 @@ var particleRequest = require("request");
 AGENDA.define('hourlyWattage', function(job, done) {
     var allOutlets = Outlets.find({});
     for (var outlet in allOutlets) {
-        var currWattage = outlet.currWattage;
-        outlet.currWattage = 0;
+        var currWattage = outlet.currentWattage;
+        outlet.currentWattage = 0;
         outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
         updateOutletsInDevice(outlet)
     }

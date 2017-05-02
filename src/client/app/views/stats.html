@@ -20,15 +20,13 @@
               <th>Outlet Number</th>
               <th>Primary Usage</th>
               <th>On/off</th>
-              <th>Power Drawn</th>
-              <th>Total Time On</th>
+              <th>Total Power Drawn</th>
             </tr>
             <tr ng-repeat="outlet in outlets" id="outletStatRow" ng-click="setSelectedOutlet(outlet)">
               <td>{{outlet.outletNumber}}</td>
               <td><span><i id="editName" class="fa fa-pencil" alt="edit device name" aria-hidden="true" data-toggle="modal" data-target="#changeOutletNicknameModal"></i><span>&nbsp;&nbsp;&nbsp;{{outlet.nickname}}</td>
             <td>{{outlet.isOn}}</td>
-            <td>{{outlet.wattage}}</td>
-            <td>{{outlet.elapsedTimeOn}}</td>
+            <td>{{outlet.currentWattage}}</td>
           </tr>
         </table>
         </div>

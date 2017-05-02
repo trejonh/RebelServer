@@ -5,7 +5,7 @@
   var particleRequest = require("request");
   var moment = require('moment');
   var agenda = require('./AgendaController');
-  var serverTimeZone = new Date().getTimezoneOffset()/60;
+  var serverTimeZone = new Date().getTimezoneOffset() / 60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -41,64 +41,65 @@
           }, {
               outletNumber: data.outletNumber
           }]
-      },function(err,outlet){
-        if(!outlet)
-          return;
-        updateOutletData(req,res);
-        return;
-      });
-      var outletObj = new Outlets();
-      outletObj.deviceID = outlet.deviceID;
-      outletObj.accessToken = outlet.accessToken;
-      outletObj.outletNumber = outlet.outletNumber;
-      outletObj.nickname = "I am outlet " + outlet.outletNumber;
-      outletObj.isOn = outlet.isOn;
-      outletObj.currentWattage = outlet.currentWattage;
-      outletObj.save(function(err, doc) {
-          if (err) {
-              console.log(err);
-              res.status(500);
-              res.json({
-                  "error": err
+      }, function(err, outlet) {
+          if (outlet)
+              updateOutletData(req, res);
+          else {
+              var outletObj = new Outlets();
+              outletObj.deviceID = outlet.deviceID;
+              outletObj.accessToken = outlet.accessToken;
+              outletObj.outletNumber = outlet.outletNumber;
+              outletObj.nickname = "I am outlet " + outlet.outletNumber;
+              outletObj.isOn = outlet.isOn;
+              outletObj.currentWattage = outlet.currentWattage;
+              outletObj.save(function(err, doc) {
+                  if (err) {
+                      console.log(err);
+                      res.status(500);
+                      res.json({
+                          "error": err
+                      });
+                      return;
+                  }
+                  res.status(200).json({ body: "good" }).end(); //if not sending json or other data need to .end()
+                  return;
               });
-              return;
+
           }
-          res.status(200).json({body:"good"}).end(); //if not sending json or other data need to .end()
-          return;
       });
   };
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
-      if(typeof data === 'string'){
-        var outlet = {}; //= new Outlets();
-        data = data.split(",");
-        console.log(data);
-        for (var i = 0; i < data.length; i++) {
-            var outletData = data[i].split(":");
-            /*
-             *TODO: only need to parse device id, accessToken, and outlet number and power monitoring stuff
-             *everything else can be calculated on the server
-             */
-            switch (i) {
-                case 0:
-                    outlet.deviceID = outletData[1].trim();
-                    break;
-                case 1:
-                    outlet.accessToken = outletData[1].trim();
-                    break;
-                case 2:
-                    outlet.outletNumber = parseInt(outletData[2]);
-                    break;
-                case 3:
-                    outlet.isOn = parseInt(outletData[1]);
-                    break;
-                case 4:
-                    outlet.currentWattage = parseInt(outletData[1].substring(0, outletData[1].indexOf('}')));
-                    break;
-            }
-        }
-        data = outlet;
+      if (typeof data === 'string') {
+          var outlet = {}; //= new Outlets();
+          data = data.split(",");
+          console.log(data);
+          for (var i = 0; i < data.length; i++) {
+              var outletData = data[i].split(":");
+              /*
+               *TODO: only need to parse device id, accessToken, and outlet number and power monitoring stuff
+               *everything else can be calculated on the server
+               */
+              switch (i) {
+                  case 0:
+                      outlet.deviceID = outletData[1].trim();
+                      break;
+                  case 1:
+                      outlet.accessToken = outletData[1].trim();
+                      break;
+                  case 2:
+                      outlet.outletNumber = parseInt(outletData[2]);
+                      break;
+                  case 3:
+                      outlet.isOn = parseInt(outletData[1]);
+                      break;
+                  case 4:
+                      outlet.currentWattage = parseInt(outletData[1].substring(0, outletData[1].indexOf('}')));
+                      break;
+              }
+          }
+          data = outlet;
       }
       Outlets.findOne({
           $and: [{
@@ -246,9 +247,9 @@
           minute: req.body.time[1]
       }).add(differenceInTz, 'hours');
       var hours = new Date(time._d).getHours();
-      agenda.cancel(req.body.outletID+' is scheduled to '+req.body.method);
-      agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
-      var job = agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.method,hours,req.body.time[1],req.body);
+      agenda.cancel(req.body.outletID + ' is scheduled to ' + req.body.method);
+      agenda.defineJob(req.body.outletID + ' is scheduled to ' + req.body.method);
+      var job = agenda.scheduleJob(req.body.outletID + ' is scheduled to ' + req.body.method, hours, req.body.time[1], req.body);
       res.status(200).json(job);
   };
 
@@ -303,9 +304,9 @@
               args: outlet.outletNumber
           }
       }, function(err, response, body) {
-        console.log(err);
-        console.log(response);
-        console.log(body);
+          console.log(err);
+          console.log(response);
+          console.log(body);
           if (!err && response.statusCode === 200) {
               if (callback)
                   callback(null);
