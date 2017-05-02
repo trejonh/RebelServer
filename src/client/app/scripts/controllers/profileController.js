@@ -36,6 +36,7 @@ angular.module('clientApp')
       .then(function(data) {
         profile.user = data.data;
         deviceService.getDevices(profile.user.username, null).then(function(data) {
+          console.log(data);
           $scope.devices = data.data;
         }, function error(err) {
           if (err) {
