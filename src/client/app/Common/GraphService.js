@@ -14,7 +14,6 @@
             var series = [];
             var legend = [];
             for (var i = 0; i < outlets.length; i++) {
-                console.log(outlets[i]);
                 var tempLabels = [];
                 var tempSeries = [];
                 for (var j = 0; j < outlets[i].hourlyWattage.length; j++) {
