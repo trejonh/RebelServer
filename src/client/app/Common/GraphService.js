@@ -13,17 +13,16 @@
             var labels = [];
             var series = [];
             var legend = [];
-            for (var outlet in outlets) {
-                console.log(outlet);
+            for (var i = 0; i < outlets.length; i++) {
                 var tempLabels = [];
                 var tempSeries = [];
-                for (var data in outlet.hourlyWattage) {
-                    tempLabels.push(data.hour);
-                    tempSeries.push(data.wattage);
+                for (var j = 0; j < outlets[i].hourlyWattage.length; j++) {
+                    tempLabels.push(outlets[i].hourlyWattage[j].hour);
+                    tempSeries.push(outlets[i].hourlyWattage[j].wattage);
                 }
                 labels = tempLabels;
                 series.push(tempSeries);
-                legend.push(outlet.nickname)
+                legend.push(outlets[i].nickname)
             }
             console.log(labels);
             console.log(series);
@@ -54,11 +53,11 @@
             var labels = [];
             var series = [];
             var legend = [];
-            for (var outlet in outlets) {
+            for (var i = 0; i < outlets.length;i++) {
                 var tempLabels = [];
                 var tempSeries = [];
-                for (var data in outlet.dailyWattage) {
-                    var date = new Date(data.day);
+                for (var j = 0; j < outlets[i].dailyWattage.length;j++) {
+                    var date = new Date(outlets[i].dailyWattage[j].day);
                     var dateStr = "";
                     switch (date.getDay() + 1) {
                         case 1:
@@ -85,11 +84,11 @@
                     }
                     dateStr += (date.getMonth()+1)+"/"+date.getDate();
                     tempLabels.push(dateStr);
-                    tempSeries.push(data.wattage);
+                    tempSeries.push(outlets[i].dailyWattage[j].wattage);
                 }
                 labels = tempLabels;
                 series.push(tempSeries);
-                legend.push(outlet.nickname)
+                legend.push(outlets[i].nickname)
             }
             var dailyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
