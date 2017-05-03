@@ -12,7 +12,7 @@
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
-            var legend = [];
+            //var legend = [];
             for (var i = 0; i < outlets.length; i++) {
                 var tempLabels = [];
                 var tempSeries = [];
@@ -20,8 +20,8 @@
                     tempLabels.push(outlets[i].hourlyWattage[j].hour);
                     tempSeries.push(outlets[i].hourlyWattage[j].wattage);
                 }
-                series.push(tempSeries);
-                legend.push(outlets[i].nickname)
+                series.push({name:outles[i].nickname,data:tempSeries});
+                //legend.push(outlets[i].nickname)
             }
             var hourlyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
@@ -37,7 +37,7 @@
                 low: 0,
                 plugins: [
                     Chartist.plugins.legend({
-                        legendNames: legend,
+                        position: 'bottom'
                     })
                 ]
             });
@@ -83,8 +83,7 @@
                     tempSeries.push(outlets[i].dailyWattage[j].wattage);
                 }
                 labels = tempLabels;
-                series.push(tempSeries);
-                legend.push(outlets[i].nickname)
+                series.push({name:outles[i].nickname,data:tempSeries});
             }
             var dailyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
@@ -100,7 +99,7 @@
                 low: 0,
                 plugins: [
                     Chartist.plugins.legend({
-                        legendNames: legend,
+                        position: 'bottom'
                     })
                 ]
             });
