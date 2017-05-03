@@ -13,8 +13,6 @@ var AGENDA = new Agenda({
     }
 });
 var particleRequest = require("request");
-var hourlyCount = 0;
-var dailyCount = 0;
 
 AGENDA.define('hourlyWattage', function(job, done) {
 	Outlets.find({outletNumber:{$ne:-1}}, function(err, allOutlets){
@@ -40,22 +38,16 @@ AGENDA.define('hourlyWattage', function(job, done) {
 						console.error(err);
 						hourlyCount++;
 					}else{
-						updateOutletsInDevice(outlet,"h");						
+						updateOutletsInDevice(outlet);						
 					}
 				});
 			});
-			while(hourlyCount < allOutlets.length){
-				//wait
-				console.log("waiting... on count "+hourlyCount);
-			}
-			//reset count
-			hourlyCount = 0;
 			//now we can say done()
-			done();
+			//done();
 		}else{
 			console.error("no outlets weren't found");
 		}
-	});
+	}).then(done);
 });
 
 
@@ -84,21 +76,15 @@ AGENDA.define('dailyWattage', function(job, done) {
 						console.error(err);
 						dailyCount++;
 					}else{
-						updateOutletsInDevice(outlet,"d");						
+						updateOutletsInDevice(outlet);						
 					}
 				});
 			});
-			while(dailyCount < allOutlets.length){
-				//wait
-			}
-			//reset count
-			dailyCount = 0;
-			//now we can say done()
-			done();
+			//done();
 		}else{
 			console.error("no outlets weren't found");
 		}
-	});
+	}).then(done);
 });
 
 module.exports.defineJob = function(functionName) {
@@ -191,7 +177,7 @@ function notifyUser(deviceID, method, passedOrFail, done) {
     });
 }
 
-function updateOutletsInDevice(outlet,count) {
+function updateOutletsInDevice(outlet) {
     var currDevice;
     Devices.findOne({
         deviceID: outlet.deviceID
@@ -210,10 +196,6 @@ function updateOutletsInDevice(outlet,count) {
                         console.log("error in updating outlets");
                         console.log(err);
                     }
-					if(count==="h")
-						hourlyCount++;
-					else
-						dailyCount++;
                 });
         }
     });
