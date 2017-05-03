@@ -32,30 +32,31 @@ angular.module('clientApp')
         stats.costPerKWH = 0.5;
 
         deviceService.getDevices(null, deviceId).then(function(data) {
-          stats.device = data.data[0];
-          $scope.outlets = data.data[0].outlets;
+            stats.device = data.data[0];
+            $scope.outlets = data.data[0].outlets;
+            hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets });
+            dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets });
         }, function error(err) {
-          if (err) {
-            console.log(err);
-          }
+            if (err) {
+                console.log(err);
+            }
         });
         $interval(function() {
-          console.log("in interval");
-            deviceService.getDevices(null, deviceId).then(function(data) {
-                stats.device = data.data[0];
-                $scope.outlets = data.data[0].outlets;
-                if (hourlyGraph && dailyGraph) {
+            console.log("in interval");
+            if (hourlyGraph && dailyGraph) {
+                deviceService.getDevices(null, deviceId).then(function(data) {
+                    stats.device = data.data[0];
+                    $scope.outlets = data.data[0].outlets;
+                    hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets });
+                    dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets });
                     hourlyGraph.update();
                     dailyGraph.update();
-                    return;
-                }
-                hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets });
-                dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets });
-            }, function error(err) {
-                if (err) {
-                    console.log(err);
-                }
-            });
+                }, function error(err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            }
         }, 3600000);
         /*$scope.$watch("outlets",function(outlets){ 
           if(hourlyGraph && dailyGraph){
