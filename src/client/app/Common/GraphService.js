@@ -9,12 +9,12 @@
     //meanData.$inject = ['$http', 'authentication'];
     function GraphService() { //jshint ignore:line
         var initHourlyGraph = function(graph) {
-            console.log(graph);
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
             var legend = [];
             for (var outlet in outlets) {
+                console.log(outlet);
                 var tempLabels = [];
                 var tempSeries = [];
                 for (var data in outlet.hourlyWattage) {
