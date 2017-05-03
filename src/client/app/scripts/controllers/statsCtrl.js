@@ -46,8 +46,8 @@ angular.module('clientApp')
         dailyGraph.update();
         return;
       }
-      hourlyGraph = GraphService.initHourlyGraph({container:"#hourlyGraph",outlets:$scope.outlets});
-      dailyGraph = GraphService.initDailyGraph({container:"#dailyGraph",outlets:$scope.outlets});
+      hourlyGraph = GraphService.initHourlyGraph({container:"#hourlyGraph",outlets:stats.device.outlets});
+      dailyGraph = GraphService.initDailyGraph({container:"#dailyGraph",outlets:stats.device.outlets});
     });
     //setSelectedOutet
     $scope.setSelectedOutlet = function(outlet) {
