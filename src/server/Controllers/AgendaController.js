@@ -23,24 +23,20 @@ AGENDA.define('hourlyWattage', function(job, done) {
 			done();
 			return;
 		}
-        console.log(allOutlets);
-        allOutlets.forEach(function(outlet){
-            var currWattage = outlet.currentWattage;
-            outlet.currentWattage = 0;
-            if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
-                outlet.hourlyWattage = [];
-            outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
-            updateOutletsInDevice(outlet)
-        });
-		/*for (var outlet in allOutlets) {
-			var currWattage = outlet.currentWattage;
-			outlet.currentWattage = 0;
-			if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
-				outlet.hourlyWattage = [];
-			outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
-			updateOutletsInDevice(outlet)
-		}*/
-		done();
+		if(allOutlets){
+			console.log("outlets were found");
+			allOutlets.forEach(function(outlet){
+				var currWattage = outlet.currentWattage;
+				outlet.currentWattage = 0;
+				if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
+					outlet.hourlyWattage = [];
+				outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
+				updateOutletsInDevice(outlet)
+			});
+			done();
+		}else{
+			console.error("no outlets were found");
+		}
 	});
 });
 
@@ -53,29 +49,22 @@ AGENDA.define('dailyWattage', function(job, done) {
 			done();
 			return;
 		}
-        console.log(allOutlets);
-        allOutlets.forEach(function(outlet){
-            var dailyWattage = 0;
-            for (var wattage in outlet.hourlyWattage)
-                dailyWattage += wattage;
-            outlet.hourlyWattage = [];
-            if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
-                outlet.dailyWattage = [];
-            outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
-            updateOutletsInDevice(outlet);
-        });
-        done();
-		/*for (var outlet in allOutlets) {
-			var dailyWattage = 0;
-			for (var wattage in outlet.hourlyWattage)
-				dailyWattage += wattage;
-			outlet.hourlyWattage = [];
-			if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
-				outlet.dailyWattage = [];
-			outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
-			updateOutletsInDevice(outlet);
+		if(allOutlets){
+			console.log("outlets were found for updating");
+			allOutlets.forEach(function(outlet){
+				var dailyWattage = 0;
+				for (var wattage in outlet.hourlyWattage)
+					dailyWattage += wattage;
+				outlet.hourlyWattage = [];
+				if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
+					outlet.dailyWattage = [];
+				outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
+				updateOutletsInDevice(outlet);
+			});
+			done();
+		}else{
+			console.error("no outlets were found");
 		}
-		done();*/
 	});
 });
 
@@ -107,6 +96,7 @@ AGENDA.on('ready', function() {
     console.log('ready!');
     AGENDA.every("60 minutes", "hourlyWattage");
     AGENDA.every("24 hours", "dailyWattage");
+	AGENDA.now("hourlyWattage");
     AGENDA.start();
 });
 
