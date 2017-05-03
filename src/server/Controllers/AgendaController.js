@@ -27,13 +27,13 @@ AGENDA.define('hourlyWattage', function(job, done) {
 		if(allOutlets){
 			console.log("outlets were found for updating hourly wattages");
 			allOutlets.forEach(function(outlet){
-				console.log(outlet);
 				var currWattage = outlet.currentWattage;
 				outlet.currentWattage = 0;
 				if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
 					outlet.hourlyWattage = [];
 				outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
 				console.log("saving to device");
+				console.log(outlet);
 				outlet.save(function(err,raw){
 					if(err){
 						console.error("error saving");
@@ -46,6 +46,7 @@ AGENDA.define('hourlyWattage', function(job, done) {
 			});
 			while(hourlyCount < allOutlets.length){
 				//wait
+				console.log("waiting... on count "+hourlyCount);
 			}
 			//reset count
 			hourlyCount = 0;
