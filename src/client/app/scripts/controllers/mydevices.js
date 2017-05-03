@@ -39,7 +39,7 @@ angular.module('clientApp')
       var toRet = 0;
       device.outlets.forEach(function(outlet) {
         if (outlet.isOn === 1) {
-          toRet += outlet.wattage;
+          toRet += outlet.currentWattage;
         }
       });
       return toRet;
