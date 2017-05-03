@@ -46,6 +46,9 @@ angular.module('clientApp')
         dailyGraph.update();
         return;
       }
+      console.log(stats.device);
+      console.log($scope.outlets);
+      console.log(stats.outlets);
       hourlyGraph = GraphService.initHourlyGraph({container:"#hourlyGraph",outlets:stats.device.outlets});
       dailyGraph = GraphService.initDailyGraph({container:"#dailyGraph",outlets:stats.device.outlets});
     });
