@@ -31,14 +31,14 @@ angular.module('clientApp')
         var dailyGraph = null;
         stats.costPerKWH = 0.5;
 
-        /*deviceService.getDevices(null, deviceId).then(function(data) {
+        deviceService.getDevices(null, deviceId).then(function(data) {
           stats.device = data.data[0];
           $scope.outlets = data.data[0].outlets;
         }, function error(err) {
           if (err) {
             console.log(err);
           }
-        });*/
+        });
         $interval(function() {
           console.log("in interval");
             deviceService.getDevices(null, deviceId).then(function(data) {
