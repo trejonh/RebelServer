@@ -176,8 +176,8 @@ function updateOutletsInDevice(outlet) {
         if (device) {
             var deviceOutlets = device.outlets;
             for (var i = 0; i < deviceOutlets.length; i++) {
-                if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
-                    deviceOutlets[i] = newOutlet;
+                if (deviceOutlets[i].outletNumber === outlet.outletNumber) {
+                    deviceOutlets[i] = outlet;
                     break;
                 }
             }
