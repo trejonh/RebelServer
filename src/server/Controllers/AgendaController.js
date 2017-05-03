@@ -23,15 +23,12 @@ AGENDA.define('hourlyWattage', function(job, done) {
 			return;
 		}
 		if(allOutlets){
-			console.log("outlets were found for updating hourly wattages");
 			allOutlets.forEach(function(outlet){
 				var currWattage = outlet.currentWattage;
 				outlet.currentWattage = 0;
 				if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
 					outlet.hourlyWattage = [];
 				outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
-				console.log("saving to device");
-				console.log(outlet);
 				outlet.save(function(err,raw){
 					if(err){
 						console.error("error saving");
@@ -43,11 +40,11 @@ AGENDA.define('hourlyWattage', function(job, done) {
 				});
 			});
 			//now we can say done()
-			//done();
+			done();
 		}else{
 			console.error("no outlets weren't found");
 		}
-	}).then(done);
+	});
 });
 
 
@@ -69,7 +66,6 @@ AGENDA.define('dailyWattage', function(job, done) {
 				if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
 					outlet.dailyWattage = [];
 				outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
-				console.log("saving to device");
 				outlet.save(function(err,raw){
 					if(err){
 						console.error("error saving");
@@ -80,11 +76,11 @@ AGENDA.define('dailyWattage', function(job, done) {
 					}
 				});
 			});
-			//done();
+			done();
 		}else{
 			console.error("no outlets weren't found");
 		}
-	}).then(done);
+	});
 });
 
 module.exports.defineJob = function(functionName) {
