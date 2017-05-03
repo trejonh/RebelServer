@@ -42,9 +42,12 @@
               outletNumber: data.outletNumber
           }]
       }, function(err, foundOutlet) {
-          if (foundOutlet)
-              updateOutletData(req, res);
-          else {
+          if (foundOutlet){
+            res.status(200).json({ body: "good" }).end();
+            return;
+              //updateOutletData(req, res);
+          }
+          else if(!foundOutlet){
               var outletObj = new Outlets();
               outletObj.deviceID = outlet.deviceID;
               outletObj.accessToken = outlet.accessToken;
@@ -76,7 +79,6 @@
       if (typeof data === 'string') {
           var outlet = {}; //= new Outlets();
           data = data.split(",");
-          console.log(data);
           for (var i = 0; i < data.length; i++) {
               var outletData = data[i].split(":");
               /*
@@ -121,7 +123,7 @@
                   error: "no docs found with id: " + data.deviceID
               });
               res.status(500).end();
-
+              return;
           }
           outlet.currentWattage += data.wattage;
           outlet.save(function(err, raw) {

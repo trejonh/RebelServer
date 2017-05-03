@@ -18,8 +18,8 @@ var particleRequest = require("request");
 AGENDA.define('hourlyWattage', function(job, done) {
 	Outlets.find({}, function(err, allOutlets){
 		if(err){
-			console.log("error in calculating hourlyWattage");
-			console.log(err);
+			console.error("error in calculating hourlyWattage");
+			console.error(err);
 			done();
 			return;
 		}
@@ -48,8 +48,8 @@ AGENDA.define('hourlyWattage', function(job, done) {
 AGENDA.define('dailyWattage', function(job, done) {
     Outlets.find({},function(err,allOutlets){
 		if(err){
-			console.log("error in calculating dailyWattage");
-			console.log(err);
+			console.error("error in calculating dailyWattage");
+			console.error(err);
 			done();
 			return;
 		}
