@@ -20,13 +20,12 @@
                     tempLabels.push(outlets[i].hourlyWattage[j].hour);
                     tempSeries.push(outlets[i].hourlyWattage[j].wattage);
                 }
+                console.log(tempLabels);
+                console.log(tempSeries);
                 labels = tempLabels;
                 series.push(tempSeries);
                 legend.push(outlets[i].nickname)
             }
-            console.log(labels);
-            console.log(series);
-            console.log(legend);
             var hourlyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
                 series: series,
