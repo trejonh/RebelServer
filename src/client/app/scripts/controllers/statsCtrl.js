@@ -40,15 +40,13 @@ angular.module('clientApp')
       }
     });
 
-    $scope.$watch("outlets",function(){ 
+    $scope.$watch("outlets",function(outlets){ 
       if(hourlyGraph && dailyGraph){
         hourlyGraph.update();
         dailyGraph.update();
         return;
       }
-      console.log(stats.device);
-      console.log($scope.outlets);
-      console.log(stats.outlets);
+      console.log(outlets);
       hourlyGraph = GraphService.initHourlyGraph({container:"#hourlyGraph",outlets:stats.device.outlets});
       dailyGraph = GraphService.initDailyGraph({container:"#dailyGraph",outlets:stats.device.outlets});
     });
