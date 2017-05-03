@@ -13,7 +13,8 @@ var AGENDA = new Agenda({
     }
 });
 var particleRequest = require("request");
-
+var hourlyCount = 0;
+var dailyCount = 0;
 
 AGENDA.define('hourlyWattage', function(job, done) {
 	Outlets.find({outletNumber:{$ne:-1}}, function(err, allOutlets){
@@ -24,15 +25,31 @@ AGENDA.define('hourlyWattage', function(job, done) {
 			return;
 		}
 		if(allOutlets){
-			console.log("outlets were found");
+			console.log("outlets were found for updating hourly wattages");
 			allOutlets.forEach(function(outlet){
+				console.log(outlet);
 				var currWattage = outlet.currentWattage;
 				outlet.currentWattage = 0;
 				if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
 					outlet.hourlyWattage = [];
 				outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
-				updateOutletsInDevice(outlet)
+				console.log("saving to device");
+				outlet.save(function(err,raw){
+					if(err){
+						console.error("error saving");
+						console.error(err);
+						hourlyCount++;
+					}else{
+						updateOutletsInDevice(outlet,"h");						
+					}
+				});
 			});
+			while(hourlyCount < allOutlets.length){
+				//wait
+			}
+			//reset count
+			hourlyCount = 0;
+			//now we can say done()
 			done();
 		}else{
 			console.error("no outlets weren't found");
@@ -59,8 +76,23 @@ AGENDA.define('dailyWattage', function(job, done) {
 				if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
 					outlet.dailyWattage = [];
 				outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
-				updateOutletsInDevice(outlet);
+				console.log("saving to device");
+				outlet.save(function(err,raw){
+					if(err){
+						console.error("error saving");
+						console.error(err);
+						dailyCount++;
+					}else{
+						updateOutletsInDevice(outlet,"d");						
+					}
+				});
 			});
+			while(dailyCount < allOutlets.length){
+				//wait
+			}
+			//reset count
+			dailyCount = 0;
+			//now we can say done()
 			done();
 		}else{
 			console.error("no outlets weren't found");
@@ -158,7 +190,7 @@ function notifyUser(deviceID, method, passedOrFail, done) {
     });
 }
 
-function updateOutletsInDevice(outlet) {
+function updateOutletsInDevice(outlet,count) {
     var currDevice;
     Devices.findOne({
         deviceID: outlet.deviceID
@@ -177,6 +209,10 @@ function updateOutletsInDevice(outlet) {
                         console.log("error in updating outlets");
                         console.log(err);
                     }
+					if(count==="h")
+						hourlyCount++;
+					else
+						dailyCount++;
                 });
         }
     });
