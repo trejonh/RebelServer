@@ -9,6 +9,7 @@
     //meanData.$inject = ['$http', 'authentication'];
     function GraphService() { //jshint ignore:line
         var initHourlyGraph = function(graph) {
+            console.log(graph);
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
@@ -24,6 +25,9 @@
                 series.push(tempSeries);
                 legend.push(outlet.nickname)
             }
+            console.log(labels);
+            console.log(series);
+            console.log(legend);
             var hourlyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
                 series: series,
