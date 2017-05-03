@@ -14,15 +14,13 @@
             var series = [];
             var legend = [];
             for (var i = 0; i < outlets.length; i++) {
+                console.log(outlets[i]);
                 var tempLabels = [];
                 var tempSeries = [];
                 for (var j = 0; j < outlets[i].hourlyWattage.length; j++) {
                     tempLabels.push(outlets[i].hourlyWattage[j].hour);
                     tempSeries.push(outlets[i].hourlyWattage[j].wattage);
                 }
-                console.log(tempLabels);
-                console.log(tempSeries);
-                labels = tempLabels;
                 series.push(tempSeries);
                 legend.push(outlets[i].nickname)
             }
