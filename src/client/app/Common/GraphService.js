@@ -20,7 +20,7 @@
                     tempLabels.push(outlets[i].hourlyWattage[j].hour);
                     tempSeries.push(outlets[i].hourlyWattage[j].wattage);
                 }
-                series.push({name:outles[i].nickname,data:tempSeries});
+                series.push({name:outlets[i].nickname,data:tempSeries});
                 //legend.push(outlets[i].nickname)
             }
             var hourlyGraph = new Chartist.Line(graph.container, {
@@ -83,7 +83,7 @@
                     tempSeries.push(outlets[i].dailyWattage[j].wattage);
                 }
                 labels = tempLabels;
-                series.push({name:outles[i].nickname,data:tempSeries});
+                series.push({name:outlets[i].nickname,data:tempSeries});
             }
             var dailyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
