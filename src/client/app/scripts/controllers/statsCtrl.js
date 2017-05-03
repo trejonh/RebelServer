@@ -40,6 +40,7 @@ angular.module('clientApp')
           }
         });*/
         $interval(function() {
+          console.log("in interval");
             deviceService.getDevices(null, deviceId).then(function(data) {
                 stats.device = data.data[0];
                 $scope.outlets = data.data[0].outlets;
@@ -55,7 +56,7 @@ angular.module('clientApp')
                     console.log(err);
                 }
             });
-        }, 86400);
+        }, 3600000);
         /*$scope.$watch("outlets",function(outlets){ 
           if(hourlyGraph && dailyGraph){
             hourlyGraph.update();
