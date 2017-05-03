@@ -16,7 +16,7 @@ var particleRequest = require("request");
 
 
 AGENDA.define('hourlyWattage', function(job, done) {
-	Outlets.find({}, function(err, allOutlets){
+	Outlets.find({outletNumber:{$ne:-1}}, function(err, allOutlets){
 		if(err){
 			console.error("error in calculating hourlyWattage");
 			console.error(err);
@@ -35,14 +35,14 @@ AGENDA.define('hourlyWattage', function(job, done) {
 			});
 			done();
 		}else{
-			console.error("no outlets were found");
+			console.error("no outlets weren't found");
 		}
 	});
 });
 
 
 AGENDA.define('dailyWattage', function(job, done) {
-    Outlets.find({},function(err,allOutlets){
+    Outlets.find({outletNumber:{$ne:-1}},function(err,allOutlets){
 		if(err){
 			console.error("error in calculating dailyWattage");
 			console.error(err);
@@ -63,7 +63,7 @@ AGENDA.define('dailyWattage', function(job, done) {
 			});
 			done();
 		}else{
-			console.error("no outlets were found");
+			console.error("no outlets weren't found");
 		}
 	});
 });
