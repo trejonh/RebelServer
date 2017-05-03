@@ -32,6 +32,10 @@ var OutletDataSchema = new mongoose.Schema({
         type: [],
         required: false
     },
+    lastHourAdded:{
+        type: Number,
+        required: false
+    },
     onScheduler:{
       type: Object,
       required:false

@@ -25,10 +25,14 @@ AGENDA.define('hourlyWattage', function(job, done) {
 		if(allOutlets){
 			allOutlets.forEach(function(outlet){
 				var currWattage = outlet.currentWattage;
+                var hour = (new Date()).getHours();
 				outlet.currentWattage = 0;
 				if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
 					outlet.hourlyWattage = [];
-				outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: (new Date()).getHours() });
+                if(outlet.lastHourAdded !== hour){
+				    outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: hour });
+                    outlet.lastHourAdded = hour;
+                }
 				outlet.save(function(err,raw){
 					if(err){
 						console.error("error saving");
@@ -66,6 +70,7 @@ AGENDA.define('dailyWattage', function(job, done) {
 				if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
 					outlet.dailyWattage = [];
 				outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
+                outlet.lastHourAdded = -1;
 				outlet.save(function(err,raw){
 					if(err){
 						console.error("error saving");

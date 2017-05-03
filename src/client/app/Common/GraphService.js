@@ -18,7 +18,7 @@
                 var tempSeries = [];
                 for (var data in outlet.hourlyWattage) {
                     tempLabels.push(data.hour);
-                    tempSeries.push(data.hourlyWattage);
+                    tempSeries.push(data.wattage);
                 }
                 labels = tempLabels;
                 series.push(tempSeries);
@@ -81,7 +81,7 @@
                     }
                     dateStr += (date.getMonth()+1)+"/"+date.getDate();
                     tempLabels.push(dateStr);
-                    tempSeries.push(data.dailyWattage);
+                    tempSeries.push(data.wattage);
                 }
                 labels = tempLabels;
                 series.push(tempSeries);
