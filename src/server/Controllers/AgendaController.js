@@ -111,7 +111,7 @@ AGENDA.on('ready', function() {
     console.log('ready!');
     AGENDA.every("60 minutes", "hourlyWattage");
     AGENDA.every("24 hours", "dailyWattage");
-	AGENDA.now("hourlyWattage");
+	//AGENDA.now("hourlyWattage");
     AGENDA.start();
 });
 
