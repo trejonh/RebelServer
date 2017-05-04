@@ -9,6 +9,7 @@
     //meanData.$inject = ['$http', 'authentication'];
     function GraphService() { //jshint ignore:line
         var initHourlyGraph = function(graph) {
+            var ele = document.getElementById('hourlyLegend');
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
@@ -37,8 +38,7 @@
                 low: 0,
                 plugins: [
                     Chartist.plugins.legend({
-                        className: 'hourlyLegend',
-                        position: 'bottom'
+                        position: ele
                     })
                 ]
             });
@@ -46,6 +46,7 @@
         };
 
         var initDailyGraph = function(graph) {
+            var ele = document.getElementById('dailyLegend');
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
@@ -99,8 +100,7 @@
                 low: 0,
                 plugins: [
                     Chartist.plugins.legend({
-                        className: 'dailyLegend',
-                        position: 'bottom'
+                        position: ele
                     })
                 ]
             });
