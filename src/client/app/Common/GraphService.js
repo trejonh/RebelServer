@@ -18,10 +18,10 @@
                 var tempLabels = [];
                 var tempSeries = [];
                 for (var j = 0; j < outlets[i].hourlyWattage.length; j++) {
-                    tempLabels.push(outlets[i].hourlyWattage[j].hour);
+                    tempLabels.push('' + outlets[i].hourlyWattage[j].hour+':00');
                     tempSeries.push(outlets[i].hourlyWattage[j].wattage);
                 }
-                series.push({name:outlets[i].nickname,data:tempSeries});
+                series.push({ name: outlets[i].nickname, data: tempSeries });
                 //legend.push(outlets[i].nickname)
             }
             var hourlyGraph = new Chartist.Line(graph.container, {
@@ -37,8 +37,30 @@
                 }),
                 low: 0,
                 plugins: [
-                    Chartist.plugins.legend({
-                       // position: ele
+                    Chartist.plugins.legend(),
+                    Chartist.plugins.ctAxisTitle({
+                        axisX: {
+                            axisTitle: 'Hour of day',
+                            offset: {
+                                x: 0,
+                                y: 50
+                            },
+                            textAnchor: 'middle'
+                        },
+                        axisY: {
+                            axisTitle: 'Amps',
+                            offset: {
+                                x: 0,
+                                y: 0
+                            },
+                            textAnchor: 'middle',
+                            flipTitle: false
+                        }
+                    }),
+                    Chartist.plugins.tooltip({
+                        tooltipFnc: function(){
+                            return "hi";
+                        }
                     })
                 ]
             });
@@ -50,10 +72,10 @@
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
-            for (var i = 0; i < outlets.length;i++) {
+            for (var i = 0; i < outlets.length; i++) {
                 var tempLabels = [];
                 var tempSeries = [];
-                for (var j = 0; j < outlets[i].dailyWattage.length;j++) {
+                for (var j = 0; j < outlets[i].dailyWattage.length; j++) {
                     var date = new Date(outlets[i].dailyWattage[j].day);
                     var dateStr = "";
                     switch (date.getDay() + 1) {
@@ -79,12 +101,12 @@
                             dateStr += "Sun ";
                             break;
                     }
-                    dateStr += (date.getMonth()+1)+"/"+date.getDate();
+                    dateStr += (date.getMonth() + 1) + "/" + date.getDate();
                     tempLabels.push(dateStr);
                     tempSeries.push(outlets[i].dailyWattage[j].wattage);
                 }
                 labels = tempLabels;
-                series.push({name:outlets[i].nickname,data:tempSeries});
+                series.push({ name: outlets[i].nickname, data: tempSeries });
             }
             var dailyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
@@ -99,8 +121,30 @@
                 }),
                 low: 0,
                 plugins: [
-                    Chartist.plugins.legend({
-                        // position: ele
+                    Chartist.plugins.legend(),
+                    Chartist.plugins.ctAxisTitle({
+                        axisX: {
+                            axisTitle: 'Day',
+                            offset: {
+                                x: 0,
+                                y: 50
+                            },
+                            textAnchor: 'middle'
+                        },
+                        axisY: {
+                            axisTitle: 'Amps',
+                            offset: {
+                                x: 0,
+                                y: 0
+                            },
+                            textAnchor: 'middle',
+                            flipTitle: false
+                        }
+                    }),
+                    Chartist.plugins.tooltip({
+                        tooltipFnc: function(){
+                            return "hi";
+                        }
                     })
                 ]
             });
