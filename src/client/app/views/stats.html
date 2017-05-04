@@ -3,28 +3,28 @@
 <br>
 <br>
 <div class="form-group col-sm-3 col-sm-offset-9">
-  <label for="costPerKWH">Cost per kWh</label>
-  <input type="number" class="form-control" id="costInput" placeholder="cost per kWh i.e. 0.58 = 58&cent;" ng-model="stats.costPerKWH">
+    <label for="costPerKWH">Cost per kWh</label>
+    <input type="number" class="form-control" id="costInput" placeholder="cost per kWh i.e. 0.58 = 58&cent;" ng-model="stats.costPerKWH">
 </div>
 <hr>
 <br>
 <br>
 <br>
 <div class="container">
-  <div class="row">
-    <div class="col-sm-9">
-      <div class="row">
-        <div class="col-sm-12">
-          <table class="table table-hover table-condensed table-responsive">
-            <tr>
-              <th>Outlet Number</th>
-              <th>Primary Usage</th>
-              <th>On/off</th>
-              <th>Total Power Drawn</th>
-            </tr>
-            <tr ng-repeat="outlet in outlets" id="outletStatRow" ng-click="setSelectedOutlet(outlet)">
-              <td>{{outlet.outletNumber}}</td>
-              <td><span><i id="editName" class="fa fa-pencil" alt="edit device name" aria-hidden="true" data-toggle="modal" data-target="#changeOutletNicknameModal"></i><span>&nbsp;&nbsp;&nbsp;{{outlet.nickname}}</td>
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-hover table-condensed table-responsive">
+                        <tr>
+                            <th>Outlet Number</th>
+                            <th>Primary Usage</th>
+                            <th>On/off</th>
+                            <th>Total Power Drawn</th>
+                        </tr>
+                        <tr ng-repeat="outlet in outlets" id="outletStatRow" ng-click="setSelectedOutlet(outlet)">
+                            <td>{{outlet.outletNumber}}</td>
+                            <td><span><i id="editName" class="fa fa-pencil" alt="edit device name" aria-hidden="true" data-toggle="modal" data-target="#changeOutletNicknameModal"></i><span>&nbsp;&nbsp;&nbsp;{{outlet.nickname}}</td>
             <td>{{outlet.isOn}}</td>
             <td>{{outlet.currentWattage}}</td>
           </tr>
@@ -34,20 +34,23 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="row">
-            <h4>Hourly Wattage Usage per Outlet</h4>
-            <div id="hourlyGraph">
-            </div>
-              <div class="hourlyLegend">
-            </div>
+              <div class="col-sm-12">
+                <h4>Hourly Wattage Usage per Outlet</h4>
+                <div id="hourlyGraph">
+                </div>
+                <div class="hourlyLegend">
+                </div>
+              </div>
             </div>
             <div class="row">
-            <h4>Daily Wattage Usage per Outlet</h4>
-            <div id="dailyGraph">
-            </div>
-              <div class="dailyLegend">
-            </div>
-            </div>
-            <p><em>Blank graphs idicate data is being accumulated, data is analyzed every hour (after server boot up)</em></p>
+              <div class="col-sm-12">
+                <h4>Daily Wattage Usage per Outlet</h4>
+                <div id="dailyGraph">
+                </div>
+                <div class="dailyLegend">
+                </div>
+              </div>
+              <p><em>Blank graphs idicate data is being accumulated, data is analyzed every hour (after server boot up)</em></p>
           </div>
         </div>
     </div>
@@ -60,85 +63,83 @@
       <label>On/Off</label>
       <form id="manualSwitchForm">
         <span id="manualSwitch" ng-click="manualSwitchClick()"><i ng-class="manualSwitchClass" aria-hidden="true"></i></span>
-                </form>
-                <!--  schedule on form -->
-                <hr>
-                <form id="scheduleOnForm">
-                  <div class="form-group">
-                    <label for="autoOn">When would like to schedule to the outlet to turn on?</label>
-                    <input type="time" class="form-control" id="scheduleOn" ng-model="stats.scheduleOn.time">
-                    <em>*if using Firefox, please enter time in a 24-hour day format i.e. 15:35 -> 3:35pm</em>
-                  </div>
-                  <button class="btn btn-success" type="submit" ng-click="scheduleOn()">Schedule To Turn On</button>
-                </form>
-                <hr>
-                <!--  Scedule off form-->
-                <form id="scheduleOffForm">
-                  <div class="form-group">
-                    <label for="autoFF">When would like to schedule to the outlet to turn off?</label>
-                    <input type="time" class="form-control" id="scheduleOff" ng-model="stats.scheduleOff.time">
-                    <em>*if using Firefox, please enter time in a 24-hour day format i.e. 15:35 -> 3:35pm</em>
-                  </div>
-                  <button class="btn btn-success" type="submit" ng-click="scheduleOff()">Schedule To Turn Off</button>
-                </form>
+                                </form>
+                                <!--  schedule on form -->
+                                <hr>
+                                <form id="scheduleOnForm">
+                                    <div class="form-group">
+                                        <label for="autoOn">When would like to schedule to the outlet to turn on?</label>
+                                        <input type="time" class="form-control" id="scheduleOn" ng-model="stats.scheduleOn.time">
+                                        <em>*if using Firefox, please enter time in a 24-hour day format i.e. 15:35 -> 3:35pm</em>
+                                    </div>
+                                    <button class="btn btn-success" type="submit" ng-click="scheduleOn()">Schedule To Turn On</button>
+                                </form>
+                                <hr>
+                                <!--  Scedule off form-->
+                                <form id="scheduleOffForm">
+                                    <div class="form-group">
+                                        <label for="autoFF">When would like to schedule to the outlet to turn off?</label>
+                                        <input type="time" class="form-control" id="scheduleOff" ng-model="stats.scheduleOff.time">
+                                        <em>*if using Firefox, please enter time in a 24-hour day format i.e. 15:35 -> 3:35pm</em>
+                                    </div>
+                                    <button class="btn btn-success" type="submit" ng-click="scheduleOff()">Schedule To Turn Off</button>
+                                </form>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <!-- changeDeviceName  Modal-->
-    <div id="changeDeviceNameModal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Change Device Name</h4>
-          </div>
-          <div class="modal-body">
-            <h1>
+        <!-- changeDeviceName  Modal-->
+        <div id="changeDeviceNameModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Change Device Name</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h1>
           Please enter a new device name
         </h1>
-            <div class="form-group">
-              <label for="deviceId">Device ID</label>
-              <input type="text" name="deviceName" class="form-control" id="deviceName" placeholder="{{stats.device.deviceName}}" ng-model="stats.device.deviceName">
+                        <div class="form-group">
+                            <label for="deviceId">Device ID</label>
+                            <input type="text" name="deviceName" class="form-control" id="deviceName" placeholder="{{stats.device.deviceName}}" ng-model="stats.device.deviceName">
+                        </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="changeDeviceName()">Confirm</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
             </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="changeDeviceName()">Confirm</button>
-          </div>
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-
-    <!-- outlet  Modal-->
-    <div id="changeOutletNicknameModal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Change Outlet Name</h4>
-          </div>
-          <div class="modal-body">
-            <h1>
+        <!-- /.modal -->
+        <!-- outlet  Modal-->
+        <div id="changeOutletNicknameModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Change Outlet Name</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h1>
           Please enter a new outlet name
         </h1>
-            <div class="form-group">
-              <label for="deviceId">Outlet name</label>
-              <input type="text" name="outletname" class="form-control" id="outlet" placeholder="{{stats.outlet.nickname}}" ng-model="stats.outlet.nickname">
+                        <div class="form-group">
+                            <label for="deviceId">Outlet name</label>
+                            <input type="text" name="outletname" class="form-control" id="outlet" placeholder="{{stats.outlet.nickname}}" ng-model="stats.outlet.nickname">
+                        </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="changeOutletName()">Confirm</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
             </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="changeOutletName()">Confirm</button>
-          </div>
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-    
+        <!-- /.modal -->

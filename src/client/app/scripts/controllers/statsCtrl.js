@@ -58,16 +58,6 @@ angular.module('clientApp')
                 });
             }
         }, 3600000);
-        /*$scope.$watch("outlets",function(outlets){ 
-          if(hourlyGraph && dailyGraph){
-            hourlyGraph.update();
-            dailyGraph.update();
-            return;
-          }
-          console.log(outlets);
-          hourlyGraph = GraphService.initHourlyGraph({container:"#hourlyGraph",outlets:stats.device.outlets});
-          dailyGraph = GraphService.initDailyGraph({container:"#dailyGraph",outlets:stats.device.outlets});
-        });*/
         //setSelectedOutet
         $scope.setSelectedOutlet = function(outlet) {
             stats.outlet = outlet;
