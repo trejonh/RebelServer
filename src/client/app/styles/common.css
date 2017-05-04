@@ -89,3 +89,6 @@ i#addDeviceIcon{
 	float:left;
 	margin: 2%;
 }
+.chartist-tooltip{
+  margin-left: 4%;
+}
