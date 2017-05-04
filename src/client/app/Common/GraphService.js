@@ -37,7 +37,7 @@
                 low: 0,
                 plugins: [
                     Chartist.plugins.legend({
-                        position: 'bottom'
+                        className: 'hourlyLegend'
                     })
                 ]
             });
@@ -99,7 +99,7 @@
                 low: 0,
                 plugins: [
                     Chartist.plugins.legend({
-                        position: 'bottom'
+                        className: 'dailyLegend'
                     })
                 ]
             });
