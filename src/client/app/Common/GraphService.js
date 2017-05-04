@@ -63,8 +63,8 @@
                         tooltipFnc: function(outletNickname, wattage){
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000);
                             var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000,graph.cost);
-                            var tip = outletNickname+" is using "+energyUsedPerHour+" kilowatts per hour\n";
-                            tip += "This totals to a cost of $"+cost+" per hour";
+                            var tip = "<p>"+outletNickname+" is using "+energyUsedPerHour+" kilowatts per hour<br>";
+                            tip += "This totals to a cost of $"+cost+" per hour</p>";
                             return tip;
                         }
                     })
@@ -153,8 +153,8 @@
                         tooltipFnc: function(outletNickname, wattage){
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000*4);
                             var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000*4,graph.cost);
-                            var tip = outletNickname+" is using "+energyUsedPerHour+" kilowatts-hours per day\n";
-                            tip += "This totals to a cost of $"+cost+" per day";
+                            var tip = "<p>"+outletNickname+" is using "+energyUsedPerHour+" kilowatts-hours per day<br>";
+                            tip += "This totals to a cost of $"+cost+" per day</p>";
                             return tip;
                         }
                     })
