@@ -41,6 +41,7 @@
                     Chartist.plugins.ctAxisTitle({
                         axisX: {
                             axisTitle: 'Hour of day',
+                            axisClass:'ct-axis-title',
                             offset: {
                                 x: 0,
                                 y: 50
@@ -49,6 +50,7 @@
                         },
                         axisY: {
                             axisTitle: 'Amps',
+                            axisClass:'ct-axis-title',
                             offset: {
                                 x: 0,
                                 y: 0
@@ -58,7 +60,8 @@
                         }
                     }),
                     Chartist.plugins.tooltip({
-                        tooltipFnc: function(){
+                        tooltipFnc: function(e){
+                            console.log(e);
                             return "hi";
                         }
                     })
@@ -125,6 +128,7 @@
                     Chartist.plugins.ctAxisTitle({
                         axisX: {
                             axisTitle: 'Day',
+                            axisClass:'ct-axis-title',
                             offset: {
                                 x: 0,
                                 y: 50
@@ -133,6 +137,7 @@
                         },
                         axisY: {
                             axisTitle: 'Amps',
+                            axisClass:'ct-axis-title',
                             offset: {
                                 x: 0,
                                 y: 0
