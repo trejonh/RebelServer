@@ -85,6 +85,7 @@ i#addDeviceIcon{
 	overflow: hidden;
 }
 .ct-legend li{
+  line-height: 1;
 	float:left;
 	margin: 2%;
 }
