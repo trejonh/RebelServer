@@ -56,12 +56,15 @@
                                 y: 0
                             },
                             textAnchor: 'middle',
-                            flipTitle: false
+                            flipTitle: true
                         }
                     }),
                     Chartist.plugins.tooltip({
-                        tooltipFnc: function(e){
+                        tooltipFnc: function(e,t,v,c){
                             console.log(e);
+                            console.log(t);
+                            console.log(v);
+                            console.log(c);
                             return "hi";
                         }
                     })
@@ -143,7 +146,7 @@
                                 y: 0
                             },
                             textAnchor: 'middle',
-                            flipTitle: false
+                            flipTitle: true
                         }
                     }),
                     Chartist.plugins.tooltip({
