@@ -34,8 +34,8 @@ angular.module('clientApp')
         deviceService.getDevices(null, deviceId).then(function(data) {
             stats.device = data.data[0];
             $scope.outlets = data.data[0].outlets;
-            hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets });
-            dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets });
+            hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+            dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
         }, function error(err) {
             if (err) {
                 console.log(err);
@@ -211,29 +211,3 @@ angular.module('clientApp')
             });
         };
     });
-
-/**
- * @ngdoc function
- * @name getEnergyConsumedPerDay
- *@description
- * # get Energy consumed per day
- * @param wattage - watts consumed
- * @param timeOn - total time on in one day in milliseconds
- */
-function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
-    timeOn = (((timeOn / 1000) / 60) / 60); //ms->secs->mins->hours
-    return (wattage * timeOn) / 1000; //Energy in kilowatts-hours/day
-}
-
-/**
- * @ngdoc function
- * @name getEnergyConsumedPerDay
- *@description
- * # get Energy consumed per day
- * @param wattage - watts consumed
- * @param timeOn - total time on in one day in milliseconds
- * @param costPerKWH - cost of Energy per kilowatts-hour in cents (.01)
- */
-function getCostOfEnergyConsumedPerDay(wattage, timeOn, costPerKWH) { // jshint ignore:line
-    return getEnergyConsumedPerDay(wattage, timeOn) * costPerKWH; //Cost in $/day
-}

@@ -49,7 +49,7 @@
                             textAnchor: 'middle'
                         },
                         axisY: {
-                            axisTitle: 'Amps',
+                            axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title',
                             offset: {
                                 x: 0,
@@ -60,12 +60,12 @@
                         }
                     }),
                     Chartist.plugins.tooltip({
-                        tooltipFnc: function(e,t,v,c){
-                            console.log(e);
-                            console.log(t);
-                            console.log(v);
-                            console.log(c);
-                            return "hi";
+                        tooltipFnc: function(outletNickname, wattage){
+                            var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000);
+                            var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000,graph.cost);
+                            var tip = outletNickname+" is using "+energyUsedPerHour+" kilowatts per hour\n";
+                            tip += "This totals to a cost of $"+cost+" per hour";
+                            return tip;
                         }
                     })
                 ]
@@ -139,7 +139,7 @@
                             textAnchor: 'middle'
                         },
                         axisY: {
-                            axisTitle: 'Amps',
+                            axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title',
                             offset: {
                                 x: 0,
@@ -150,8 +150,12 @@
                         }
                     }),
                     Chartist.plugins.tooltip({
-                        tooltipFnc: function(){
-                            return "hi";
+                        tooltipFnc: function(outletNickname, wattage){
+                            var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000*4);
+                            var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000*4,graph.cost);
+                            var tip = outletNickname+" is using "+energyUsedPerHour+" kilowatts-hours per day\n";
+                            tip += "This totals to a cost of $"+cost+" per day";
+                            return tip;
                         }
                     })
                 ]
@@ -166,3 +170,29 @@
     }
 
 })();
+
+/**
+ * @ngdoc function
+ * @name getEnergyConsumedPerDay
+ *@description
+ * # get Energy consumed per day
+ * @param wattage - watts consumed
+ * @param timeOn - total time on in one day in milliseconds
+ */
+function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
+    timeOn = (((timeOn / 1000) / 60) / 60); //ms->secs->mins->hours
+    return (wattage * timeOn) / 1000; //Energy in kilowatts-hours/day
+}
+
+/**
+ * @ngdoc function
+ * @name getEnergyConsumedPerDay
+ *@description
+ * # get Energy consumed per day
+ * @param wattage - watts consumed
+ * @param timeOn - total time on in one day in milliseconds
+ * @param costPerKWH - cost of Energy per kilowatts-hour in cents (.01)
+ */
+function getCostOfEnergyConsumedPerDay(wattage, timeOn, costPerKWH) { // jshint ignore:line
+    return getEnergyConsumedPerDay(wattage, timeOn) * costPerKWH; //Cost in $/day
+}
