@@ -64,8 +64,8 @@ AGENDA.define('dailyWattage', function(job, done) {
 			console.log("outlets were found for updating");
 			allOutlets.forEach(function(outlet){
 				var dailyWattage = 0;
-				for (var wattage in outlet.hourlyWattage)
-					dailyWattage += wattage;
+				for (var i = 0; i<outlet.hourlyWattage.length;i++)
+					dailyWattage += outlet.hourlyWattage[i].wattage;
 				outlet.hourlyWattage = [];
 				if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
 					outlet.dailyWattage = [];
