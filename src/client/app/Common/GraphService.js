@@ -48,7 +48,6 @@
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
-            var legend = [];
             for (var i = 0; i < outlets.length;i++) {
                 var tempLabels = [];
                 var tempSeries = [];
