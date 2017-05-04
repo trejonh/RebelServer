@@ -38,7 +38,7 @@
                 low: 0,
                 plugins: [
                     Chartist.plugins.legend({
-                        position: ele
+                       // position: ele
                     })
                 ]
             });
@@ -100,7 +100,7 @@
                 low: 0,
                 plugins: [
                     Chartist.plugins.legend({
-                        position: ele
+                        // position: ele
                     })
                 ]
             });
