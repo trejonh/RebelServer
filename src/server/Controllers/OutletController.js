@@ -42,6 +42,7 @@
           }]
       }, function(err, foundOutlet) {
           if (foundOutlet) {
+              outlet._id = foundOutlet._id;
               updateOutletData(outlet);
               res.status(200).json({ body: "good" }).end();
               return;
@@ -359,30 +360,13 @@
   }
 
   function updateOutletData(data) {
-      Outlets.findOne({
-          $and: [{
-              deviceID: data.deviceID
-          }, {
-              outletNumber: data.outletNumber
-          }]
-      }, function(err, outlet) {
-        console.log(outlet);
-        console.log(typeof outlet.currentWattage);
-          if (err) {
-              console.error(err);
-              return;
-          } else if (!outlet) {
-              console.error("no docs found with id: " + data.deviceID);
-              return;
-          }
-          if (parseInt(data.wattage) === NaN)
-              data.wattage = 0;
-          var temp = outlet.currentWattage;
-          temp += parseInt(data.wattage);
-          outlet.currentWattage = temp;
-          outlet.save(function(err, raw) {
+      Outlets.findByIdAndUpdate(data._id, { $inc: { currentWattage: data.wattage } },
+          function(err, outlet) {
               if (err) {
                   console.error(err);
+                  return;
+              } else if (!outlet) {
+                  console.error("no docs found with id: " + data.deviceID);
                   return;
               }
               Devices.findOne({
@@ -392,10 +376,10 @@
                       console.error(err);
                       return;
                   } else if (device) {
-                      updateOutletsInDevice(device, res, outlet);
+                      updateOutletsInDevice(device, null, outlet);
                       return;
                   }
               });
+
           });
-      });
   }
