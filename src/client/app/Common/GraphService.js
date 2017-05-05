@@ -39,8 +39,8 @@
                 }),
                 low: 0,
                 plugins: [
-                    Chartist.plugins.legend({className:"hourly",position:'top'}),
-                    Chartist.plugins.ctAxisTitle({
+                    Chartist.plugins.legend({position:'bottom'}),
+                    /*Chartist.plugins.ctAxisTitle({
                         axisX: {
                             axisTitle: 'Hour of day',
                             axisClass:'ct-axis-title-y',
@@ -60,7 +60,7 @@
                             textAnchor: 'end',
                             flipTitle: true
                         }
-                    }),
+                    }),*/
                     Chartist.plugins.tooltip({
                         tooltipFnc: function(outletNickname, wattage){
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000);
@@ -108,8 +108,8 @@
                 }),
                 low: 0,
                 plugins: [
-                    Chartist.plugins.legend({className:"daily",position:'top'}),
-                    Chartist.plugins.ctAxisTitle({
+                    Chartist.plugins.legend({position:'bottom'}),
+                    /*Chartist.plugins.ctAxisTitle({
                         axisX: {
                             axisTitle: 'Month/Day',
                             axisClass:'ct-axis-title-x',
@@ -129,7 +129,7 @@
                             textAnchor: 'start',
                             flipTitle: true
                         }
-                    }),
+                    }),*/
                     Chartist.plugins.tooltip({
                         tooltipFnc: function(outletNickname, wattage){
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000*4);
