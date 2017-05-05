@@ -74,7 +74,6 @@
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
-      console.log(data);
       if (typeof data === 'string') {
           var outlet = {}; //= new Outlets();
           data = data.split(",");
@@ -360,7 +359,6 @@
   }
 
   function updateOutletData(data) {
-    console.log(data);
       Outlets.findOne({
           $and: [{
               deviceID: data.deviceID
@@ -368,6 +366,8 @@
               outletNumber: data.outletNumber
           }]
       }, function(err, outlet) {
+        console.log(outlet);
+        console.log(typeof outlets.currentWattage);
           if (err) {
               console.error(err);
               return;
