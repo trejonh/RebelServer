@@ -10,7 +10,6 @@
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
       data = data.split(",");
-      console.log(data);
       for (var i = 0; i < data.length; i++) {
           var outletData = data[i].split(":");
           /*
@@ -361,6 +360,7 @@
   }
 
   function updateOutletData(data) {
+    console.log(data);
       Outlets.findOne({
           $and: [{
               deviceID: data.deviceID
