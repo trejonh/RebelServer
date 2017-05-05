@@ -30,7 +30,7 @@
             }, {
                 fullWidth: true,
                 chartPadding: {
-                    right: 40
+                    right: 0
                 },
                 lineSmooth: Chartist.Interpolation.cardinal({
                     fillHoles: true,
@@ -44,7 +44,7 @@
                             axisClass:'ct-axis-title-y',
                             offset: {
                                 x: 0,
-                                y: 50
+                                y: 0
                             },
                             textAnchor: 'middle'
                         },
@@ -52,7 +52,7 @@
                             axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 0,
+                                x: 50,
                                 y: 0
                             },
                             textAnchor: 'middle',
@@ -90,13 +90,15 @@
                 labels = tempLabels;
                 series.push({ name: outlets[i].nickname, data: tempSeries });
             }
+            console.log(labels);
+            console.log(series);
             var dailyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
                 series: series,
             }, {
                 fullWidth: true,
                 chartPadding: {
-                    right: 40
+                    right: 0
                 },
                 lineSmooth: Chartist.Interpolation.cardinal({
                     fillHoles: true,
@@ -110,7 +112,7 @@
                             axisClass:'ct-axis-title-x',
                             offset: {
                                 x: 0,
-                                y: 50
+                                y: 0
                             },
                             textAnchor: 'middle'
                         },
@@ -118,7 +120,7 @@
                             axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 0,
+                                x: 50,
                                 y: 0
                             },
                             textAnchor: 'middle',
