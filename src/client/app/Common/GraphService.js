@@ -41,7 +41,7 @@
                     Chartist.plugins.ctAxisTitle({
                         axisX: {
                             axisTitle: 'Hour of day',
-                            axisClass:'ct-axis-title',
+                            axisClass:'ct-axis-title-y',
                             offset: {
                                 x: 0,
                                 y: 50
@@ -50,7 +50,7 @@
                         },
                         axisY: {
                             axisTitle: 'Wattage (w)',
-                            axisClass:'ct-axis-title',
+                            axisClass:'ct-axis-title-y',
                             offset: {
                                 x: 0,
                                 y: 0
@@ -63,8 +63,8 @@
                         tooltipFnc: function(outletNickname, wattage){
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000);
                             var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000,graph.cost);
-                            var tip = "<p>"+outletNickname+" is using "+energyUsedPerHour+" kilowatts per hour<br>";
-                            tip += "This totals to a cost of $"+cost+" per hour</p>";
+                            var tip = "<p>"+outletNickname+" is using "+parseFloat(Math.round(energyUsedPerHour*100)/100).toFixed(2)+" kilowatts per hour<br>";
+                            tip += "This totals to a cost of $"+parseFloat(Math.round(cost*100)/100).toFixed(2)+" per hour</p>";
                             return tip;
                         }
                     })
@@ -83,31 +83,7 @@
                 var tempSeries = [];
                 for (var j = 0; j < outlets[i].dailyWattage.length; j++) {
                     var date = new Date(outlets[i].dailyWattage[j].day);
-                    var dateStr = "";
-                    switch (date.getDay() + 1) {
-                        case 1:
-                            dateStr += "Mon ";
-                            break;
-                        case 2:
-                            dateStr += "Tue ";
-                            break;
-                        case 3:
-                            dateStr += "Wed ";
-                            break;
-                        case 4:
-                            dateStr += "Thur ";
-                            break;
-                        case 5:
-                            dateStr += "Fri ";
-                            break;
-                        case 6:
-                            dateStr += "Sat ";
-                            break;
-                        case 7:
-                            dateStr += "Sun ";
-                            break;
-                    }
-                    dateStr += (date.getMonth() + 1) + "/" + date.getDate();
+                    var dateStr = (date.getMonth() + 1) + "/" + date.getDate();
                     tempLabels.push(dateStr);
                     tempSeries.push(outlets[i].dailyWattage[j].wattage);
                 }
@@ -131,7 +107,7 @@
                     Chartist.plugins.ctAxisTitle({
                         axisX: {
                             axisTitle: 'Day',
-                            axisClass:'ct-axis-title',
+                            axisClass:'ct-axis-title-x',
                             offset: {
                                 x: 0,
                                 y: 50
@@ -140,7 +116,7 @@
                         },
                         axisY: {
                             axisTitle: 'Wattage (w)',
-                            axisClass:'ct-axis-title',
+                            axisClass:'ct-axis-title-y',
                             offset: {
                                 x: 0,
                                 y: 0
@@ -153,8 +129,8 @@
                         tooltipFnc: function(outletNickname, wattage){
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000*4);
                             var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000*4,graph.cost);
-                            var tip = "<p>"+outletNickname+" is using "+energyUsedPerHour+" kilowatts-hours per day<br>";
-                            tip += "This totals to a cost of $"+cost+" per day</p>";
+                            var tip = "<p>"+outletNickname+" is using "+parseFloat(Math.round(energyUsedPerHour*100)/100).toFixed(2)+" kilowatts-hours per day<br>";
+                            tip += "This totals to a cost of $"+parseFloat(Math.round(cost*100)/100).toFixed(2)+" per day</p>";
                             return tip;
                         }
                     })
