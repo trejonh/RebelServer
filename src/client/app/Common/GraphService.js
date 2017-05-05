@@ -78,7 +78,9 @@
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
+            console.log(outlets.length);
             for (var i = 0; i < outlets.length; i++) {
+                console.log(outlets[i].dailyWattage.length);
                 var tempLabels = [];
                 var tempSeries = [];
                 for (var j = 0; j < outlets[i].dailyWattage.length; j++) {
