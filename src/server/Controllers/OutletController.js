@@ -42,14 +42,11 @@
               outletNumber: outlet.outletNumber
           }]
       }, function(err, foundOutlet) {
-          if (foundOutlet){
-            console.log(this);
-            updateOutletData(req,res);
-            res.status(200).json({ body: "good" }).end();
-            return;
-              //updateOutletData(req, res);
-          }
-          else if(!foundOutlet){
+          if (foundOutlet) {
+              updateOutletData(outlet);
+              res.status(200).json({ body: "good" }).end();
+              return;
+          } else if (!foundOutlet) {
               var outletObj = new Outlets();
               outletObj.deviceID = outlet.deviceID;
               outletObj.accessToken = outlet.accessToken;
@@ -356,5 +353,41 @@
               }
               return;
           }
+      });
+  }
+
+  function updateOutletData(data) {
+      Outlets.findOne({
+          $and: [{
+              deviceID: data.deviceID
+          }, {
+              outletNumber: data.outletNumber
+          }]
+      }, function(err, outlet) {
+          if (err) {
+              console.error(err);
+              return;
+          } else if (!outlet) {
+              console.error("no docs found with id: " + data.deviceID);
+              return;
+          }
+          outlet.currentWattage += data.wattage;
+          outlet.save(function(err, raw) {
+              if (err) {
+                  console.error(err);
+                  return;
+              }
+              Devices.findOne({
+                  deviceID: data.deviceID
+              }, function(err, device) {
+                  if (err) {
+                      console.error(err);
+                      return;
+                  } else if (device) {
+                      updateOutletsInDevice(device, res, outlet);
+                      return;
+                  }
+              });
+          });
       });
   }
