@@ -124,11 +124,7 @@
               res.status(500).end();
               return;
           }
-          if (parseInt(data.wattage) === NaN)
-              data.wattage = 0;
-          var temp = outlet.currentWattage;
-          temp += parseInt(data.wattage);
-          outlet.currentWattage = temp;
+          outlet.currentWattage = += parseInt(data.wattage);
           outlet.isOn = data.isOn;
           outlet.save(function(err, raw) {
               if (err) {
