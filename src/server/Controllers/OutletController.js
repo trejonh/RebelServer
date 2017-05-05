@@ -43,6 +43,7 @@
           }]
       }, function(err, foundOutlet) {
           if (foundOutlet){
+            console.log("outlet preexists");
             res.status(200).json({ body: "good" }).end();
             return;
               //updateOutletData(req, res);
@@ -76,6 +77,7 @@
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
+      console.log(data);
       if (typeof data === 'string') {
           var outlet = {}; //= new Outlets();
           data = data.split(",");

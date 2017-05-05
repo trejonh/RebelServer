@@ -37,7 +37,6 @@ AGENDA.define('hourlyWattage', function(job, done) {
 					if(err){
 						console.error("error saving");
 						console.error(err);
-						hourlyCount++;
 					}else{
 						updateOutletsInDevice(outlet);						
 					}
@@ -75,7 +74,6 @@ AGENDA.define('dailyWattage', function(job, done) {
 					if(err){
 						console.error("error saving");
 						console.error(err);
-						dailyCount++;
 					}else{
 						updateOutletsInDevice(outlet);						
 					}

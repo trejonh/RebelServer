@@ -9,7 +9,6 @@
     //meanData.$inject = ['$http', 'authentication'];
     function GraphService() { //jshint ignore:line
         var initHourlyGraph = function(graph) {
-            var ele = document.getElementById('hourlyLegend');
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
@@ -30,7 +29,7 @@
             }, {
                 fullWidth: true,
                 chartPadding: {
-                    right: 0
+                    right: 50
                 },
                 lineSmooth: Chartist.Interpolation.cardinal({
                     fillHoles: true,
@@ -43,7 +42,7 @@
                             axisTitle: 'Hour of day',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 10,
+                                x: 0,
                                 y: 0
                             },
                             textAnchor: 'middle'
@@ -52,7 +51,7 @@
                             axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 10,
+                                x: 50,
                                 y: 0
                             },
                             textAnchor: 'middle',
@@ -74,13 +73,11 @@
         };
 
         var initDailyGraph = function(graph) {
-            var ele = document.getElementById('dailyLegend');
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
             console.log(outlets.length);
             for (var i = 0; i < outlets.length; i++) {
-                console.log(outlets[i].dailyWattage.length);
                 var tempLabels = [];
                 var tempSeries = [];
                 for (var j = 0; j < outlets[i].dailyWattage.length; j++) {
@@ -93,15 +90,13 @@
                 labels = tempLabels;
                 series.push({ name: outlets[i].nickname, data: tempSeries });
             }
-            console.log(labels);
-            console.log(series);
             var dailyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
                 series: series,
             }, {
                 fullWidth: true,
                 chartPadding: {
-                    right: 0
+                    right: 50
                 },
                 lineSmooth: Chartist.Interpolation.cardinal({
                     fillHoles: true,
@@ -114,7 +109,7 @@
                             axisTitle: 'Month/Day',
                             axisClass:'ct-axis-title-x',
                             offset: {
-                                x: 10,
+                                x: 0,
                                 y: 0
                             },
                             textAnchor: 'middle'
@@ -123,7 +118,7 @@
                             axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 10,
+                                x: 50,
                                 y: 0
                             },
                             textAnchor: 'middle',
