@@ -43,7 +43,7 @@
                             axisClass:'ct-axis-title-y',
                             offset: {
                                 x: 0,
-                                y: 30
+                                y: 20
                             },
                             textAnchor: 'middle'
                         },
@@ -109,7 +109,7 @@
                             axisClass:'ct-axis-title-x',
                             offset: {
                                 x: 0,
-                                y: 150
+                                y: 20
                             },
                             textAnchor: 'middle'
                         },
@@ -118,7 +118,7 @@
                             axisClass:'ct-axis-title-y',
                             offset: {
                                 x: 20,
-                                y: -10
+                                y: 0
                             },
                             textAnchor: 'middle',
                             flipTitle: true
