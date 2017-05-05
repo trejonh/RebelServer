@@ -371,6 +371,8 @@
               console.error("no docs found with id: " + data.deviceID);
               return;
           }
+          if(parseInt(data.wattage)===NaN)
+            data.wattage = 0;
           outlet.currentWattage += parseInt(data.wattage);
           outlet.save(function(err, raw) {
               if (err) {
