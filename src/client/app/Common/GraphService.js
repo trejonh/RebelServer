@@ -43,7 +43,7 @@
                             axisTitle: 'Hour of day',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 0,
+                                x: 10,
                                 y: 0
                             },
                             textAnchor: 'middle'
@@ -52,7 +52,7 @@
                             axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 50,
+                                x: 10,
                                 y: 0
                             },
                             textAnchor: 'middle',
@@ -85,6 +85,7 @@
                     var date = new Date(outlets[i].dailyWattage[j].day);
                     var dateStr = (date.getMonth() + 1) + "/" + date.getDate();
                     tempLabels.push(dateStr);
+                    console.log(outlets[i]);
                     tempSeries.push(outlets[i].dailyWattage[j].wattage);
                 }
                 labels = tempLabels;
@@ -108,10 +109,10 @@
                     Chartist.plugins.legend(),
                     Chartist.plugins.ctAxisTitle({
                         axisX: {
-                            axisTitle: 'Day',
+                            axisTitle: 'Month/Day',
                             axisClass:'ct-axis-title-x',
                             offset: {
-                                x: 0,
+                                x: 10,
                                 y: 0
                             },
                             textAnchor: 'middle'
@@ -120,7 +121,7 @@
                             axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 50,
+                                x: 10,
                                 y: 0
                             },
                             textAnchor: 'middle',
