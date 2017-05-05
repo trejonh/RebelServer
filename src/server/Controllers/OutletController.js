@@ -361,7 +361,7 @@
   }
 
   function updateOutletData(data) {
-      Outlets.findByIdAndUpdate(data._id, { $set:{isOn:data.isOn},$inc: { currentWattage: data.wattage } },
+      Outlets.findByIdAndUpdate(data._id,
           function(err, outlet) {
               if (err) {
                   console.error(err);
@@ -369,18 +369,27 @@
               } else if (!outlet) {
                   console.error("no docs found with id: " + data.deviceID);
                   return;
+              } else if (outlet) {
+                  outlet.isOn = data.isOn;
+                  outlet.currentWattage = data.wattage;
+                  outlet.save(function(err, raw) {
+                      if (err) {
+                          console.error(err);
+                          return;
+                      }
+                      Devices.findOne({
+                          deviceID: data.deviceID
+                      }, function(err, device) {
+                          if (err) {
+                              console.error(err);
+                              return;
+                          } else if (device) {
+                              updateOutletsInDevice(device, null, outlet);
+                              return;
+                          }
+                      });
+                  });
               }
-              Devices.findOne({
-                  deviceID: data.deviceID
-              }, function(err, device) {
-                  if (err) {
-                      console.error(err);
-                      return;
-                  } else if (device) {
-                      updateOutletsInDevice(device, null, outlet);
-                      return;
-                  }
-              });
 
           });
   }
