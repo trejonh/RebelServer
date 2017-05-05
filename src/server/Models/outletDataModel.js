@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var Number = mongoose.Schema.Types.Number;
 var OutletDataSchema = new mongoose.Schema({
     deviceID: {
         type: String,
