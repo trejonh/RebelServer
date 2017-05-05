@@ -43,7 +43,7 @@
           }]
       }, function(err, foundOutlet) {
           if (foundOutlet){
-            console.log("outlet preexists");
+            console.log(this);
             updateOutletData(req,res);
             res.status(200).json({ body: "good" }).end();
             return;
