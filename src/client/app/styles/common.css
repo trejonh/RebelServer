@@ -78,13 +78,13 @@ i#addDeviceIcon{
 .fa-toggle-off{
   color:red;
 }
-.legend{
+.ct-legend{
 	list-style:none;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
 }
-.legend li{
+.ct-legend li{
   line-height: 1;
 	float:left;
 	margin: 2%;
