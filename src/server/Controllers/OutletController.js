@@ -129,6 +129,7 @@
           var temp = outlet.currentWattage;
           temp += parseInt(data.wattage);
           outlet.currentWattage = temp;
+          outlet.isOn = data.isOn;
           outlet.save(function(err, raw) {
               if (err) {
                   console.log(err);
@@ -360,7 +361,7 @@
   }
 
   function updateOutletData(data) {
-      Outlets.findByIdAndUpdate(data._id, { $inc: { currentWattage: data.wattage } },
+      Outlets.findByIdAndUpdate(data._id, { $set:{isOn:data.isOn},$inc: { currentWattage: data.wattage } },
           function(err, outlet) {
               if (err) {
                   console.error(err);
