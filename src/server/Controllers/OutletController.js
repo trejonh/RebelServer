@@ -37,13 +37,14 @@
       }
       Outlets.findOne({
           $and: [{
-              deviceID: data.deviceID
+              deviceID: outlet.deviceID
           }, {
-              outletNumber: data.outletNumber
+              outletNumber: outlet.outletNumber
           }]
       }, function(err, foundOutlet) {
           if (foundOutlet){
             console.log("outlet preexists");
+            updateOutletData(req,res);
             res.status(200).json({ body: "good" }).end();
             return;
               //updateOutletData(req, res);
