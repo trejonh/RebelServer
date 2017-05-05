@@ -371,7 +371,7 @@
               console.error("no docs found with id: " + data.deviceID);
               return;
           }
-          outlet.currentWattage += data.wattage;
+          outlet.currentWattage += parseInt(data.wattage);
           outlet.save(function(err, raw) {
               if (err) {
                   console.error(err);
