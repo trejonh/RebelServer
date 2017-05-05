@@ -29,7 +29,7 @@
             }, {
                 fullWidth: true,
                 chartPadding: {
-                    right: 50
+                    right: 10
                 },
                 lineSmooth: Chartist.Interpolation.cardinal({
                     fillHoles: true,
@@ -42,8 +42,8 @@
                             axisTitle: 'Hour of day',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 150,
-                                y: 0
+                                x: 0,
+                                y: 30
                             },
                             textAnchor: 'middle'
                         },
@@ -51,7 +51,7 @@
                             axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 0,
+                                x: 20,
                                 y: 0
                             },
                             textAnchor: 'middle',
@@ -117,8 +117,8 @@
                             axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 0,
-                                y: 0
+                                x: 20,
+                                y: -10
                             },
                             textAnchor: 'middle',
                             flipTitle: true
