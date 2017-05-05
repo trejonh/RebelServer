@@ -367,7 +367,7 @@
           }]
       }, function(err, outlet) {
         console.log(outlet);
-        console.log(typeof outlets.currentWattage);
+        console.log(typeof outlet.currentWattage);
           if (err) {
               console.error(err);
               return;
