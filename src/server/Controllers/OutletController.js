@@ -125,7 +125,11 @@
               res.status(500).end();
               return;
           }
-          outlet.currentWattage += data.wattage;
+          if (parseInt(data.wattage) === NaN)
+              data.wattage = 0;
+          var temp = outlet.currentWattage;
+          temp += parseInt(data.wattage);
+          outlet.currentWattage = temp;
           outlet.save(function(err, raw) {
               if (err) {
                   console.log(err);
@@ -371,9 +375,11 @@
               console.error("no docs found with id: " + data.deviceID);
               return;
           }
-          if(parseInt(data.wattage)===NaN)
-            data.wattage = 0;
-          outlet.currentWattage += parseInt(data.wattage);
+          if (parseInt(data.wattage) === NaN)
+              data.wattage = 0;
+          var temp = outlet.currentWattage;
+          temp += parseInt(data.wattage);
+          outlet.currentWattage = temp;
           outlet.save(function(err, raw) {
               if (err) {
                   console.error(err);
