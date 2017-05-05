@@ -29,7 +29,10 @@
             }, {
                 fullWidth: true,
                 chartPadding: {
-                    right: 0
+                    top: 20,
+                    right: 0,
+                    bottom: 20,
+                    left: 0
                 },
                 lineSmooth: Chartist.Interpolation.cardinal({
                     fillHoles: true,
@@ -45,7 +48,7 @@
                                 x: 0,
                                 y: 40
                             },
-                            textAnchor: 'middle'
+                            textAnchor: 'end'
                         },
                         axisY: {
                             axisTitle: 'Wattage (w)',
@@ -54,7 +57,7 @@
                                 x: 0,
                                 y: 40
                             },
-                            textAnchor: 'middle',
+                            textAnchor: 'end',
                             flipTitle: true
                         }
                     }),
@@ -95,7 +98,10 @@
             }, {
                 fullWidth: true,
                 chartPadding: {
-                    right: 50
+                    top: 20,
+                    right: 0,
+                    bottom: 20,
+                    left: 0
                 },
                 lineSmooth: Chartist.Interpolation.cardinal({
                     fillHoles: true,
@@ -111,7 +117,7 @@
                                 x: 0,
                                 y: 40
                             },
-                            textAnchor: 'middle'
+                            textAnchor: 'start'
                         },
                         axisY: {
                             axisTitle: 'Wattage (w)',
@@ -120,7 +126,7 @@
                                 x: 0,
                                 y: 20
                             },
-                            textAnchor: 'middle',
+                            textAnchor: 'start',
                             flipTitle: true
                         }
                     }),
