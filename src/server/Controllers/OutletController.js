@@ -124,7 +124,7 @@
               res.status(500).end();
               return;
           }
-          outlet.currentWattage = += parseInt(data.wattage);
+          outlet.currentWattage += parseInt(data.wattage);
           outlet.isOn = data.isOn;
           outlet.save(function(err, raw) {
               if (err) {
