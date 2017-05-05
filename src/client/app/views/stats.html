@@ -37,8 +37,8 @@
                 <h4>Hourly Wattage Usage per Outlet</h4>
                 <div id="hourlyGraph">
                 </div>
-                <div id="hourlyLegend">
-                </div>
+                <ul class="legend" id="hourlyLegend">
+                </ul>
               </div>
             </div>
             <div class="row">
@@ -46,8 +46,8 @@
                 <h4>Daily Wattage Usage per Outlet</h4>
                 <div id="dailyGraph">
                 </div>
-                <div id="dailyLegend">
-                </div>
+                <ul class="legend" id="dailyLegend">
+                </ul>
               </div>
             </div>
             <p><em>Blank graphs idicate data is being accumulated, data is analyzed every hour (after server boot up)</em></p>
@@ -144,5 +144,7 @@
         <!-- /.modal -->
 <script>
     $("#hourlyLegend").html($(".hourly").html());
+    $(".hourly").html('')
     $("#dailyLegend").html($(".daily").html());
+    $(".daily").html('')
 </script>
