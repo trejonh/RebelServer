@@ -36,13 +36,13 @@
                 }),
                 low: 0,
                 plugins: [
-                    Chartist.plugins.legend(),
+                    Chartist.plugins.legend({className:"hourly",position:'top'}),
                     Chartist.plugins.ctAxisTitle({
                         axisX: {
                             axisTitle: 'Hour of day',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 0,
+                                x: 150,
                                 y: 0
                             },
                             textAnchor: 'middle'
@@ -51,7 +51,7 @@
                             axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 50,
+                                x: 0,
                                 y: 0
                             },
                             textAnchor: 'middle',
@@ -76,7 +76,6 @@
             var outlets = graph.outlets;
             var labels = [];
             var series = [];
-            console.log(outlets.length);
             for (var i = 0; i < outlets.length; i++) {
                 var tempLabels = [];
                 var tempSeries = [];
@@ -103,14 +102,14 @@
                 }),
                 low: 0,
                 plugins: [
-                    Chartist.plugins.legend(),
+                    Chartist.plugins.legend({className:"daily",position:'top'}),
                     Chartist.plugins.ctAxisTitle({
                         axisX: {
                             axisTitle: 'Month/Day',
                             axisClass:'ct-axis-title-x',
                             offset: {
                                 x: 0,
-                                y: 0
+                                y: 150
                             },
                             textAnchor: 'middle'
                         },
@@ -118,7 +117,7 @@
                             axisTitle: 'Wattage (w)',
                             axisClass:'ct-axis-title-y',
                             offset: {
-                                x: 50,
+                                x: 0,
                                 y: 0
                             },
                             textAnchor: 'middle',
