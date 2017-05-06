@@ -38,7 +38,6 @@ angular.module('clientApp')
                     deviceService.getDevices(profile.user.username, null).then(function(deviceData) {
                             deviceData.data.forEach(function(device) {
                                 deviceService.getOutlets(device.deviceID).then(function(outletData) {
-                                    console.log(outletData);
                                     if (outletData.data) {
                                         device.outlets = outletData.data;
                                         $scope.devices.push(device);
@@ -106,7 +105,6 @@ angular.module('clientApp')
                         profile.updatedProfileMessage = "added the following device: " + profile.addDevice.deviceID;
                         deviceData.data.forEach(function(device) {
                             deviceService.getOutlets(device.deviceID).then(function(outletData) {
-                                console.log(outletData);
                                 if (outletData.data) {
                                     device.outlets = outletData.data;
                                     $scope.devices.push(device);

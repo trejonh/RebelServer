@@ -18,7 +18,6 @@ angular.module('clientApp')
                 deviceService.getDevices(mydevice.user.username, null).then(function(deviceData) {
                         deviceData.data.forEach(function(device) {
                             deviceService.getOutlets(device.deviceID).then(function(outletData) {
-                                console.log(outletData);
                                 if (outletData.data) {
                                     device.outlets = outletData.data;
                                     $scope.devices.push(device);

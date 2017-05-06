@@ -55,8 +55,8 @@ angular.module('clientApp')
                             data.data[0].outlets = outletData.data;
                             stats.device = data.data[0];
                             $scope.outlets = data.data[0].outlets;
-                            hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH = 0.5 });
-                            dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH = 0.5 });
+                            hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH });
+                            dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH });
                         }, function error(err) {
                             if (err)
                                 console.log(err);

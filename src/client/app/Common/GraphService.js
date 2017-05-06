@@ -65,10 +65,10 @@
                     var date = new Date(outlets[i].dailyWattage[j].day);
                     var dateStr = (date.getMonth() + 1) + "/" + date.getDate();
                     tempLabels.push(dateStr);
-                    console.log(outlets[i]);
                     tempSeries.push(outlets[i].dailyWattage[j].wattage);
                 }
                 labels = tempLabels;
+                console.log(tempSeries);
                 series.push({ name: outlets[i].nickname, data: tempSeries });
             }
             var dailyGraph = new Chartist.Line(graph.container, {
