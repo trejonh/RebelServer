@@ -15,18 +15,17 @@ angular.module('clientApp')
     meanData.getProfile()
       .then(function(data) {
         mydevice.user = data.data;
-        deviceService.getDevices(mydevice.user.username).then(function(data) {
-          for(var i = 0; i<data.data.length; i++){
-              deviceService.getOutlets(data.data[i].deviceID).then(function(outletData){
-                data.data[i].outlets = outletData.data;
-                $scope.devices.push(data.data[i]);
+        deviceService.getDevices(mydevice.user.username).then(function(deviceData) {
+          for(var i = 0; i<deviceData.data.length; i++){
+              deviceService.getOutlets(deviceData.data[i].deviceID).then(function(outletData){
+                deviceData.data[i].outlets = outletData.data;
+                $scope.devices.push(deviceData.data[i]);
                 console.log($scope.devices);
               },function error(err){
                 if(err)
                   console.log(err);
               });
           }
-          //$scope.devices = data.data;
         }, function error(err) {
           if (err) {
             console.log(err);

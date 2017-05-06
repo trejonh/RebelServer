@@ -33,7 +33,6 @@ angular.module('clientApp')
 
         deviceService.getDevices(null, deviceId).then(function(data) {
             deviceService.getOutlets(data.data[0].deviceID).then(function(outletData) {
-                console.log(outletData);
                 data.data[0].outlets = outletData.data;
                 stats.device = data.data[0];
                 $scope.outlets = data.data[0].outlets;
@@ -205,8 +204,7 @@ angular.module('clientApp')
         $scope.changeDeviceName = function() {
             $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
                 deviceService.changeDeviceName(stats.device).then(function(data) {
-                    console.log(data);
-                    // stats.device = data.data;
+                    stats.device.deviceName = data.data[0].deviceName;
                 }, function error(err) {
                     console.log(err);
                 });
@@ -218,8 +216,7 @@ angular.module('clientApp')
             $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
             stats.outlet.owner = stats.device.owner;
             deviceService.changeOutletNickname(stats.outlet).then(function(data) {
-                console.log(data);
-                //stats.device = data.data;
+                stats.outlet = data.data;
             }, function error(err) {
                 console.log(err);
             });
