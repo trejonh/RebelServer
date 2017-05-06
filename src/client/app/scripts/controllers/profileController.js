@@ -36,6 +36,7 @@ angular.module('clientApp')
       .then(function(data) {
         profile.user = data.data;
         deviceService.getDevices(profile.user.username, null).then(function(data) {
+          console.log(data);
           for(var i = 0; i<data.data.length; i++){
               deviceService.getOutlets(data.data[i].deviceID).then(function(outletData){
                 console.log(outletData);
