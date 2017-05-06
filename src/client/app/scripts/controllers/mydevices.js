@@ -16,7 +16,17 @@ angular.module('clientApp')
       .then(function(data) {
         mydevice.user = data.data;
         deviceService.getDevices(mydevice.user.username).then(function(data) {
-          $scope.devices = data.data;
+          for(var i = 0; i<data.data.length; i++){
+              deviceService.getOutlets(data.data[i].deviceID).then(function(outletData){
+                console.log(outletData);
+                data.data[i].outlets = outletData.data;
+                $scope.devices.push(data.data[i]);
+              },function error(err){
+                if(err)
+                  console.log(err);
+              });
+          }
+          //$scope.devices = data.data;
         }, function error(err) {
           if (err) {
             console.log(err);

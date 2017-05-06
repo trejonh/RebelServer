@@ -36,8 +36,17 @@ angular.module('clientApp')
       .then(function(data) {
         profile.user = data.data;
         deviceService.getDevices(profile.user.username, null).then(function(data) {
-          console.log(data);
-          $scope.devices = data.data;
+          for(var i = 0; i<data.data.length; i++){
+              deviceService.getOutlets(data.data[i].deviceID).then(function(outletData){
+                console.log(outletData);
+                data.data[i].outlets = outletData.data;
+                $scope.devices.push(data.data[i]);
+              },function error(err){
+                if(err)
+                  console.log(err);
+              });
+          }
+          //$scope.devices = data.data;
         }, function error(err) {
           if (err) {
             console.log(err);
@@ -92,7 +101,18 @@ angular.module('clientApp')
         profile.addDevice._id = profile.user._id;
         deviceService.addDevice(profile.addDevice);
         deviceService.getDevices(profile.user.username, null).then(function(data) {
-          $scope.devices = data.data.devices;
+          for(var i = 0; i<data.data.length; i++){
+              deviceService.getOutlets(data.data[i].deviceID).then(function(outletData){
+                console.log(outletData);
+                data.data[i].outlets = outletData.data;
+                if($scope.devices.indexOf(data.data[i])===-1)
+                  $scope.devices.push(data.data[i]);
+              },function error(err){
+                if(err)
+                  console.log(err);
+              });
+          }
+          //$scope.devices = data.data;
           $scope.profileUpdate = false;
           profile.updatedProfileMessage = "added the following device: " + profile.addDevice.deviceID;
         }, function error(err) {

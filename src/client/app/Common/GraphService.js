@@ -40,27 +40,6 @@
                 low: 0,
                 plugins: [
                     Chartist.plugins.legend({position:'bottom'}),
-                    /*Chartist.plugins.ctAxisTitle({
-                        axisX: {
-                            axisTitle: 'Hour of day',
-                            axisClass:'ct-axis-title-y',
-                            offset: {
-                                x: 0,
-                                y: 40
-                            },
-                            textAnchor: 'end'
-                        },
-                        axisY: {
-                            axisTitle: 'Wattage (w)',
-                            axisClass:'ct-axis-title-y',
-                            offset: {
-                                x: 0,
-                                y: 40
-                            },
-                            textAnchor: 'end',
-                            flipTitle: true
-                        }
-                    }),*/
                     Chartist.plugins.tooltip({
                         tooltipFnc: function(outletNickname, wattage){
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000);
@@ -109,27 +88,6 @@
                 low: 0,
                 plugins: [
                     Chartist.plugins.legend({position:'bottom'}),
-                    /*Chartist.plugins.ctAxisTitle({
-                        axisX: {
-                            axisTitle: 'Month/Day',
-                            axisClass:'ct-axis-title-x',
-                            offset: {
-                                x: 0,
-                                y: 40
-                            },
-                            textAnchor: 'start'
-                        },
-                        axisY: {
-                            axisTitle: 'Wattage (w)',
-                            axisClass:'ct-axis-title-y',
-                            offset: {
-                                x: 0,
-                                y: 20
-                            },
-                            textAnchor: 'start',
-                            flipTitle: true
-                        }
-                    }),*/
                     Chartist.plugins.tooltip({
                         tooltipFnc: function(outletNickname, wattage){
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000*4);

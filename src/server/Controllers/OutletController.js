@@ -135,7 +135,8 @@
                   }).end();
                   return;
               }
-              Devices.findOne({
+              res.status(200).json({body:raw}).end();
+              /*Devices.findOne({
                   deviceID: req.body.deviceID
               }, function(err, device) {
                   if (err) {
@@ -150,7 +151,7 @@
                           outlet: outlet
                       }).end();
                   }
-              });
+              });*/
           });
       });
   };
@@ -174,17 +175,16 @@
    *this is called when a device is created
    *locally called, not by angular directly
    **/
-  module.exports.getOutlets = function(deviceID, callback) {
+  module.exports.getOutlets = function(req, res) {
       Outlets.find({
-          deviceID: deviceID
+          deviceID: req.body.deviceID
       }).sort({
           outletNumber: 'asc'
       }).lean().exec(function(err, outlets) {
           if (err) {
               console.log(err);
-              callback(err, null);
           } else {
-              callback(null, outlets);
+            res.status(200).json(outlets).end();
           }
       });
   };
@@ -202,9 +202,9 @@
               return;
           } else if (outlet) {
               outlet.nickname = req.body.nickname;
-              outlet.save(function() {
-                  newOutlet = outlet;
-                  Devices.findOne({
+              outlet.save(function(err, newOutlet) {
+                  res.status(200).json(newOutlet);
+                  /*Devices.findOne({
                       $and: [{
                           deviceID: req.body.deviceID
                       }, {
@@ -220,10 +220,9 @@
                       } else if (device) {
                           updateOutletsInDevice(device, res, newOutlet);
                       } else if (process.env["TestDB"]) { //jshint ignore:line
-                          res.status(200).json(newOutlet);
                           return;
                       }
-                  });
+                  });*/
               });
           }
       });
@@ -280,7 +279,7 @@
                       outlet.isOn = 1;
                   }
                   outlet.save(function() {
-                      Devices.findOne({
+                      /*Devices.findOne({
                           $and: [{
                               owner: req.body.username
                           }, {
@@ -290,7 +289,7 @@
                           if (device) {
                               updateOutletsInDevice(device, res, outlet);
                           }
-                      });
+                      });*/
                   });
 
               });
@@ -323,7 +322,7 @@
   }
 
 
-  function updateOutletsInDevice(device, res, newOutlet) {
+ /* function updateOutletsInDevice(device, res, newOutlet) {
       console.log("trying to update outlets in device");
       var deviceOutlets = device.outlets;
       for (var i = 0; i < deviceOutlets.length; i++) {
@@ -388,4 +387,4 @@
               }
 
           });
-  }
+  }*/

@@ -22,6 +22,13 @@
         }
       });
     };
+    var getOutlets = function(deviceID) {
+      return $http.get('http://' + window.location.hostname + ':3000/outlets', {
+        params: {
+          deviceID: deviceID
+        }
+      });
+    };
 
     var changeDeviceName = function(device) {
       return $http.post('http://' + window.location.hostname + ':3000/changeDeviceName', device);
@@ -50,6 +57,7 @@
     return {
       addDevice: addDevice,
       getDevices: getDevices,
+      getOutlets: getOutlets,
       changeDeviceName: changeDeviceName,
       changeOutletNickname: changeOutletNickname,
       scheduleTask: scheduleTask,

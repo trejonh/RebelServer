@@ -32,30 +32,53 @@ angular.module('clientApp')
         stats.costPerKWH = 0.5;
 
         deviceService.getDevices(null, deviceId).then(function(data) {
-            stats.device = data.data[0];
-            $scope.outlets = data.data[0].outlets;
-            hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+            for(var i = 0; i<data.data.length; i++){
+              deviceService.getOutlets(data.data[i].deviceID).then(function(outletData){
+                console.log(outletData);
+                data.data[i].outlets = outletData.data;
+                stats.devices.=data.data[i];
+                $scope.outlets = data.data[i].outlets;
+                hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
             dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+              },function error(err){
+                if(err)
+                  console.log(err);
+              });
+          }
+            //stats.device = data.data[0];
+            //$scope.outlets = data.data[0].outlets;
+            //hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+            //dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
         }, function error(err) {
             if (err) {
                 console.log(err);
             }
         });
         $interval(function() {
-            console.log("in interval");
             if (hourlyGraph && dailyGraph) {
-                deviceService.getDevices(null, deviceId).then(function(data) {
-                    stats.device = data.data[0];
-                    $scope.outlets = data.data[0].outlets;
-                    hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets });
-                    dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets });
-                    hourlyGraph.update();
-                    dailyGraph.update();
-                }, function error(err) {
-                    if (err) {
-                        console.log(err);
-                    }
-                });
+               deviceService.getDevices(null, deviceId).then(function(data) {
+            for(var i = 0; i<data.data.length; i++){
+              deviceService.getOutlets(data.data[i].deviceID).then(function(outletData){
+                console.log(outletData);
+                data.data[i].outlets = outletData.data;
+                stats.devices.=data.data[i];
+                $scope.outlets = data.data[i].outlets;
+                hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+            dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+              },function error(err){
+                if(err)
+                  console.log(err);
+              });
+          }
+            //stats.device = data.data[0];
+            //$scope.outlets = data.data[0].outlets;
+            //hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+            //dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+        }, function error(err) {
+            if (err) {
+                console.log(err);
+            }
+        });
             }
         }, 3600000);
         //setSelectedOutet
@@ -99,7 +122,8 @@ angular.module('clientApp')
             }
             stats.outlet.username = stats.device.owner;
             deviceService.manualSwitch(stats.outlet).then(function(data) {
-                stats.device = data.data;
+                console.log(data);
+               // stats.device = data.data;
             }, function err(err) {
                 if (err) {
                     console.log(err);
@@ -193,7 +217,7 @@ angular.module('clientApp')
             $("#changeDeviceNameModal").on("hidden.bs.modal", function(eve) { //jshint ignore:line
                 deviceService.changeDeviceName(stats.device).then(function(data) {
                     console.log(data);
-                    stats.device = data.data;
+                   // stats.device = data.data;
                 }, function error(err) {
                     console.log(err);
                 });
@@ -205,7 +229,8 @@ angular.module('clientApp')
             $("#changeOutletNameModal").modal("hide"); //jshint ignore:line
             stats.outlet.owner = stats.device.owner;
             deviceService.changeOutletNickname(stats.outlet).then(function(data) {
-                stats.device = data.data;
+                console.log(data);
+                //stats.device = data.data;
             }, function error(err) {
                 console.log(err);
             });

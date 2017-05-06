@@ -37,9 +37,9 @@ AGENDA.define('hourlyWattage', function(job, done) {
 					if(err){
 						console.error("error saving");
 						console.error(err);
-					}else{
+					}/*else{
 						updateOutletsInDevice(outlet);						
-					}
+					}*/
 				});
 			});
 			//now we can say done()
@@ -74,9 +74,9 @@ AGENDA.define('dailyWattage', function(job, done) {
 					if(err){
 						console.error("error saving");
 						console.error(err);
-					}else{
+					}/*else{
 						updateOutletsInDevice(outlet);						
-					}
+					}*/
 				});
 			});
 			done();
@@ -176,7 +176,7 @@ function notifyUser(deviceID, method, passedOrFail, done) {
     });
 }
 
-function updateOutletsInDevice(outlet) {
+/*function updateOutletsInDevice(outlet) {
     var currDevice;
     Devices.findOne({
         deviceID: outlet.deviceID
@@ -198,4 +198,4 @@ function updateOutletsInDevice(outlet) {
                 });
         }
     });
-}
+}*/
