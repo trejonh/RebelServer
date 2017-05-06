@@ -35,13 +35,14 @@ angular.module('clientApp')
     meanData.getProfile()
       .then(function(data) {
         profile.user = data.data;
-        deviceService.getDevices(profile.user.username, null).then(function(data) {
-          console.log(data);
-          for(var i = 0; i<data.data.length; i++){
-              deviceService.getOutlets(data.data[i].deviceID).then(function(outletData){
+        deviceService.getDevices(profile.user.username, null).then(function(deviceData) {
+          for(var i = 0; i<deviceData.data.length; i++){
+              deviceService.getOutlets(deviceData.data[i].deviceID).then(function(outletData){
                 console.log(outletData);
-                data.data[i].outlets = outletData.data;
+                deviceData.data[i].outlets = outletData.data;
+                console.log(deviceData.data);
                 $scope.devices.push(data.data[i]);
+                console.log($scope.devices);
               },function error(err){
                 if(err)
                   console.log(err);
