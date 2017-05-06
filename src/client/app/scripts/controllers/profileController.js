@@ -101,26 +101,25 @@ angular.module('clientApp')
                 profile.addDevice.username = profile.user.username;
                 profile.addDevice._id = profile.user._id;
                 deviceService.addDevice(profile.addDevice);
-                deviceService.getDevices(profile.user.username, null).then(function(data) {
-                    for (var i = 0; i < data.data.length; i++) {
-                        deviceService.getOutlets(data.data[i].deviceID).then(function(outletData) {
-                            console.log(outletData);
-                            data.data[i].outlets = outletData.data;
-                            if ($scope.devices.indexOf(data.data[i]) === -1)
-                                $scope.devices.push(data.data[i]);
-                        }, function error(err) {
-                            if (err)
-                                console.log(err);
+                deviceService.getDevices(null, profile.addDevice.deviceID).then(function(deviceData) {
+                        $scope.profileUpdate = false;
+                        profile.updatedProfileMessage = "added the following device: " + profile.addDevice.deviceID;
+                        deviceData.data.forEach(function(device) {
+                            deviceService.getOutlets(device.deviceID).then(function(outletData) {
+                                console.log(outletData);
+                                if (outletData.data) {
+                                    device.outlets = outletData.data;
+                                    $scope.devices.push(device);
+                                }
+                            }, function error(err) {
+                                if (err)
+                                    console.log(err);
+                            });
                         });
-                    }
-                    //$scope.devices = data.data;
-                    $scope.profileUpdate = false;
-                    profile.updatedProfileMessage = "added the following device: " + profile.addDevice.deviceID;
-                }, function error(err) {
-                    if (err) {
+                    },
+                    function error(err) {
                         console.log(err);
-                    }
-                });
+                    });
             });
         };
         $scope.updatePhoneNumber = function() {
