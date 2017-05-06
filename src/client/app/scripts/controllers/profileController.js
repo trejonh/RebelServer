@@ -36,19 +36,18 @@ angular.module('clientApp')
             .then(function(data) {
                     profile.user = data.data;
                     deviceService.getDevices(profile.user.username, null).then(function(deviceData) {
-                            for (var i = 0; i < deviceData.data, length; i++) {
-                                var device = deviceData.data[i];
+                            deviceData.data.forEach(function(device) {
                                 deviceService.getOutlets(device.deviceID).then(function(outletData) {
                                     console.log(outletData);
-                                    if (outletData.data)
-                                        return outletData.data
-                                    else
-                                        return [];
+                                    if (outletData.data) {
+                                        device.outlets = outletData.data;
+                                        $scope.devices.push(device);
+                                    }
                                 }, function error(err) {
                                     if (err)
                                         console.log(err);
                                 });
-                            }
+                            });
                         },
                         function error(err) {
                             console.log(err);
