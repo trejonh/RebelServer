@@ -32,19 +32,19 @@ angular.module('clientApp')
         stats.costPerKWH = 0.5;
 
         deviceService.getDevices(null, deviceId).then(function(data) {
-            for(var i = 0; i<data.data.length; i++){
-              deviceService.getOutlets(data.data[i].deviceID).then(function(outletData){
+            //for(var i = 0; i<data.data.length; i++){
+              deviceService.getOutlets(data.data[0].deviceID).then(function(outletData){
                 console.log(outletData);
-                data.data[i].outlets = outletData.data;
-                stats.devices.=data.data[i];
-                $scope.outlets = data.data[i].outlets;
+                data.data[0].outlets = outletData.data;
+                stats.devices=data.data[0];
+                $scope.outlets = data.data[0].outlets;
                 hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
             dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
               },function error(err){
                 if(err)
                   console.log(err);
               });
-          }
+          //}
             //stats.device = data.data[0];
             //$scope.outlets = data.data[0].outlets;
             //hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
@@ -57,12 +57,12 @@ angular.module('clientApp')
         $interval(function() {
             if (hourlyGraph && dailyGraph) {
                deviceService.getDevices(null, deviceId).then(function(data) {
-            for(var i = 0; i<data.data.length; i++){
-              deviceService.getOutlets(data.data[i].deviceID).then(function(outletData){
+            //for(var i = 0; i<data.data.length; i++){
+              deviceService.getOutlets(data.data[0].deviceID).then(function(outletData){
                 console.log(outletData);
-                data.data[i].outlets = outletData.data;
-                stats.devices.=data.data[i];
-                $scope.outlets = data.data[i].outlets;
+                data.data[0].outlets = outletData.data;
+                stats.devices.=data.data[0];
+                $scope.outlets = data.data[0].outlets;
                 hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
             dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
               },function error(err){
