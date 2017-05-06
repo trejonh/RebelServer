@@ -36,19 +36,7 @@ angular.module('clientApp')
       .then(function(data) {
         profile.user = data.data;
         deviceService.getDevices(profile.user.username, null).then(function(deviceData) {
-          for(var i = 0; i<deviceData.data.length; i++){
-              deviceService.getOutlets(deviceData.data[i].deviceID).then(function(outletData){
-                console.log(outletData);
-                deviceData.data[i].outlets = outletData.data;
-                console.log(deviceData.data);
-                $scope.devices.push(data.data[i]);
-                console.log($scope.devices);
-              },function error(err){
-                if(err)
-                  console.log(err);
-              });
-          }
-          //$scope.devices = data.data;
+          $scope.devices = deviceData.data;
         }, function error(err) {
           if (err) {
             console.log(err);
@@ -57,6 +45,16 @@ angular.module('clientApp')
       }, function error(e) {
         console.log(e);
       });
+    $scope.getOutlets = function(device){
+      deviceService.getOutlets(device.deviceID).then(function(outletData){
+                console.log(outletData);
+                return outletData.data
+              },function error(err){
+                if(err)
+                  console.log(err);
+              });
+    };
+
     $scope.logout = function() {
       authentication.logout();
     };
