@@ -177,7 +177,7 @@
    **/
   module.exports.getOutlets = function(req, res) {
       Outlets.find({
-          deviceID: req.body.deviceID
+          deviceID: req.query.deviceID
       }).sort({
           outletNumber: 'asc'
       }).lean().exec(function(err, outlets) {
