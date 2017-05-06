@@ -34,30 +34,29 @@ angular.module('clientApp')
         };
         meanData.getProfile()
             .then(function(data) {
-                profile.user = data.data;
-                deviceService.getDevices(profile.user.username, null).then(function(deviceData) {
-                    $scope.devices = deviceData.data;
-                }, function error(err) {
-                    if (err) {
-                        console.log(err);
-                    }
+                    profile.user = data.data;
+                    deviceService.getDevices(profile.user.username, null).then(function(deviceData) {
+                            for (var i = 0; i < deviceData.data, length; i++) {
+                                var device = deviceData.data[i];
+                                deviceService.getOutlets(device.deviceID).then(function(outletData) {
+                                    console.log(outletData);
+                                    if (outletData.data)
+                                        return outletData.data
+                                    else
+                                        return [];
+                                }, function error(err) {
+                                    if (err)
+                                        console.log(err);
+                                });
+                            }
+                        },
+                        function error(err) {
+                            console.log(err);
+                        });
+                },
+                function error(e) {
+                    console.log(e);
                 });
-            }, function error(e) {
-                console.log(e);
-            });
-        $scope.getOutlets = function(device) {
-            deviceService.getOutlets(device.deviceID).then(function(outletData) {
-                console.log(outletData);
-                if(outletData.data)
-                  return outletData.data
-                else
-                  return [];
-            }, function error(err) {
-                if (err)
-                    console.log(err);
-            });
-        };
-
         $scope.logout = function() {
             authentication.logout();
         };

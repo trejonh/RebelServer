@@ -39,7 +39,7 @@
           <th>On/off</th>
           <th>Total Power Drawn</th>
         </tr>
-        <tr ng-repeat="outlet in getOutlets(device)">
+        <tr ng-repeat="outlet in device.outlets">
           <td>{{outlet.outletNumber}}</td>
           <td>{{outlet.nickname}}</td>
           <td>{{outlet.isOn}}</td>
