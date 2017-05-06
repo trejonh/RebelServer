@@ -68,8 +68,8 @@
                     tempSeries.push(outlets[i].dailyWattage[j].wattage);
                 }
                 labels = tempLabels;
-                console.log(tempSeries);
                 series.push({ name: outlets[i].nickname, data: tempSeries });
+                console.log(series);
             }
             var dailyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
@@ -87,7 +87,7 @@
                 }),
                 low: 0,
                 plugins: [
-                    Chartist.plugins.legend({position:'bottom'}),
+                    //Chartist.plugins.legend({position:'bottom'}),
                     Chartist.plugins.tooltip({
                         tooltipFnc: function(outletNickname, wattage){
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000*4);
