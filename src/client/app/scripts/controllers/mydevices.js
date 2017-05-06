@@ -15,7 +15,7 @@ angular.module('clientApp')
         meanData.getProfile()
             .then(function(data) {
                 mydevice.user = data.data;
-                deviceService.getDevices(profile.user.username, null).then(function(deviceData) {
+                deviceService.getDevices(mydevice.user.username, null).then(function(deviceData) {
                         deviceData.data.forEach(function(device) {
                             deviceService.getOutlets(device.deviceID).then(function(outletData) {
                                 console.log(outletData);
