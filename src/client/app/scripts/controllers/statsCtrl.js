@@ -33,6 +33,7 @@ angular.module('clientApp')
 
         deviceService.getDevices(null, deviceId).then(function(data) {
             //for(var i = 0; i<data.data.length; i++){
+                console.log(data);
             deviceService.getOutlets(data.data[0].deviceID).then(function(outletData) {
                 console.log(outletData);
                 data.data[0].outlets = outletData.data;
