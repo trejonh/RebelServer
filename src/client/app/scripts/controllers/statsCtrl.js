@@ -9,79 +9,79 @@
  */
 angular.module('clientApp')
     .controller('StatsCtrl', function($scope, $route, $interval, deviceService, GraphService, authentication) {
-            var stats = this;
-            var deviceId = $route.current.params.deviceID;
-            $scope.selectedAnOutlet = true;
-            stats.device = {};
-            stats.helper = "Please select an outlet listed to the left.";
-            stats.outlet = undefined;
-            stats.outlets = [];
-            $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
-            stats.taskScheduler = {
-                manualOn: true,
-                scheduleOn: "",
-                repeatOn: true,
-                scheduleOff: "",
-                repeatOff: true,
-                setOnTime: [],
-                setOffTime: []
-            };
+        var stats = this;
+        var deviceId = $route.current.params.deviceID;
+        $scope.selectedAnOutlet = true;
+        stats.device = {};
+        stats.helper = "Please select an outlet listed to the left.";
+        stats.outlet = undefined;
+        stats.outlets = [];
+        $scope.manualSwitchClass = "fa fa-toggle-on fa-5x";
+        stats.taskScheduler = {
+            manualOn: true,
+            scheduleOn: "",
+            repeatOn: true,
+            scheduleOff: "",
+            repeatOff: true,
+            setOnTime: [],
+            setOffTime: []
+        };
 
-            var hourlyGraph = null;
-            var dailyGraph = null;
-            stats.costPerKWH = 0.5;
+        var hourlyGraph = null;
+        var dailyGraph = null;
+        stats.costPerKWH = 0.5;
 
-            deviceService.getDevices(null, deviceId).then(function(data) {
-                //for(var i = 0; i<data.data.length; i++){
-                deviceService.getOutlets(data.data[0].deviceID).then(function(outletData) {
-                    console.log(outletData);
-                    data.data[0].outlets = outletData.data;
-                    stats.devices = data.data[0];
-                    $scope.outlets = data.data[0].outlets;
-                    hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH = 0.5 });
-                    dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH = 0.5 });
-                }, function error(err) {
-                    if (err)
-                        console.log(err);
-                });
-                //}
-                //stats.device = data.data[0];
-                //$scope.outlets = data.data[0].outlets;
-                //hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
-                //dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+        deviceService.getDevices(null, deviceId).then(function(data) {
+            //for(var i = 0; i<data.data.length; i++){
+            deviceService.getOutlets(data.data[0].deviceID).then(function(outletData) {
+                console.log(outletData);
+                data.data[0].outlets = outletData.data;
+                stats.devices = data.data[0];
+                $scope.outlets = data.data[0].outlets;
+                hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH = 0.5 });
+                dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH = 0.5 });
             }, function error(err) {
-                if (err) {
+                if (err)
                     console.log(err);
-                }
             });
-            $interval(function() {
-                    if (hourlyGraph && dailyGraph) {
-                        deviceService.getDevices(null, deviceId).then(function(data) {
-                                    //for(var i = 0; i<data.data.length; i++){
-                                    deviceService.getOutlets(data.data[0].deviceID).then(function(outletData) {
-                                        console.log(outletData);
-                                        data.data[0].outlets = outletData.data;
-                                        stats.devices = data.data[0];
-                                        $scope.outlets = data.data[0].outlets;
-                                        hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH = 0.5 });
-                                        dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH = 0.5 });
-                                    }, function error(err) {
-                                        if (err)
-                                            console.log(err);
-                                    });
-                                }
-                                //stats.device = data.data[0];
-                                //$scope.outlets = data.data[0].outlets;
-                                //hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
-                                //dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
-                            },
-                            function error(err) {
-                                if (err) {
-                                    console.log(err);
-                                }
-                            });
-                }
-            }, 3600000);
+            //}
+            //stats.device = data.data[0];
+            //$scope.outlets = data.data[0].outlets;
+            //hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+            //dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+        }, function error(err) {
+            if (err) {
+                console.log(err);
+            }
+        });
+        $interval(function() {
+            if (hourlyGraph && dailyGraph) {
+                deviceService.getDevices(null, deviceId).then(function(data) {
+                        //for(var i = 0; i<data.data.length; i++){
+                        deviceService.getOutlets(data.data[0].deviceID).then(function(outletData) {
+                            console.log(outletData);
+                            data.data[0].outlets = outletData.data;
+                            stats.devices = data.data[0];
+                            $scope.outlets = data.data[0].outlets;
+                            hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH = 0.5 });
+                            dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH = 0.5 });
+                        }, function error(err) {
+                            if (err)
+                                console.log(err);
+                        });
+                        //}
+                        //stats.device = data.data[0];
+                        //$scope.outlets = data.data[0].outlets;
+                        //hourlyGraph = GraphService.initHourlyGraph({ container: "#hourlyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+                        //dailyGraph = GraphService.initDailyGraph({ container: "#dailyGraph", outlets: stats.device.outlets , cost: stats.costPerKWH = 0.5});
+                    },
+                    function error(err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+            }
+        }, 3600000);
         //setSelectedOutet
         $scope.setSelectedOutlet = function(outlet) {
             stats.outlet = outlet;
