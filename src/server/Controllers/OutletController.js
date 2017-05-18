@@ -322,7 +322,7 @@
   }
 
 
- /* function updateOutletsInDevice(device, res, newOutlet) {
+  function updateOutletsInDevice(device, res, newOutlet) {
       console.log("trying to update outlets in device");
       var deviceOutlets = device.outlets;
       for (var i = 0; i < deviceOutlets.length; i++) {
