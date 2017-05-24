@@ -76,7 +76,7 @@
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
       if (typeof data === 'string') {
-          var outlet = {}; //= new Outlets();
+          var outletObj = {}; //= new Outlets();
           data = data.split(",");
           for (var i = 0; i < data.length; i++) {
               var outletData = data[i].split(":");
@@ -86,23 +86,23 @@
                */
               switch (i) {
                   case 0:
-                      outlet.deviceID = outletData[1].trim();
+                      outletObj.deviceID = outletData[1].trim();
                       break;
                   case 1:
-                      outlet.accessToken = outletData[1].trim();
+                      outletObj.accessToken = outletData[1].trim();
                       break;
                   case 2:
-                      outlet.outletNumber = parseInt(outletData[2]);
+                      outletObj.outletNumber = parseInt(outletData[2]);
                       break;
                   case 3:
-                      outlet.isOn = parseInt(outletData[1]);
+                      outletObj.isOn = parseInt(outletData[1]);
                       break;
                   case 4:
-                      outlet.currentWattage = parseInt(outletData[1].substring(0, outletData[1].indexOf('}')));
+                      outletObj.currentWattage = parseInt(outletData[1].substring(0, outletData[1].indexOf('}')));
                       break;
               }
           }
-          data = outlet;
+          data = outletObj;
       }
       Outlets.findOne({
           $and: [{
@@ -124,7 +124,8 @@
               res.status(500).end();
               return;
           }
-          outlet.currentWattage += parseInt(data.currentWattage);
+          var temp = outlet.currentWattage;
+          outlet.currentWattage = temp;
           outlet.isOn = data.isOn;
           outlet.save(function(err, raw) {
               if (err) {

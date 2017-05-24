@@ -70,7 +70,6 @@
                 labels = tempLabels;
                 series.push({ name: outlets[i].nickname, data: tempSeries });
             }
-                console.log(series);
             var dailyGraph = new Chartist.Line(graph.container, {
                 labels: labels,
                 series: series,
