@@ -5,7 +5,7 @@ var particleRequest = require("request");
 var Devices = mongoose.model("smartDeviceModel");
 var Users = mongoose.model("registeredUserModel");
 var Outlets = mongoose.model("outletDataModel");
-const SECONDS_IN_DAY = 86400;
+const SECONDS_IN_HOUR = 3600;
 var serverTimeZone = new Date().getTimezoneOffset() / 60;
 var AGENDA = new Agenda({
     db: {
@@ -30,7 +30,7 @@ AGENDA.define('hourlyWattage', function(job, done) {
 				if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
 					outlet.hourlyWattage = [];
                 if(outlet.lastHourAdded !== hour){
-				    outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_DAY, hour: hour });
+				    outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_HOUR, hour: hour });
                     outlet.lastHourAdded = hour;
                 }
 				outlet.save(function(err,raw){
