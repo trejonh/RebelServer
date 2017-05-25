@@ -101,9 +101,16 @@
             return dailyGraph;
         };
 
+        var updateGraphs = function(hourly,daily){
+            var h =initHourlyGraph();
+            var d =initDailyGraph();
+            return {hourly:h, daily: d};
+        };
+
         return {
             initHourlyGraph: initHourlyGraph,
-            initDailyGraph: initDailyGraph
+            initDailyGraph: initDailyGraph,
+            updateGraphs: updateGraphs
         };
     }
 

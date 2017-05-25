@@ -70,14 +70,15 @@ angular.module('clientApp')
         }, 3600000);
         $interval(function() {
             if (hourlyGraph && dailyGraph) {
-                console.log(hourlyGraph);
-                console.log(dailyGraph);
+                graphs = GraphService.updateGraphs({ container: "#hourlyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH },
+                    { container: "#dailyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH });
+                hourlyGraph = graphs.h;
+                dailyGraph = graphs.d;
             }
         }, 3000);
         $interval(function() {
             deviceService.getOutlets(stats.device.deviceID).then(function(outletData) {
-                console.log(outletData);
-                //$scope.outlets = data.data[0].outlets;
+                $scope.outlets = outletData.data;
             }, function error(err) {
                 if (err)
                     console.log(err);
@@ -236,3 +237,40 @@ angular.module('clientApp')
             });
         };
     });
+/*
+function updateHourly(outlets){
+
+            var labels = [];
+            var series = [];
+            //var legend = [];
+            for (var i = 0; i < outlets.length; i++) {
+                var tempLabels = [];
+                var tempSeries = [];
+                for (var j = 0; j < outlets[i].hourlyWattage.length; j++) {
+                    tempLabels.push('' + outlets[i].hourlyWattage[j].hour+':00');
+                    tempSeries.push(outlets[i].hourlyWattage[j].wattage);
+                }
+                series.push({ name: outlets[i].nickname, data: tempSeries });
+                //legend.push(outlets[i].nickname)
+            }
+            return {labels:labels, series:series};
+}
+
+function updateDaily(outlets){
+
+            var labels = [];
+            var series = [];
+            for (var i = 0; i < outlets.length; i++) {
+                var tempLabels = [];
+                var tempSeries = [];
+                for (var j = 0; j < outlets[i].dailyWattage.length; j++) {
+                    var date = new Date(outlets[i].dailyWattage[j].day);
+                    var dateStr = (date.getMonth() + 1) + "/" + date.getDate();
+                    tempLabels.push(dateStr);
+                    tempSeries.push(outlets[i].dailyWattage[j].wattage);
+                }
+                labels = tempLabels;
+                series.push({ name: outlets[i].nickname, data: tempSeries });
+            }
+            return {labels:labels, series:series};
+}*/
