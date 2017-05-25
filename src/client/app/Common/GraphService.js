@@ -20,6 +20,7 @@
                     tempLabels.push('' + outlets[i].hourlyWattage[j].hour+':00');
                     tempSeries.push(outlets[i].hourlyWattage[j].wattage);
                 }
+                labels = tempLabels;
                 series.push({ name: outlets[i].nickname, data: tempSeries });
                 //legend.push(outlets[i].nickname)
             }
