@@ -104,6 +104,7 @@
           }
           data = outletObj;
       }
+      console.log(data);
       Outlets.findOne({
           $and: [{
               deviceID: data.deviceID
@@ -125,7 +126,9 @@
               return;
           }
           var temp = outlet.currentWattage;
+          temp += data.currentWattage;
           outlet.currentWattage = temp;
+          console.log(outlet.currentWattage);
           outlet.isOn = data.isOn;
           outlet.save(function(err, raw) {
               if (err) {
