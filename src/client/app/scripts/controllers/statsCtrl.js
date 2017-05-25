@@ -68,14 +68,21 @@ angular.module('clientApp')
                     });
             }
         }, 3600000);
-        $interval(function(){
-            if(hourlyGraph && dailyGraph){
+        $interval(function() {
+            if (hourlyGraph && dailyGraph) {
                 console.log(hourlyGraph);
                 console.log(dailyGraph);
-                hourlyGraph.update();
-                dailyGraph.update();
             }
-        },3000);
+        }, 3000);
+        $interval(function() {
+            deviceService.getOutlets(stats.device.deviceID).then(function(outletData) {
+                console.log(outletData);
+                //$scope.outlets = data.data[0].outlets;
+            }, function error(err) {
+                if (err)
+                    console.log(err);
+            });
+        }, 10000);
         //setSelectedOutet
         $scope.setSelectedOutlet = function(outlet) {
             stats.outlet = outlet;
