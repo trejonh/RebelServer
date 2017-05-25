@@ -69,6 +69,8 @@ angular.module('clientApp')
             }
         }, 3600000);
         $interval(function() {
+            console.log(stats.device);
+            console.log($scope.outlets);
             if (hourlyGraph && dailyGraph) {
                 graphs = GraphService.updateGraphs({ container: "#hourlyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH },
                     { container: "#dailyGraph", outlets: stats.device.outlets, cost: stats.costPerKWH });

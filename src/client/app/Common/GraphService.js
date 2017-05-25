@@ -42,6 +42,7 @@
                     Chartist.plugins.legend({position:'bottom'}),
                     Chartist.plugins.tooltip({
                         tooltipFnc: function(outletNickname, wattage){
+                            console.log(outletNickname,wattage)
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000);
                             var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000,graph.cost);
                             var tip = "<p>"+outletNickname+" is using "+parseFloat(Math.round(energyUsedPerHour*100)/100).toFixed(2)+" kilowatts per hour<br>";
