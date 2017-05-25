@@ -126,8 +126,8 @@
  * @param timeOn - total time on in one day in milliseconds
  */
 function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
-    timeOn = (((timeOn / 1000) / 60) / 60); //ms->secs->mins->hours
-    return (wattage * timeOn) / 1000; //Energy in kilowatts-hours/day
+    var time = (((timeOn / 1000) / 60) / 60); //ms->secs->mins->hours
+    return (wattage/1000)* time; //Energy in kilowatts-hours/day
 }
 
 /**
