@@ -30,7 +30,7 @@
                   outlet.isOn = parseInt(outletData[1]);
                   break;
               case 4:
-                  outlet.currentWattage = parseInt(outletData[1].substring(0, outletData[1].indexOf('}')));
+                  outlet.currentWattage = parseFloat(outletData[1].substring(0, outletData[1].indexOf('}')));
                   break;
           }
       }
@@ -98,7 +98,7 @@
                       outletObj.isOn = parseInt(outletData[1]);
                       break;
                   case 4:
-                      outletObj.currentWattage = parseInt(outletData[1].substring(0, outletData[1].indexOf('}')));
+                      outletObj.currentWattage = parseFloat(outletData[1].substring(0, outletData[1].indexOf('}')));
                       break;
               }
           }
