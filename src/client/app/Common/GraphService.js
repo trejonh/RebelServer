@@ -42,7 +42,6 @@
                     Chartist.plugins.legend({position:'bottom'}),
                     Chartist.plugins.tooltip({
                         tooltipFnc: function(outletNickname, wattage){
-                            console.log(outletNickname,wattage)
                             var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000);
                             var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000,graph.cost);
                             var tip = "<p>"+outletNickname+" is using "+parseFloat(Math.round(energyUsedPerHour*100)/100).toFixed(2)+" kilowatts per hour<br>";
@@ -90,8 +89,8 @@
                     //Chartist.plugins.legend({position:'bottom'}),
                     Chartist.plugins.tooltip({
                         tooltipFnc: function(outletNickname, wattage){
-                            var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000*4);
-                            var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000*4,graph.cost);
+                            var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000*24);
+                            var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000*24,graph.cost);
                             var tip = "<p>"+outletNickname+" is using "+parseFloat(Math.round(energyUsedPerHour*100)/100).toFixed(2)+" kilowatts-hours per day<br>";
                             tip += "This totals to a cost of $"+parseFloat(Math.round(cost*100)/100).toFixed(2)+" per day</p>";
                             return tip;
