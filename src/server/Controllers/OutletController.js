@@ -104,7 +104,6 @@
           }
           data = outletObj;
       }
-      console.log(data);
       Outlets.findOne({
           $and: [{
               deviceID: data.deviceID
@@ -128,7 +127,6 @@
           var temp = outlet.currentWattage;
           temp += data.currentWattage;
           outlet.currentWattage = temp;
-          console.log(outlet.currentWattage);
           outlet.isOn = data.isOn;
           outlet.save(function(err, raw) {
               if (err) {
@@ -140,22 +138,6 @@
                   return;
               }
               res.status(200).json({body:raw}).end();
-              /*Devices.findOne({
-                  deviceID: req.body.deviceID
-              }, function(err, device) {
-                  if (err) {
-                      res.status(500).json(err);
-                      return;
-                  } else if (device) {
-                      updateOutletsInDevice(device, res, outlet);
-                      return;
-                  } else {
-                      res.status(500).json({
-                          err: "no device has been created to house this outlet, but data has been saved.",
-                          outlet: outlet
-                      }).end();
-                  }
-              });*/
           });
       });
   };
