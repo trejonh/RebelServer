@@ -34,6 +34,7 @@
                   break;
           }
       }
+      outlet.currentWattage = parseFloat(Math.round(outlet.currentWattage * 100) / 100).toFixed(2);
       Outlets.findOne({
           $and: [{
               deviceID: outlet.deviceID
@@ -126,6 +127,7 @@
           }
           var temp = outlet.currentWattage;
           temp += data.currentWattage;
+          temp = parseFloat(Math.round(temp * 100) / 100).toFixed(2);
           outlet.currentWattage = temp;
           outlet.isOn = data.isOn;
           outlet.save(function(err, raw) {
@@ -137,7 +139,7 @@
                   }).end();
                   return;
               }
-              res.status(200).json({body:raw}).end();
+              res.status(200).json({ body: raw }).end();
           });
       });
   };
@@ -170,7 +172,7 @@
           if (err) {
               console.log(err);
           } else {
-            res.status(200).json(outlets).end();
+              res.status(200).json(outlets).end();
           }
       });
   };

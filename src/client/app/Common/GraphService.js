@@ -29,6 +29,7 @@
                 series: series,
             }, {
                 fullWidth: true,
+                axisY:{onlyInteger:false},
                 chartPadding: {
                     top: 20,
                     right: 0,
@@ -76,6 +77,7 @@
                 series: series,
             }, {
                 fullWidth: true,
+                axisY:{onlyInteger:false},
                 chartPadding: {
                     top: 20,
                     right: 0,
