@@ -57,6 +57,7 @@
               outletObj.currentWattage = outlet.currentWattage;
               outletObj.hourlyWattage = [];
               outletObj.dailyWattage = [];
+              outletObj.lastState = 1;
               outletObj.save(function(err, doc) {
                   if (err) {
                       console.log(err);

@@ -29,7 +29,7 @@ angular.module('clientApp')
 
         var hourlyGraph = null;
         var dailyGraph = null;
-        stats.costPerKWH = 0.5;
+        stats.costPerKWH = 0.14;
 
         deviceService.getDevices(null, deviceId).then(function(data) {
             deviceService.getOutlets(data.data[0].deviceID).then(function(outletData) {
@@ -68,14 +68,14 @@ angular.module('clientApp')
                     });
             }
         }, 3600000);
-        $interval(function() {
+        /*$interval(function() {
             if (hourlyGraph && dailyGraph) {
                 graphs = GraphService.updateGraphs({ container: "#hourlyGraph", outlets: $scope.outlets, cost: stats.costPerKWH },
                     { container: "#dailyGraph", outlets: $scope.outlets, cost: stats.costPerKWH });
                 hourlyGraph = graphs.h;
                 dailyGraph = graphs.d;
             }
-        }, 5000);
+        }, 5000);*/
         $interval(function() {
             deviceService.getOutlets(stats.device.deviceID).then(function(outletData) {
                 $scope.outlets = outletData.data;
