@@ -75,7 +75,7 @@ angular.module('clientApp')
                 hourlyGraph = graphs.h;
                 dailyGraph = graphs.d;
             }
-        }, 3000);
+        }, 5000);
         $interval(function() {
             deviceService.getOutlets(stats.device.deviceID).then(function(outletData) {
                 $scope.outlets = outletData.data;
