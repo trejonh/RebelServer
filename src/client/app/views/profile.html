@@ -37,15 +37,13 @@
           <th>Outlet Number</th>
           <th>Primary Usage</th>
           <th>On/off</th>
-          <th>Power Drawn</th>
-          <th>Total Time On</th>
+          <th>Total Power Drawn</th>
         </tr>
         <tr ng-repeat="outlet in device.outlets">
           <td>{{outlet.outletNumber}}</td>
           <td>{{outlet.nickname}}</td>
           <td>{{outlet.isOn}}</td>
-          <td>{{outlet.wattage}}</td>
-          <td>{{outlet.elapsedTimeOn}}</td>
+          <td>{{outlet.currentWattage}}</td>
         </tr>
       </table>
     </div>

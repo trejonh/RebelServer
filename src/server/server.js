@@ -12,7 +12,6 @@ require('./Models/mongooseConnection');
 require('./config/passport');
 
 var agenda = require('./Controllers/AgendaController').agenda;
-var agendaUI = require('agenda-ui');
 
 // [SH] Bring in the routes for the API (delete the default routes)
 var routesApi = require('./routes');
@@ -37,8 +36,6 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
     next();
 });
-
-app.use('/agenda-ui', agendaUI(agenda, {poll: 1000}));
 // [SH] Use the API routes when path starts with /api
 app.use('/', routesApi);
 

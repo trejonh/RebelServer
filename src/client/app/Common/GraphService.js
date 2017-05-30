@@ -2,139 +2,145 @@
 /* globals Chartist*/
 (function() {
 
-  angular
-    .module('clientApp')
-    .service('GraphService', GraphService);
+    angular
+        .module('clientApp')
+        .service('GraphService', GraphService);
 
-  //meanData.$inject = ['$http', 'authentication'];
-  function GraphService() { //jshint ignore:line
-    var initLineGraph = function(graph) {
-      var chart = new Chartist.Line(graph.container, {
-        labels: graph.dates,
-        series: [graph.data]
-      }, {
-        low: 0
-      });
-
-      // Let's put a sequence number aside so we can use it in the event callbacks
-      var seq = 0,
-        delays = 80,
-        durations = 500;
-
-      // Once the chart is fully created we reset the sequence
-      chart.on('created', function() {
-        seq = 0;
-      });
-
-      // On each drawn element by Chartist we use the Chartist.Svg API to trigger SMIL animations
-      chart.on('draw', function(data) {
-        seq++;
-
-        if (data.type === 'line') {
-          // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
-          data.element.animate({
-            opacity: {
-              // The delay when we like to start the animation
-              begin: seq * delays + 1000,
-              // Duration of the animation
-              dur: durations,
-              // The value where the animation should start
-              from: 0,
-              // The value where it should end
-              to: 1
+    //meanData.$inject = ['$http', 'authentication'];
+    function GraphService() { //jshint ignore:line
+        var initHourlyGraph = function(graph) {
+            var outlets = graph.outlets;
+            var labels = [];
+            var series = [];
+            //var legend = [];
+            for (var i = 0; i < outlets.length; i++) {
+                var tempLabels = [];
+                var tempSeries = [];
+                for (var j = 0; j < outlets[i].hourlyWattage.length; j++) {
+                    tempLabels.push('' + outlets[i].hourlyWattage[j].hour+':00');
+                    tempSeries.push(outlets[i].hourlyWattage[j].wattage);
+                }
+                labels = tempLabels;
+                series.push({ name: outlets[i].nickname, data: tempSeries });
+                //legend.push(outlets[i].nickname)
             }
-          });
-        } else if (data.type === 'label' && data.axis === 'x') {
-          data.element.animate({
-            y: {
-              begin: seq * delays,
-              dur: durations,
-              from: data.y + 100,
-              to: data.y,
-              // We can specify an easing function from Chartist.Svg.Easing
-              easing: 'easeOutQuart'
+            var hourlyGraph = new Chartist.Line(graph.container, {
+                labels: labels,
+                series: series,
+            }, {
+                fullWidth: true,
+                axisY:{onlyInteger:false},
+                chartPadding: {
+                    top: 20,
+                    right: 0,
+                    bottom: 20,
+                    left: 0
+                },
+                lineSmooth: Chartist.Interpolation.cardinal({
+                    fillHoles: true,
+                }),
+                low: 0,
+                plugins: [
+                    Chartist.plugins.legend({position:'bottom'}),
+                    Chartist.plugins.tooltip({
+                        tooltipFnc: function(outletNickname, wattage){
+                            var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000);
+                            var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000,graph.cost);
+                            var tip = "<p>"+outletNickname+" is using "+parseFloat(Math.round(energyUsedPerHour*100)/100).toFixed(2)+" kilowatts per hour<br>";
+                            tip += "This totals to a cost of $"+parseFloat(Math.round(cost*100)/100).toFixed(2)+" per hour</p>";
+                            return tip;
+                        }
+                    })
+                ]
+            });
+            return hourlyGraph;
+        };
+
+        var initDailyGraph = function(graph) {
+            var outlets = graph.outlets;
+            var labels = [];
+            var series = [];
+            for (var i = 0; i < outlets.length; i++) {
+                var tempLabels = [];
+                var tempSeries = [];
+                for (var j = 0; j < outlets[i].dailyWattage.length; j++) {
+                    var date = new Date(outlets[i].dailyWattage[j].day);
+                    var dateStr = (date.getMonth() + 1) + "/" + date.getDate();
+                    tempLabels.push(dateStr);
+                    tempSeries.push(outlets[i].dailyWattage[j].wattage);
+                }
+                labels = tempLabels;
+                series.push({ name: outlets[i].nickname, data: tempSeries });
             }
-          });
-        } else if (data.type === 'label' && data.axis === 'y') {
-          data.element.animate({
-            x: {
-              begin: seq * delays,
-              dur: durations,
-              from: data.x - 100,
-              to: data.x,
-              easing: 'easeOutQuart'
-            }
-          });
-        } else if (data.type === 'point') {
-          data.element.animate({
-            x1: {
-              begin: seq * delays,
-              dur: durations,
-              from: data.x - 10,
-              to: data.x,
-              easing: 'easeOutQuart'
-            },
-            x2: {
-              begin: seq * delays,
-              dur: durations,
-              from: data.x - 10,
-              to: data.x,
-              easing: 'easeOutQuart'
-            },
-            opacity: {
-              begin: seq * delays,
-              dur: durations,
-              from: 0,
-              to: 1,
-              easing: 'easeOutQuart'
-            }
-          });
-        } else if (data.type === 'grid') {
-          // Using data.axis we get x or y which we can use to construct our animation definition objects
-          var pos1Animation = {
-            begin: seq * delays,
-            dur: durations,
-            from: data[data.axis.units.pos + '1'] - 30,
-            to: data[data.axis.units.pos + '1'],
-            easing: 'easeOutQuart'
-          };
+            var dailyGraph = new Chartist.Line(graph.container, {
+                labels: labels,
+                series: series,
+            }, {
+                fullWidth: true,
+                axisY:{onlyInteger:false},
+                chartPadding: {
+                    top: 20,
+                    right: 0,
+                    bottom: 20,
+                    left: 0
+                },
+                lineSmooth: Chartist.Interpolation.cardinal({
+                    fillHoles: true,
+                }),
+                low: 0,
+                plugins: [
+                    //Chartist.plugins.legend({position:'bottom'}),
+                    Chartist.plugins.tooltip({
+                        tooltipFnc: function(outletNickname, wattage){
+                            var energyUsedPerHour = getEnergyConsumedPerDay(wattage,3600000*24);
+                            var cost =  getCostOfEnergyConsumedPerDay(wattage,3600000*24,graph.cost);
+                            var tip = "<p>"+outletNickname+" is using "+parseFloat(Math.round(energyUsedPerHour*100)/100).toFixed(2)+" kilowatts-hours per day<br>";
+                            tip += "This totals to a cost of $"+parseFloat(Math.round(cost*100)/100).toFixed(2)+" per day</p>";
+                            return tip;
+                        }
+                    })
+                ]
+            });
+            return dailyGraph;
+        };
 
-          var pos2Animation = {
-            begin: seq * delays,
-            dur: durations,
-            from: data[data.axis.units.pos + '2'] - 100,
-            to: data[data.axis.units.pos + '2'],
-            easing: 'easeOutQuart'
-          };
+        var updateGraphs = function(hourly,daily){
+            var h =initHourlyGraph();
+            var d =initDailyGraph();
+            return {hourly:h, daily: d};
+        };
 
-          var animations = {};
-          animations[data.axis.units.pos + '1'] = pos1Animation;
-          animations[data.axis.units.pos + '2'] = pos2Animation;
-          animations['opacity'] = { //jshint ignore:line
-            begin: seq * delays,
-            dur: durations,
-            from: 0,
-            to: 1,
-            easing: 'easeOutQuart'
-          };
-
-          data.element.animate(animations);
-        }
-      });
-
-      // For the sake of the example we update the chart every time it's created with a delay of 10 seconds
-      chart.on('created', function() {
-        if (window.__exampleAnimateTimeout) {
-          clearTimeout(window.__exampleAnimateTimeout);
-          window.__exampleAnimateTimeout = null;
-        }
-        window.__exampleAnimateTimeout = setTimeout(chart.update.bind(chart), 12000);
-      });
-    };
-
-    return {
-      initLineGraph: initLineGraph
-    };
-  }
+        return {
+            initHourlyGraph: initHourlyGraph,
+            initDailyGraph: initDailyGraph,
+            updateGraphs: updateGraphs
+        };
+    }
 
 })();
+
+/**
+ * @ngdoc function
+ * @name getEnergyConsumedPerDay
+ *@description
+ * # get Energy consumed per day
+ * @param wattage - watts consumed
+ * @param timeOn - total time on in one day in milliseconds
+ */
+function getEnergyConsumedPerDay(wattage, timeOn) { //jshint ignore:line
+    var time = (((timeOn / 1000) / 60) / 60); //ms->secs->mins->hours
+    return (wattage/1000)* time; //Energy in kilowatts-hours/day
+}
+
+/**
+ * @ngdoc function
+ * @name getEnergyConsumedPerDay
+ *@description
+ * # get Energy consumed per day
+ * @param wattage - watts consumed
+ * @param timeOn - total time on in one day in milliseconds
+ * @param costPerKWH - cost of Energy per kilowatts-hour in cents (.01)
+ */
+function getCostOfEnergyConsumedPerDay(wattage, timeOn, costPerKWH) { // jshint ignore:line
+    return getEnergyConsumedPerDay(wattage, timeOn) * costPerKWH; //Cost in $/day
+}

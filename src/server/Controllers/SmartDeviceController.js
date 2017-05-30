@@ -8,6 +8,7 @@ module.exports.getDevices = function(req, res) {
     } : {
         deviceID: req.query.deviceID
     };
+    console.log(searchQuery);
     Device.find(searchQuery, function(err, devices) {
         if (err || !devices) {
             console.log(err);
@@ -26,20 +27,21 @@ module.exports.addDevice = function(deviceID, username) {
     newDevice.deviceID = deviceID;
     newDevice.owner = username;
     newDevice.deviceName = "Smart Power Strip " + (new Date()).toLocaleDateString();
-    ctrlOutlet.getOutlets(deviceID, function(err, outlets) {
+    newDevice.save(function(err, dev, num) {
         if (err) {
             console.log(err);
-            return;
+            return null
+        } else if (dev) {
+            return dev;
+        }
+    });
+    /*ctrlOutlet.getOutlets(deviceID, function(err, outlets) {
+        if (err) {
+            console.log(err);
+            return null;
         }
         newDevice.outlets = outlets;
-        newDevice.save(function(err, dev, num) {
-            if (err) {
-                console.log(err);
-            } else if (dev) {
-                return dev;
-            }
-        });
-    });
+    });*/
 };
 
 module.exports.changeDeviceName = function(req, res) {

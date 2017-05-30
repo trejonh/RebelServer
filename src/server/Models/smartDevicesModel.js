@@ -13,21 +13,13 @@ var SmartDeviceSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    outlets: {
+    /*outlets: {
         type: [],
         required: false
-    },
+    },*/
     lastSeenOnline:{
-      type: String,
-      required: false
-    },
-    dailyWattage:{
-      type: Number,
-      required: false
-    },
-    dailyTimeUsed:{
-      type: Number,
-      required: false
+        type: Object,
+        required: false
     }
 });
 

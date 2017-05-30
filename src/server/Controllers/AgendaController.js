@@ -4,7 +4,9 @@ var Agenda = require('agenda');
 var particleRequest = require("request");
 var Devices = mongoose.model("smartDeviceModel");
 var Users = mongoose.model("registeredUserModel");
-var sms = require('./testLib/index');
+var Outlets = mongoose.model("outletDataModel");
+const SECONDS_IN_HOUR = 4*60;
+var serverTimeZone = new Date().getTimezoneOffset() / 60;
 var AGENDA = new Agenda({
     db: {
         address: mongoConnectionString
@@ -12,10 +14,78 @@ var AGENDA = new Agenda({
 });
 var particleRequest = require("request");
 
-AGENDA.on('ready', function() {
-    console.log('ready!');
-    AGENDA.start();
+AGENDA.define('hourlyWattage', function(job, done) {
+	Outlets.find({outletNumber:{$ne:-1}}, function(err, allOutlets){
+		if(err){
+			console.error("error in calculating hourlyWattage");
+			console.error(err);
+			done();
+			return;
+		}
+		if(allOutlets){
+			allOutlets.forEach(function(outlet){
+				var currWattage = outlet.currentWattage;
+                var hour = (new Date()).getHours();
+				outlet.currentWattage = 0;
+				if(outlet.hourlyWattage === undefined || outlet.hourlyWattage ===  null)
+					outlet.hourlyWattage = [];
+                if(outlet.lastHourAdded !== hour){
+				    outlet.hourlyWattage.push({ wattage: currWattage / SECONDS_IN_HOUR, hour: hour });
+                    outlet.lastHourAdded = hour;
+                }
+				outlet.save(function(err,raw){
+					if(err){
+						console.error("error saving");
+						console.error(err);
+					}/*else{
+						updateOutletsInDevice(outlet);						
+					}*/
+				});
+			});
+			//now we can say done()
+			done();
+		}else{
+			console.error("no outlets weren't found");
+		}
+	});
 });
+
+
+AGENDA.define('dailyWattage', function(job, done) {
+    Outlets.find({outletNumber:{$ne:-1}},function(err,allOutlets){
+		if(err){
+			console.error("error in calculating dailyWattage");
+			console.error(err);
+			done();
+			return;
+		}
+		if(allOutlets){
+			console.log("outlets were found for updating");
+			allOutlets.forEach(function(outlet){
+				var dailyWattage = 0;
+				for (var i = 0; i<outlet.hourlyWattage.length;i++)
+					dailyWattage += outlet.hourlyWattage[i].wattage;
+				outlet.hourlyWattage = [];
+				if(outlet.dailyWattage === undefined || outlet.dailyWattage === null)
+					outlet.dailyWattage = [];
+				outlet.dailyWattage.push({ wattage: dailyWattage / 24, day: new Date() });
+                outlet.lastHourAdded = -1;
+				outlet.save(function(err,raw){
+					if(err){
+						console.error("error saving");
+						console.error(err);
+					}/*else{
+						updateOutletsInDevice(outlet);						
+					}*/
+				});
+			});
+			done();
+		}else{
+			console.error("no outlets weren't found");
+		}
+	});
+});
+
 module.exports.defineJob = function(functionName) {
     return AGENDA.define(functionName, function(job, done) {
         var data = job.attrs.data;
@@ -30,6 +100,7 @@ module.exports.scheduleJob = function(functionName, timeHours, timeMin, data) {
 };
 
 module.exports.cancel = function(names) {
+    console.log(names);
     AGENDA.cancel({
         name: names
     }, function(err, numRemoved) {
@@ -38,6 +109,15 @@ module.exports.cancel = function(names) {
         }
     });
 };
+
+AGENDA.on('ready', function() {
+    console.log('ready!');
+    AGENDA.every("60 minutes", "hourlyWattage");
+    AGENDA.every("24 hours", "dailyWattage");
+	//AGENDA.now("hourlyWattage");
+    AGENDA.start();
+});
+
 module.exports.agenda = AGENDA;
 
 function switchPower(outlet, done) {
@@ -47,8 +127,6 @@ function switchPower(outlet, done) {
             args: outlet.outletNumber
         }
     }, function(err, response, body) {
-        console.log(body);
-        console.log(err);
         if (err) {
             console.log(err);
             notifyUser(outlet.deviceObjID, outlet.method, "a failure due to: " + err.error_description, done);
@@ -90,25 +168,34 @@ function notifyUser(deviceID, method, passedOrFail, done) {
                         if (err) {
                             console.log(err);
                         }
-                        if (user.phoneNumber) {
-                            var opts = {
-                                subject: "Rebel Kangaroo",
-                                phoneNumber: user.phoneNumber,
-                                message: notification.message,
-                                region: 'us',
-                                username: process.env["username"], // jshint ignore:line
-                                password: process.env["password"], // jshint ignore:line
-                                host: process.env["host"] // jshint ignore:line
-                            };
-                            sms.sendText(opts,
-                                function(info) {
-                                    console.log(info);
-                                    done();
-                                });
-                        }
+						done();
                     });
                 }
             });
         }
     });
 }
+
+/*function updateOutletsInDevice(outlet) {
+    var currDevice;
+    Devices.findOne({
+        deviceID: outlet.deviceID
+    }, function(err, device) {
+        if (device) {
+            var deviceOutlets = device.outlets;
+            for (var i = 0; i < deviceOutlets.length; i++) {
+                if (deviceOutlets[i].outletNumber === outlet.outletNumber) {
+                    deviceOutlets[i] = outlet;
+                    break;
+                }
+            }
+            Devices.findByIdAndUpdate(device._id, { $set: { outlets: deviceOutlets } },
+                function(err, dev) {
+                    if (err || !dev) {
+                        console.log("error in updating outlets");
+                        console.log(err);
+                    }
+                });
+        }
+    });
+}*/

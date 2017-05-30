@@ -70,8 +70,7 @@ module.exports.updateUser = function(req, res) {
             if (req.body.phoneNumber)
                 user.phoneNumber = req.body.phoneNumber;
             if (req.body.deviceID && user.devices.indexOf(req.body.deviceID) === -1) {
-                deviceCtrl.addDevice(req.body.deviceID, req.body.username);
-                user.devices.push(req.body.deviceID);
+                user.devices.push(deviceCtrl.addDevice(req.body.deviceID, req.body.username));
             }
             user.save(function(err) {
                 if (!process.env["TestDB"]) //jshint ignore:line

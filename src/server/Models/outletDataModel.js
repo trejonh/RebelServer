@@ -20,29 +20,21 @@ var OutletDataSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    wattage: {
+    currentWattage: {
         type: Number,
         required: true
     },
-    timeSetOn: {
-        type: Object,
+    hourlyWattage: {
+        type: [],
         required: false
     },
-    timeSetOff: {
-        type: Object,
+    dailyWattage: {
+        type: [],
         required: false
     },
-    elapsedTimeOn: {
+    lastHourAdded:{
         type: Number,
-        required: true
-    },
-    timeSinceLastUpdate:{
-      type: Number,
-      required: false
-    },
-    lastKnownPowerStatus:{
-      type: Boolean,
-      required:false
+        required: false
     },
     onScheduler:{
       type: Object,

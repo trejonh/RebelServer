@@ -5,7 +5,7 @@
   var particleRequest = require("request");
   var moment = require('moment');
   var agenda = require('./AgendaController');
-  var serverTimeZone = new Date().getTimezoneOffset()/60;
+  var serverTimeZone = new Date().getTimezoneOffset() / 60;
   module.exports.createOutlet = function(req, res) {
       var data = req.body.data;
       var outlet = {}; //= new Outlets();
@@ -30,37 +30,82 @@
                   outlet.isOn = parseInt(outletData[1]);
                   break;
               case 4:
-                  outlet.wattage = parseInt(outletData[1].substring(0, outletData[1].indexOf('}')));
+                  outlet.currentWattage = parseFloat(outletData[1].substring(0, outletData[1].indexOf('}')));
                   break;
           }
       }
-      var outletObj = new Outlets();
-      outletObj.deviceID = outlet.deviceID;
-      outletObj.accessToken = outlet.accessToken;
-      outletObj.outletNumber = outlet.outletNumber;
-      outletObj.nickname = "I am outlet " + outlet.outletNumber;
-      outletObj.isOn = outlet.isOn;
-      outletObj.wattage = outlet.wattage;
-      outletObj.elapsedTimeOn = 0;
-      outletObj.lastKnownPowerStatus = true;
-      outletObj.timeSinceLastUpdate = Date.now();
-
-      outletObj.save(function(err, doc) {
-          if (err) {
-              console.log(err);
-              res.status(500);
-              res.json({
-                  "error": err
-              });
+      outlet.currentWattage = parseFloat(Math.round(outlet.currentWattage * 100) / 100).toFixed(2);
+      Outlets.findOne({
+          $and: [{
+              deviceID: outlet.deviceID
+          }, {
+              outletNumber: outlet.outletNumber
+          }]
+      }, function(err, foundOutlet) {
+          if (foundOutlet) {
+              outlet._id = foundOutlet._id;
+              updateOutletData(outlet);
+              res.status(200).json({ body: "good" }).end();
               return;
+          } else if (!foundOutlet) {
+              var outletObj = new Outlets();
+              outletObj.deviceID = outlet.deviceID;
+              outletObj.accessToken = outlet.accessToken;
+              outletObj.outletNumber = outlet.outletNumber;
+              outletObj.nickname = "I am outlet " + outlet.outletNumber;
+              outletObj.isOn = outlet.isOn;
+              outletObj.currentWattage = outlet.currentWattage;
+              outletObj.hourlyWattage = [];
+              outletObj.dailyWattage = [];
+              outletObj.lastState = 1;
+              outletObj.save(function(err, doc) {
+                  if (err) {
+                      console.log(err);
+                      res.status(500);
+                      res.json({
+                          "error": err
+                      });
+                      return;
+                  }
+                  res.status(200).json({ body: "good" }).end(); //if not sending json or other data need to .end()
+                  return;
+              });
+
           }
-          res.status(200).end(); //if not sending json or other data need to .end()
-          return;
       });
   };
 
   module.exports.updateOutletData = function(req, res) {
       var data = req.body.data;
+      if (typeof data === 'string') {
+          var outletObj = {}; //= new Outlets();
+          data = data.split(",");
+          for (var i = 0; i < data.length; i++) {
+              var outletData = data[i].split(":");
+              /*
+               *TODO: only need to parse device id, accessToken, and outlet number and power monitoring stuff
+               *everything else can be calculated on the server
+               */
+              switch (i) {
+                  case 0:
+                      outletObj.deviceID = outletData[1].trim();
+                      break;
+                  case 1:
+                      outletObj.accessToken = outletData[1].trim();
+                      break;
+                  case 2:
+                      outletObj.outletNumber = parseInt(outletData[2]);
+                      break;
+                  case 3:
+                      outletObj.isOn = parseInt(outletData[1]);
+                      break;
+                  case 4:
+                      outletObj.currentWattage = parseFloat(outletData[1].substring(0, outletData[1].indexOf('}')));
+                      break;
+              }
+          }
+          data = outletObj;
+      }
       Outlets.findOne({
           $and: [{
               deviceID: data.deviceID
@@ -71,46 +116,31 @@
           if (err) {
               console.log(err);
               res.json(err);
-              res.status(500);
+              res.status(500).end();
               return;
           } else if (!outlet) {
               console.log("no docs found with id: " + data.deviceID);
               res.json({
                   error: "no docs found with id: " + data.deviceID
               });
-              res.status(500);
-
+              res.status(500).end();
+              return;
           }
-          outlet.wattage = data.wattage;
-          //TODO: verify time
-          if (outlet.lastKnownPowerStatus) {
-              outlet.elapsedTimeOn = Date.now() - outlet.timeSinceLastUpdate;
-              outlet.timeSinceLastUpdate = Date.now();
-          }
+          var temp = outlet.currentWattage;
+          temp += data.currentWattage;
+          temp = parseFloat(Math.round(temp * 100) / 100).toFixed(2);
+          outlet.currentWattage = temp;
+          outlet.isOn = data.isOn;
           outlet.save(function(err, raw) {
               if (err) {
                   console.log(err);
                   res.status(500);
                   res.json({
                       "error": err
-                  });
+                  }).end();
                   return;
               }
-              Devices.findOne({
-                  deviceID: req.body.deviceID
-              }, function(err, device) {
-                  if (err) {
-                      res.status(500).json(err);
-                      return;
-                  } else if (device) {
-                      updateOutletsInDevice(device, res, outlet);
-                  } else {
-                      res.status(500).json({
-                          err: "no device has been created to house this outlet, but data has been saved.",
-                          outlet: outlet
-                      });
-                  }
-              });
+              res.status(200).json({ body: raw }).end();
           });
       });
   };
@@ -134,25 +164,16 @@
    *this is called when a device is created
    *locally called, not by angular directly
    **/
-  module.exports.getOutlets = function(deviceID, callback) {
+  module.exports.getOutlets = function(req, res) {
       Outlets.find({
-          deviceID: deviceID
+          deviceID: req.query.deviceID
       }).sort({
           outletNumber: 'asc'
       }).lean().exec(function(err, outlets) {
           if (err) {
               console.log(err);
-              callback(err, null);
           } else {
-              for (var i = 0; i < outlets.length; i++) {
-                  if (outlets[i].lastKnownPowerStatus) {
-                      outlets[i].elapsedTimeOn += (Date.now() - outlets[i].timeSinceLastUpdate);
-                      outlets[i].timeSinceLastUpdate = Date.now();
-                      outlets[i].save();
-                  }
-
-              }
-              callback(null, outlets);
+              res.status(200).json(outlets).end();
           }
       });
   };
@@ -170,13 +191,9 @@
               return;
           } else if (outlet) {
               outlet.nickname = req.body.nickname;
-              if (outlet.lastKnownPowerStatus) {
-                  outlet.elapsedTimeOn += (Date.now() - outlet.timeSinceLastUpdate);
-                  outlet.timeSinceLastUpdate = Date.now();
-              }
-              outlet.save(function() {
-                  newOutlet = outlet;
-                  Devices.findOne({
+              outlet.save(function(err, newOutlet) {
+                  res.status(200).json(newOutlet);
+                  /*Devices.findOne({
                       $and: [{
                           deviceID: req.body.deviceID
                       }, {
@@ -192,10 +209,9 @@
                       } else if (device) {
                           updateOutletsInDevice(device, res, newOutlet);
                       } else if (process.env["TestDB"]) { //jshint ignore:line
-                          res.status(200).json(newOutlet);
                           return;
                       }
-                  });
+                  });*/
               });
           }
       });
@@ -223,9 +239,9 @@
           minute: req.body.time[1]
       }).add(differenceInTz, 'hours');
       var hours = new Date(time._d).getHours();
-      agenda.cancel(req.body.outletID+' is scheduled to '+req.body.method);
-      agenda.defineJob(req.body.outletID+' is scheduled to '+req.body.method);
-      var job = agenda.scheduleJob(req.body.outletID+' is scheduled to '+req.body.method,hours,req.body.time[1],req.body);
+      agenda.cancel(req.body.outletID + ' is scheduled to ' + req.body.method);
+      agenda.defineJob(req.body.outletID + ' is scheduled to ' + req.body.method);
+      var job = agenda.scheduleJob(req.body.outletID + ' is scheduled to ' + req.body.method, hours, req.body.time[1], req.body);
       res.status(200).json(job);
   };
 
@@ -252,7 +268,7 @@
                       outlet.isOn = 1;
                   }
                   outlet.save(function() {
-                      Devices.findOne({
+                      /*Devices.findOne({
                           $and: [{
                               owner: req.body.username
                           }, {
@@ -262,7 +278,7 @@
                           if (device) {
                               updateOutletsInDevice(device, res, outlet);
                           }
-                      });
+                      });*/
                   });
 
               });
@@ -271,15 +287,18 @@
   };
 
   function switchPower(outlet, callback) {
-      var method = "turnOn";
+      var method = "PowerOn";
       if (outlet.isOn)
-          method = "turnOff";
+          method = "PowerOff";
       var particleUrl = "https://api.particle.io/v1/devices/";
       particleRequest.post(particleUrl + outlet.deviceID + "/" + method + "?access_token=" + outlet.accessToken, {
           form: {
               args: outlet.outletNumber
           }
       }, function(err, response, body) {
+          console.log(err);
+          console.log(response);
+          console.log(body);
           if (!err && response.statusCode === 200) {
               if (callback)
                   callback(null);
@@ -293,6 +312,7 @@
 
 
   function updateOutletsInDevice(device, res, newOutlet) {
+      console.log("trying to update outlets in device");
       var deviceOutlets = device.outlets;
       for (var i = 0; i < deviceOutlets.length; i++) {
           if (deviceOutlets[i].outletNumber === newOutlet.outletNumber) {
@@ -302,22 +322,58 @@
       }
       Devices.findByIdAndUpdate(device._id, {
           $set: {
-              outlets: deviceOutlets
+              outlets: deviceOutlets,
+              lastSeenOnline: (new Date()).toTimeString()
           }
       }, function(err, dev) {
           if (err) {
               if (res) {
                   res.status(500).json({
                       err: err
-                  });
+                  }).end();
               }
               console.log(err);
               return;
           } else if (dev) {
               if (res) {
-                  res.status(200).json(dev);
+                  console.log("done updating");
+                  res.status(200).json(dev).end();
               }
               return;
           }
       });
+  }
+
+  function updateOutletData(data) {
+      Outlets.findByIdAndUpdate(data._id,
+          function(err, outlet) {
+              if (err) {
+                  console.error(err);
+                  return;
+              } else if (!outlet) {
+                  console.error("no docs found with id: " + data.deviceID);
+                  return;
+              } else if (outlet) {
+                  outlet.isOn = data.isOn;
+                  outlet.currentWattage = data.wattage;
+                  outlet.save(function(err, raw) {
+                      if (err) {
+                          console.error(err);
+                          return;
+                      }
+                      Devices.findOne({
+                          deviceID: data.deviceID
+                      }, function(err, device) {
+                          if (err) {
+                              console.error(err);
+                              return;
+                          } else if (device) {
+                              updateOutletsInDevice(device, null, outlet);
+                              return;
+                          }
+                      });
+                  });
+              }
+
+          });
   }

@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "angular": "^1.5.8",
-    "furious-monkey": "^2.0.0",
     "jasmine": "^2.5.2",
     "jasmine-core": "^2.2.0",
     "moment": "^2.17.1",
